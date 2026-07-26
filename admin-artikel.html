@@ -130,7 +130,7 @@
     const pendingKey='pendingArticles_v1';
     const pubKey='publishedArticles_v1';
     const deletedArticlesKey='deletedArticleIds_v1';
-    const serverApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : `${window.location.origin}/api`;
+    const serverApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
     const serverArticlesUrl = `${serverApiBase}/articles`;
     const serverPendingUrl = `${serverApiBase}/pending`;
     const publishUrl = `${serverApiBase}/publish`;
