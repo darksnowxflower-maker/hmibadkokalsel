@@ -147,9 +147,7 @@
         if(response.ok){
           const data=await response.json();
           if(Array.isArray(data)){
-            const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
-            const filtered=data.filter(a=>!deletedIds.includes(a.id));
-            return filtered.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
+            return data.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
           }
         }
       }catch(e){ }
@@ -229,7 +227,18 @@
               const body=await response.text();
               throw new Error(`Publish failed: ${response.status} ${response.statusText} ${body}`);
             }
-            // The publish endpoint already removes the pending item from the queue.
+            
+            // Clean up deletedArticlesKey in localStorage if this ID was previously marked deleted
+            const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+            const cleanedDeleted=deletedIds.filter(id=>id!==articleId);
+            localStorage.setItem(deletedArticlesKey,JSON.stringify(cleanedDeleted));
+
+            // Sync with local pubKey cache
+            const stored=JSON.parse(localStorage.getItem(pubKey)||'[]');
+            const filteredStored=stored.filter(a=>a.id!==articleId);
+            filteredStored.unshift(publishedArticle);
+            localStorage.setItem(pubKey,JSON.stringify(filteredStored));
+
             alert('Artikel telah dipublikasikan.');
             await loadPending();
             await renderPublishedList();

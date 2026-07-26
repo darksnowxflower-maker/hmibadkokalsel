@@ -96,8 +96,7 @@
         if(response.ok){
           const article=await response.json();
           if(article && !article.error){
-            const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
-            if(!deletedIds.includes(article.id)) return article;
+            return article;
           }
         }
       }catch(e){

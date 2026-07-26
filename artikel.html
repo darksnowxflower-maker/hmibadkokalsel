@@ -256,8 +256,7 @@
         if(!response.ok) throw new Error('Failed to fetch articles');
         const data=await response.json();
         if(!Array.isArray(data)) throw new Error('Invalid articles data');
-        const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
-        return data.filter(a=>!deletedIds.includes(a.id)).sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
+        return data.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
       }catch(error){
         return getPublishedArticlesFallback();
       }
