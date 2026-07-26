@@ -140,7 +140,10 @@
 
     async function loadPublishedArticles(){
       try{
-        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}`,{cache:'no-store'});
+        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}&cache=${Math.random()}`,{
+          cache:'no-store',
+          headers:{'Cache-Control':'no-cache, no-store, must-revalidate','Pragma':'no-cache'}
+        });
         if(response.ok){
           const data=await response.json();
           if(Array.isArray(data)){
@@ -304,6 +307,20 @@
           try{
             const response=await fetch(`${articleUrl}?id=${encodeURIComponent(articleId)}`,{method:'DELETE'});
             if(!response.ok) throw new Error('Delete failed');
+            
+            // Mark artikel sebagai deleted bahkan ketika sukses
+            const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+            if(!deletedIds.includes(articleId)){
+              deletedIds.push(articleId);
+              localStorage.setItem(deletedArticlesKey,JSON.stringify(deletedIds));
+            }
+            // Hapus dari pubKey juga jika ada
+            const stored=JSON.parse(localStorage.getItem(pubKey)||'[]');
+            const filtered=stored.filter(a=>a.id!==articleId);
+            if(filtered.length !== stored.length){
+              localStorage.setItem(pubKey,JSON.stringify(filtered));
+            }
+            
             alert('Artikel terpublish berhasil dihapus.');
             await renderPublishedList();
           }catch(err){

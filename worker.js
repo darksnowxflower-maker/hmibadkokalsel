@@ -1,4 +1,25 @@
-const DEFAULT_ARTICLES = [];
+const DEFAULT_ARTICLES = [
+  {
+    "id": "meratus",
+    "nama": "Kader HMI",
+    "asal": "HMI Badko Kalsel",
+    "judul": "Meratus: Merawat Alam dan Identitas Lokal",
+    "kategori": "Lingkungan",
+    "ringkasan": "Kajian tentang hubungan kader HMI dengan alam Meratus sebagai sumber inspirasi dan semangat konservasi.",
+    "isi": "Hutan Meratus adalah saksi perjuangan panjang masyarakat Kalimantan Selatan. Kader HMI dituntut untuk menjaga kelestariannya melalui literasi lingkungan, riset lokal, dan aksi pengabdian yang berpijak pada nilai keislaman dan kebangsaan. Alam bukan hanya ruang, melainkan sanad kultural yang harus diwariskan kepada generasi berikut.",
+    "publishedAt": "2026-07-26T00:00:00.000Z"
+  },
+  {
+    "id": "alam",
+    "nama": "Kader HMI",
+    "asal": "HMI Badko Kalsel",
+    "judul": "Alam sebagai Guru: Refleksi Kader terhadap Ekosistem dan Etika",
+    "kategori": "Keislaman",
+    "ringkasan": "Tulisan reflektif tentang bagaimana alam mengajarkan etika pengelolaan sumber daya dan merawat kemaslahatan bersama.",
+    "isi": "Alam memberi pelajaran kesabaran, rekonsiliasi, dan kedermawanan. Sebagai kader, kita belajar bahawa etika ilmiah dan religi bertemu dalam menjaga keseimbangan lingkungan. Langkah kecil konservasi, seperti menghormati sumber air dan merawat hutan, adalah cermin dari komitmen kita terhadap umat dan negeri.",
+    "publishedAt": "2026-07-26T00:00:00.000Z"
+  }
+];
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -37,12 +58,13 @@ function createArticleId() {
 }
 
 async function getArticles(storage) {
-  const articles = await readKV(storage.ARTICLES_KV, 'articles', []);
-  if (!articles || !articles.length) {
+  const articles = await readKV(storage.ARTICLES_KV, 'articles', null);
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    // Initialize dengan DEFAULT_ARTICLES jika kosong
     await writeKV(storage.ARTICLES_KV, 'articles', DEFAULT_ARTICLES);
     return DEFAULT_ARTICLES;
   }
-  return Array.isArray(articles) ? articles : [];
+  return articles;
 }
 
 async function getPending(storage) {
@@ -64,6 +86,20 @@ async function handleRequest(request, env) {
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
+  }
+
+  // Reset endpoint untuk maintenance
+  if (pathname === '/reset-articles' && request.method === 'POST') {
+    const token = new URL(request.url).searchParams.get('token');
+    if (token !== 'admin123') {
+      return jsonResponse({ error: 'Unauthorized' }, 401);
+    }
+    try {
+      await writeKV(env.ARTICLES_KV, 'articles', DEFAULT_ARTICLES);
+      return jsonResponse({ success: true, message: 'Articles reset to default', count: DEFAULT_ARTICLES.length });
+    } catch (err) {
+      return jsonResponse({ error: err.message }, 500);
+    }
   }
 
   if (pathname === '/articles' && request.method === 'GET') {

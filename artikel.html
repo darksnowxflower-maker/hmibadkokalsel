@@ -200,7 +200,10 @@
 
     async function loadPublishedArticles(){
       try{
-        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}`,{cache:'no-store'});
+        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}&cache=${Math.random()}`,{
+          cache:'no-store',
+          headers:{'Cache-Control':'no-cache, no-store, must-revalidate','Pragma':'no-cache'}
+        });
         if(!response.ok) throw new Error('Failed to fetch articles');
         const data=await response.json();
         if(!Array.isArray(data)) throw new Error('Invalid articles data');
