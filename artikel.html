@@ -66,6 +66,16 @@
       </div>
     </section>
   </main>
+  <div id="statusModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 px-4 py-8">
+    <div class="w-full max-w-md rounded-[2rem] bg-white p-6 md:p-8 text-center shadow-2xl space-y-4">
+      <div id="statusModalIcon" class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-hmiGreen text-3xl">
+        <i class="fas fa-circle-check"></i>
+      </div>
+      <h3 id="statusModalTitle" class="text-2xl font-extrabold text-gray-900">Tulisan Berhasil Dikirim!</h3>
+      <p id="statusModalMessage" class="text-gray-600 text-sm leading-relaxed">Tulisan Anda telah berhasil dikirim dan tersimpan di server untuk ditinjau oleh tim moderasi artikel.</p>
+      <button id="closeStatusModal" type="button" class="w-full rounded-full bg-hmiGreen px-6 py-3.5 font-bold text-white shadow-lg hover:bg-hmiDark transition">Tutup & Mengerti</button>
+    </div>
+  </div>
   <div id="adminLoginModal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/60 px-4 py-8">
     <div class="w-full max-w-lg rounded-[2rem] bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex items-start justify-between gap-4 mb-6">
@@ -118,6 +128,44 @@
         }
       });
     }
+
+    const statusModal = document.getElementById('statusModal');
+    const statusModalIcon = document.getElementById('statusModalIcon');
+    const statusModalTitle = document.getElementById('statusModalTitle');
+    const statusModalMessage = document.getElementById('statusModalMessage');
+    const closeStatusModal = document.getElementById('closeStatusModal');
+
+    function showModalNotice(title, msg, type = 'success'){
+      if(!statusModal) return;
+      if(type === 'success'){
+        statusModalIcon.className = 'mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-hmiGreen text-3xl';
+        statusModalIcon.innerHTML = '<i class="fas fa-circle-check"></i>';
+        statusModalTitle.textContent = title || 'Tulisan Berhasil Dikirim!';
+        statusModalTitle.className = 'text-2xl font-extrabold text-hmiGreen';
+      } else if (type === 'error'){
+        statusModalIcon.className = 'mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 text-3xl';
+        statusModalIcon.innerHTML = '<i class="fas fa-circle-exclamation"></i>';
+        statusModalTitle.textContent = title || 'Formulir Belum Lengkap';
+        statusModalTitle.className = 'text-2xl font-extrabold text-red-600';
+      } else {
+        statusModalIcon.className = 'mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-600 text-3xl';
+        statusModalIcon.innerHTML = '<i class="fas fa-info-circle"></i>';
+        statusModalTitle.textContent = title || 'Pemberitahuan';
+        statusModalTitle.className = 'text-2xl font-extrabold text-gray-800';
+      }
+      statusModalMessage.innerHTML = msg;
+      statusModal.classList.remove('hidden');
+      statusModal.classList.add('flex');
+    }
+
+    function hideModalNotice(){
+      if(!statusModal) return;
+      statusModal.classList.add('hidden');
+      statusModal.classList.remove('flex');
+    }
+
+    closeStatusModal?.addEventListener('click', hideModalNotice);
+    statusModal?.addEventListener('click', (e) => { if(e.target === statusModal) hideModalNotice(); });
 
     const adminLoginModal = document.getElementById('adminLoginModal');
     const adminLoginBtn = document.getElementById('adminLoginBtn');
@@ -238,6 +286,10 @@
     document.getElementById('closeArticleForm')?.addEventListener('click',closeArticleForm);
     document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){ if(formSection && !formSection.classList.contains('hidden')) closeArticleForm();}});
 
+    if(window.location.hash === '#kirim-tulisan'){
+      openArticleForm();
+    }
+
     function updateCounters(){
       const titleValue=title?.value || '';
       document.getElementById('titleCount').textContent=titleValue.length;
@@ -345,22 +397,49 @@
 
     form?.addEventListener('submit',async(event)=>{
       event.preventDefault();
+      
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Kirim Tulisan';
+
+      form.querySelectorAll('.form-field').forEach(field => field.removeAttribute('aria-invalid'));
+
       let first=null;
       form.querySelectorAll('[required]').forEach(field=>{
-        const invalid=!field.checkValidity();
-        field.setAttribute('aria-invalid',invalid?'true':'false');
-        if(invalid&&!first)first=field;
+        let invalid=!field.checkValidity();
+        if(field.name==='isi' && field.value.trim().length<200){
+          invalid=true;
+        }
+        if(invalid){
+          field.setAttribute('aria-invalid','true');
+          if(!first)first=field;
+        }
       });
+
       if(first){
+        let errText = 'Mohon lengkapi seluruh kolom wajib yang ditandai merah.';
+        if(form.elements.isi && form.elements.isi.value.trim().length<200){
+          const curLen = form.elements.isi.value.trim().length;
+          errText += `<br><span class="font-bold mt-1 block">• Isi tulisan kurang dari 200 karakter (saat ini ${curLen} karakter).</span>`;
+        }
+
         message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
         message.classList.remove('hidden');
-        message.innerHTML='<i class="fas fa-circle-exclamation mr-2"></i>Mohon lengkapi semua kolom wajib dengan benar.';
+        message.innerHTML=`<i class="fas fa-circle-exclamation mr-2"></i>${errText}`;
+
+        showModalNotice('Formulir Belum Lengkap', errText, 'error');
+
         first.focus();
+        first.scrollIntoView({behavior:'smooth',block:'center'});
         return;
       }
 
       clearTimeout(window.saveTimer);
       clearTimeout(window.draftTimer);
+
+      if(submitBtn){
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim tulisan...';
+      }
 
       const fileInput=document.getElementById('headerImage');
       const file=fileInput?.files[0];
@@ -382,7 +461,11 @@
 
       let savedToServer=false;
       try{
-        const response=await fetch(serverPendingUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        const response=await fetch(serverPendingUrl,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(data)
+        });
         if(response.ok){
           savedToServer=true;
         }
@@ -394,18 +477,27 @@
       window.headerImageDataUrl='';
       form.reset();
       localStorage.removeItem(draftKey);
-      document.getElementById('fileName').textContent='Pilih berkas tulisan';
+      document.getElementById('fileName').textContent='Pilih gambar header';
       updateCounters();
       status.innerHTML='<i class="far fa-floppy-disk mr-1"></i>Draf tersimpan otomatis';
 
+      const successNotice = `Tulisan Anda berjudul <strong>"${escapeHtml(data.judul)}"</strong> berhasil dikirim untuk ditinjau oleh tim moderasi artikel.${savedToServer?'':'<br><span class="text-xs text-amber-700 font-normal mt-1 block">(Disimpan ke memori cadangan lokal)</span>'}`;
+
       message.className='rounded-xl p-4 text-sm bg-green-50 text-green-800 block';
       message.classList.remove('hidden');
-      message.innerHTML=`<i class="fas fa-circle-check mr-2"></i><strong>Tulisan berhasil dikirim untuk ditinjau oleh admin artikel.</strong> ${savedToServer?'':'Server tidak tersedia, tulisan disimpan lokal sebagai cadangan.'}`;
-      message.scrollIntoView({behavior:'smooth',block:'nearest'});
+      message.innerHTML=`<i class="fas fa-circle-check mr-2"></i><strong>Tulisan berhasil dikirim!</strong> ${successNotice}`;
+      message.scrollIntoView({behavior:'smooth',block:'center'});
+
+      showModalNotice('Tulisan Berhasil Dikirim! 🎉', successNotice, 'success');
+
+      if(submitBtn){
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
 
       setTimeout(()=>{
         suppressInputHide = false;
-      }, 500);
+      }, 1000);
     });
 
     async function renderPublished(){
