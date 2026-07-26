@@ -77,7 +77,7 @@
       {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
     ];
 
-    const serverApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
+    const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
 
     function escapeHtml(value){
       return String(value || '').replace(/[&<>"']/g,(character)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
