@@ -58,10 +58,10 @@
                 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center space-x-1">
-                    <a href="index.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.home">Beranda</a>
-                    <a href="artikel.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap">Artikel</a>
+                    <a href="index.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.home">Beranda</a>
+                    <a href="artikel.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap">Artikel</a>
                     <div class="relative nav-dropdown">
-                        <button type="button" class="nav-dropdown-btn nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap inline-flex items-center gap-1.5" data-i18n="nav.profile" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="nav-dropdown-btn nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap inline-flex items-center gap-1.5" data-i18n="nav.profile" aria-haspopup="true" aria-expanded="false">
                             Profil <i class="fas fa-chevron-down text-[10px] transition-transform duration-200"></i>
                         </button>
                         <div class="nav-dropdown-menu hidden absolute left-0 top-full mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
@@ -71,9 +71,11 @@
                             <a href="sejarah.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Sejarah</a>
                         </div>
                     </div>
-                    <a href="perpustakaan.html" class="nav-item text-hmiGreen font-bold border-b-2 border-hmiGreen px-4 py-7 whitespace-nowrap" data-i18n="nav.perpustakaan">Perpustakaan</a>
-                    <a href="berita.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.berita">Berita</a>
-                    <div class="flex items-center gap-2 ml-3">
+                    <a href="pengurus.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap">Pengurus</a>
+                    <a href="program-kerja.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap">Program Kerja</a>
+                    <a href="perpustakaan.html" class="nav-item text-hmiGreen font-bold border-b-2 border-hmiGreen px-3 py-7 whitespace-nowrap" data-i18n="nav.perpustakaan">Perpustakaan</a>
+                    <a href="berita.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.berita">Berita</a>
+                    <div class="flex items-center gap-2 ml-2">
                         <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-sm font-semibold text-gray-600 transition-all hover:border-hmiGreen hover:text-hmiGreen" aria-label="Ubah mode gelap/terang">
                             <i class="fas fa-moon"></i>
                             <span>Dark</span>
@@ -97,7 +99,7 @@
                 <a href="artikel.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Artikel</a>
                 <details class="group">
                     <summary class="list-none cursor-pointer flex items-center justify-between block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">
-                        <span >Profil</span>
+                        <span>Profil</span>
                         <i class="fas fa-chevron-down text-xs transition-transform duration-200 group-open:rotate-180"></i>
                     </summary>
                     <div class="pl-4 mt-1 space-y-1">
@@ -107,6 +109,8 @@
                         <a href="sejarah.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Sejarah</a>
                     </div>
                 </details>
+                <a href="pengurus.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Pengurus</a>
+                <a href="program-kerja.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Program Kerja</a>
                 <a href="perpustakaan.html" class="block px-3 py-2 rounded-md text-base font-bold text-hmiGreen bg-green-50">Perpustakaan</a>
                 <a href="berita.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Berita</a>
                 <div class="flex items-center justify-end gap-2 px-3 pt-1">
@@ -183,10 +187,13 @@
                 <h3 class="font-bold text-lg mb-4 border-b border-gray-700 pb-2 inline-block">Portal HMI</h3>
                 <ul class="text-gray-400 text-sm space-y-2">
                     <li><a href="index.html" class="hover:text-hmiGreen transition">Beranda</a></li>
-                    <li></li>
-                    <li></li>
+                    <li><a href="artikel.html" class="hover:text-hmiGreen transition">Artikel</a></li>
                     <li><a href="profil.html" class="hover:text-hmiGreen transition">Profil Cabang</a></li>
-                    <li></li>
+                    <li><a href="pengurus.html" class="hover:text-hmiGreen transition">Pengurus</a></li>
+                    <li><a href="program-kerja.html" class="hover:text-hmiGreen transition">Program Kerja</a></li>
+                    <li><a href="sejarah.html" class="hover:text-hmiGreen transition">Sejarah</a></li>
+                    <li><a href="perpustakaan.html" class="hover:text-hmiGreen transition">Perpustakaan</a></li>
+                    <li><a href="berita.html" class="hover:text-hmiGreen transition">Berita</a></li>
                 </ul>
             </div>
             
