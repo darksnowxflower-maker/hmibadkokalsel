@@ -193,7 +193,7 @@
       pending.forEach(a=>{
         const card=document.createElement('div');
         card.className='p-4 border rounded-xl flex flex-col md:flex-row md:items-start md:justify-between gap-4';
-        card.innerHTML=`<div><h3 class="font-bold text-lg">${escapeHtml(a.judul)}</h3><p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.submittedAt).toLocaleString()}</p><p class="mt-2 text-gray-700">${escapeHtml(a.ringkasan)}</p></div><div class="flex flex-wrap gap-2"><button data-article-id="${a.id}" class="previewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2">Preview</button><button data-article-id="${a.id}" class="approveBtn rounded-full bg-hmiGreen text-white px-4 py-2">Approve</button><button data-article-id="${a.id}" class="rejectBtn rounded-full border px-4 py-2">Reject</button></div>`;
+        card.innerHTML=`<div><h3 class="font-bold text-lg">${escapeHtml(a.judul)}</h3><p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.submittedAt).toLocaleString()}</p><p class="mt-2 text-gray-700">${escapeHtml(a.ringkasan)}</p></div><div class="flex flex-wrap gap-2"><button data-article-id="${a.id}" class="previewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2">Preview</button><button class="approveBtn rounded-full bg-hmiGreen text-white px-4 py-2">Approve</button><button class="rejectBtn rounded-full border px-4 py-2">Reject</button></div>`;
         list.appendChild(card);
       });
       attachActions();
@@ -214,10 +214,9 @@
         };
       });
 
-      document.querySelectorAll('.approveBtn').forEach((btn)=>{
+      document.querySelectorAll('.approveBtn').forEach((btn, index)=>{
         btn.onclick=async ()=>{
-          const articleId=btn.dataset.articleId;
-          const article=currentPending.find(a=>a.id===articleId);
+          const article=currentPending[index];
           if(!article) return;
           article.status='published';
           article.publishedAt=new Date().toISOString();
@@ -229,22 +228,21 @@
             alert('Artikel telah dipublikasikan.');
             await loadPending();
             await renderPublishedList();
-          } catch(err){
+          }catch(err){
             alert('Gagal mempublikasikan artikel. Pastikan server berjalan.');
           }
         };
       });
 
-      document.querySelectorAll('.rejectBtn').forEach((btn)=>{
+      document.querySelectorAll('.rejectBtn').forEach((btn, index)=>{
         btn.onclick=async ()=>{
-          const articleId=btn.dataset.articleId;
-          const article=currentPending.find(a=>a.id===articleId);
-          if(!article) return;
           if(!confirm('Tolak artikel ini dan hapus dari antrean?')) return;
+          const article=currentPending[index];
+          if(!article) return;
           try{
             const response=await fetch(`${serverPendingUrl}?id=${encodeURIComponent(article.id)}`,{method:'DELETE'});
             if(!response.ok) throw new Error('Pending delete failed');
-          } catch(err){
+          }catch(err){
             currentPending = currentPending.filter(a=>a.id!==article.id);
             localStorage.setItem(pendingKey,JSON.stringify(currentPending));
           }
