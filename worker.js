@@ -1,20 +1,11 @@
-const DEFAULT_ARTICLES = [
-  {
-    id: 'sample-1',
-    nama: 'Muhammad Indra Kurniawan',
-    asal: 'HMI Badko Kalsel',
-    judul: 'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',
-    kategori: 'Kajian',
-    ringkasan: 'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',
-    isi: 'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',
-    publishedAt: new Date().toISOString()
-  }
-];
+const DEFAULT_ARTICLES = [];
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type'
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Max-Age': '86400',
+  'Cache-Control': 'no-store, no-cache, must-revalidate'
 };
 
 function jsonResponse(data, status = 200) {
@@ -163,10 +154,9 @@ async function handleRequest(request, env) {
     }
     const pending = await getPending(env);
     const filtered = pending.filter((item) => item.id !== id);
-    if (filtered.length === pending.length) {
-      return jsonResponse({ error: 'Pending article not found' }, 404);
+    if (filtered.length !== pending.length) {
+      await writeKV(env.PENDING_KV, 'pending', filtered);
     }
-    await writeKV(env.PENDING_KV, 'pending', filtered);
     return jsonResponse({ success: true });
   }
 

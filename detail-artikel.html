@@ -73,11 +73,11 @@
       });
     }
 
-    const defaultPublishedArticles=[
-      {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
-    ];
+    const defaultPublishedArticles=[];
 
     const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
+    const deletedArticlesKey='deletedArticleIds_v1';
+    const publishedArticlesKey='publishedArticles_v1';
 
     function escapeHtml(value){
       return String(value || '').replace(/[&<>"']/g,(character)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
@@ -92,19 +92,22 @@
     async function loadArticle(articleId){
       if(!articleId) return null;
       try{
-        const response=await fetch(`${serverApiBase}/article?id=${encodeURIComponent(articleId)}`,{cache:'no-store'});
+        const response=await fetch(`${serverApiBase}/article?id=${encodeURIComponent(articleId)}&t=${Date.now()}`,{cache:'no-store'});
         if(response.ok){
           const article=await response.json();
-          if(article && !article.error) return article;
+          if(article && !article.error){
+            const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+            if(!deletedIds.includes(article.id)) return article;
+          }
         }
       }catch(e){
       }
-      const publishedStorage=JSON.parse(localStorage.getItem('publishedArticles_v1')||'[]');
-      const deletedIds=JSON.parse(localStorage.getItem('deletedArticleIds_v1')||'[]');
+      const publishedStorage=JSON.parse(localStorage.getItem(publishedArticlesKey)||'[]');
+      const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
       return [
         ...publishedStorage,
         ...defaultPublishedArticles.filter(article=>!deletedIds.includes(article.id) && !publishedStorage.some(a=>a.id===article.id))
-      ].find(item=>item.id===articleId) || null;
+      ].find(item=>item.id===articleId && !deletedIds.includes(item.id)) || null;
     }
 
     function renderArticle(article){

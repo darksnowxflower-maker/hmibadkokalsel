@@ -135,18 +135,18 @@
     const serverPendingUrl = `${serverApiBase}/pending`;
     const publishUrl = `${serverApiBase}/publish`;
     const articleUrl = `${serverApiBase}/article`;
-    const defaultPublishedArticles=[
-      {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
-    ];
+    const defaultPublishedArticles=[];
     let currentPending = [];
 
     async function loadPublishedArticles(){
       try{
-        const response=await fetch(serverArticlesUrl,{cache:'no-store'});
+        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}`,{cache:'no-store'});
         if(response.ok){
           const data=await response.json();
           if(Array.isArray(data)){
-            return data.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
+            const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+            const filtered=data.filter(a=>!deletedIds.includes(a.id));
+            return filtered.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
           }
         }
       }catch(e){ }
@@ -156,7 +156,7 @@
     function getPublishedArticles(){
       const stored=JSON.parse(localStorage.getItem(pubKey)||'[]');
       const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
-      const articles=[...stored];
+      const articles=[...stored].filter(a=>!deletedIds.includes(a.id));
       defaultPublishedArticles.forEach(article=>{
         if(!deletedIds.includes(article.id) && !articles.some(a=>a.id===article.id)){
           articles.push(article);
@@ -168,7 +168,7 @@
     async function loadPending(){
       let pending=[];
       try{
-        const response=await fetch(serverPendingUrl,{cache:'no-store'});
+        const response=await fetch(`${serverPendingUrl}?t=${Date.now()}`,{cache:'no-store'});
         if(response.ok){
           const data=await response.json();
           if(Array.isArray(data)){
@@ -193,7 +193,7 @@
       pending.forEach(a=>{
         const card=document.createElement('div');
         card.className='p-4 border rounded-xl flex flex-col md:flex-row md:items-start md:justify-between gap-4';
-        card.innerHTML=`<div><h3 class="font-bold text-lg">${escapeHtml(a.judul)}</h3><p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.submittedAt).toLocaleString()}</p><p class="mt-2 text-gray-700">${escapeHtml(a.ringkasan)}</p></div><div class="flex flex-wrap gap-2"><button data-article-id="${a.id}" class="previewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2">Preview</button><button class="approveBtn rounded-full bg-hmiGreen text-white px-4 py-2">Approve</button><button class="rejectBtn rounded-full border px-4 py-2">Reject</button></div>`;
+        card.innerHTML=`<div><h3 class="font-bold text-lg">${escapeHtml(a.judul)}</h3><p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.submittedAt).toLocaleString()}</p><p class="mt-2 text-gray-700">${escapeHtml(a.ringkasan)}</p></div><div class="flex flex-wrap gap-2"><button data-article-id="${a.id}" class="previewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2">Preview</button><button data-article-id="${a.id}" class="approveBtn rounded-full bg-hmiGreen text-white px-4 py-2">Approve</button><button data-article-id="${a.id}" class="rejectBtn rounded-full border px-4 py-2">Reject</button></div>`;
         list.appendChild(card);
       });
       attachActions();
@@ -214,35 +214,43 @@
         };
       });
 
-      document.querySelectorAll('.approveBtn').forEach((btn, index)=>{
+      document.querySelectorAll('.approveBtn').forEach((btn)=>{
         btn.onclick=async ()=>{
-          const article=currentPending[index];
+          const articleId=btn.dataset.articleId;
+          const article=currentPending.find(a=>a.id===articleId);
           if(!article) return;
-          article.status='published';
-          article.publishedAt=new Date().toISOString();
+          const publishedArticle={...article, status:'published', publishedAt:new Date().toISOString()};
           try{
-            const response=await fetch(publishUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(article)});
-            if(!response.ok) throw new Error('Publish failed');
-            const deleteResponse=await fetch(`${serverPendingUrl}?id=${encodeURIComponent(article.id)}`,{method:'DELETE'});
-            if(!deleteResponse.ok) throw new Error('Pending delete failed');
+            const response=await fetch(publishUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(publishedArticle)});
+            if(!response.ok){
+              const body=await response.text();
+              throw new Error(`Publish failed: ${response.status} ${response.statusText} ${body}`);
+            }
+            // The publish endpoint already removes the pending item from the queue.
             alert('Artikel telah dipublikasikan.');
             await loadPending();
             await renderPublishedList();
           }catch(err){
-            alert('Gagal mempublikasikan artikel. Pastikan server berjalan.');
+            console.error('Approve error:', err);
+            alert(`Gagal mempublikasikan artikel: ${err.message}`);
           }
         };
       });
 
-      document.querySelectorAll('.rejectBtn').forEach((btn, index)=>{
+      document.querySelectorAll('.rejectBtn').forEach((btn)=>{
         btn.onclick=async ()=>{
           if(!confirm('Tolak artikel ini dan hapus dari antrean?')) return;
-          const article=currentPending[index];
+          const articleId=btn.dataset.articleId;
+          const article=currentPending.find(a=>a.id===articleId);
           if(!article) return;
           try{
             const response=await fetch(`${serverPendingUrl}?id=${encodeURIComponent(article.id)}`,{method:'DELETE'});
-            if(!response.ok) throw new Error('Pending delete failed');
+            if(!response.ok){
+              const body=await response.text();
+              throw new Error(`Pending delete failed: ${response.status} ${response.statusText} ${body}`);
+            }
           }catch(err){
+            console.error('Reject error:', err);
             currentPending = currentPending.filter(a=>a.id!==article.id);
             localStorage.setItem(pendingKey,JSON.stringify(currentPending));
           }
@@ -297,8 +305,9 @@
             const response=await fetch(`${articleUrl}?id=${encodeURIComponent(articleId)}`,{method:'DELETE'});
             if(!response.ok) throw new Error('Delete failed');
             alert('Artikel terpublish berhasil dihapus.');
-            renderPublishedList();
+            await renderPublishedList();
           }catch(err){
+            console.error('Delete error:', err);
             const stored=JSON.parse(localStorage.getItem(pubKey)||'[]');
             const filtered=stored.filter(a=>a.id!==articleId);
             if(filtered.length !== stored.length){
@@ -311,7 +320,7 @@
               }
             }
             alert('Server tidak tersedia, artikel dihapus secara lokal.');
-            renderPublishedList();
+            await renderPublishedList();
           }
         };
       });

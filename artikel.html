@@ -186,27 +186,26 @@
     const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
     const serverArticlesUrl=`${serverApiBase}/articles`;
     const serverPendingUrl=`${serverApiBase}/pending`;
-    const defaultPublishedArticles=[
-      {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
-    ];
+    const defaultPublishedArticles=[];
 
     function getPublishedArticlesFallback(){
       const stored=JSON.parse(localStorage.getItem(publishedKey)||'[]');
       const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
       const merged=[
-        ...stored,
-        ...defaultPublishedArticles.filter(article=>!deletedIds.includes(article.id))
+        ...stored.filter(article=>!deletedIds.includes(article.id)),
+        ...defaultPublishedArticles.filter(article=>!deletedIds.includes(article.id) && !stored.some(a=>a.id===article.id))
       ];
       return merged.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
     }
 
     async function loadPublishedArticles(){
       try{
-        const response=await fetch(serverArticlesUrl,{cache:'no-store'});
+        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}`,{cache:'no-store'});
         if(!response.ok) throw new Error('Failed to fetch articles');
         const data=await response.json();
         if(!Array.isArray(data)) throw new Error('Invalid articles data');
-        return data;
+        const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+        return data.filter(a=>!deletedIds.includes(a.id)).sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
       }catch(error){
         return getPublishedArticlesFallback();
       }
