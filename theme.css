@@ -18,6 +18,12 @@
     --theme-focus: rgba(0, 140, 82, 0.4);
 }
 
+@media (min-width: 1024px) {
+    .nav-dropdown:hover .nav-dropdown-menu {
+        display: block !important;
+    }
+}
+
 html[data-theme="dark"] {
     color-scheme: dark;
     accent-color: #34d399;
