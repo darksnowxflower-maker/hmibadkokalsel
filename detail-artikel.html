@@ -26,12 +26,29 @@
           <h1 id="articleTitle" class="mt-6 text-4xl md:text-5xl font-extrabold leading-tight"></h1>
           <div id="articleByline" class="mt-5 text-sm text-emerald-100"></div>
           <p id="articleExcerpt" class="mt-8 max-w-3xl text-lg leading-relaxed text-emerald-100/90"></p>
-          <div class="mt-8 flex flex-wrap gap-3"><a href="artikel.html" class="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-bold text-hmiDark shadow hover:bg-gray-100"><i class="fas fa-arrow-left mr-2"></i>Kembali ke Artikel</a></div>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a href="artikel.html" class="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-bold text-hmiDark shadow hover:bg-gray-100"><i class="fas fa-arrow-left mr-2"></i>Kembali ke Artikel</a>
+            <button id="heroShareBtn" type="button" class="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white shadow hover:bg-white/20 transition"><i class="fas fa-share-nodes"></i><span>Bagikan Artikel</span></button>
+          </div>
         </div>
       </div>
       <div class="p-8 md:p-12">
         <div id="articleImageContainer" class="mb-10 hidden overflow-hidden rounded-[1.75rem]"></div>
         <article id="articleContent" class="prose prose-lg max-w-none text-gray-800"></article>
+        <div class="mt-12 pt-8 border-t border-gray-200">
+          <div class="rounded-2xl bg-gray-50 border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h4 class="font-extrabold text-lg text-gray-900 flex items-center gap-2"><i class="fas fa-share-nodes text-hmiGreen"></i>Bagikan Artikel Ini</h4>
+              <p class="text-sm text-gray-600 mt-1">Sebarkan gagasan dan karya tulis ini ke jejaring sosial Anda.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <button id="shareWaBtn" type="button" class="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-bold text-white shadow hover:bg-[#20bd5a] transition"><i class="fab fa-whatsapp text-lg"></i>WhatsApp</button>
+              <button id="shareFbBtn" type="button" class="inline-flex items-center gap-2 rounded-full bg-[#1877F2] px-5 py-2.5 font-bold text-white shadow hover:bg-[#166fe5] transition"><i class="fab fa-facebook-f text-base"></i>Facebook</button>
+              <button id="shareTwBtn" type="button" class="inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 font-bold text-white shadow hover:bg-gray-800 transition"><i class="fab fa-x-twitter text-base"></i>X / Twitter</button>
+              <button id="copyLinkBtn" type="button" class="inline-flex items-center gap-2 rounded-full bg-gray-200 text-gray-800 px-5 py-2.5 font-bold shadow hover:bg-gray-300 transition"><i class="fas fa-link text-base"></i>Salin Tautan</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <section id="notFound" class="hidden rounded-[2rem] bg-white border border-gray-200 shadow-sm p-12 text-center">
@@ -43,6 +60,10 @@
       </div>
     </section>
   </main>
+  <div id="shareToast" class="fixed bottom-6 right-6 z-[100] hidden items-center gap-3 rounded-2xl bg-gray-900 text-white px-5 py-3.5 shadow-2xl transition-all border border-gray-800">
+    <i class="fas fa-circle-check text-emerald-400 text-lg"></i>
+    <span id="shareToastText" class="text-sm font-semibold">Tautan artikel berhasil disalin!</span>
+  </div>
   <footer class="bg-gray-900 text-white py-8 mt-12 border-t-4 border-hmiGreen"><div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400"><p>© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan.</p><p class="mt-1">Prototype by Muhammad Indra Kurniawan</p></div></footer>
   <script>
     const mobileBtn=document.getElementById('mobileBtn');
@@ -78,6 +99,7 @@
     const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
     const deletedArticlesKey='deletedArticleIds_v1';
     const publishedArticlesKey='publishedArticles_v1';
+    let currentArticleData = null;
 
     function escapeHtml(value){
       return String(value || '').replace(/[&<>"']/g,(character)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
@@ -88,6 +110,62 @@
         return '<p>'+escapeHtml(paragraph.trim()).replace(/\n/g,'<br>')+'</p>';
       }).join('');
     }
+
+    function showShareToast(messageText){
+      const toast = document.getElementById('shareToast');
+      const toastText = document.getElementById('shareToastText');
+      if(!toast || !toastText) return;
+      toastText.textContent = messageText || 'Tautan artikel berhasil disalin!';
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(window.shareToastTimer);
+      window.shareToastTimer = setTimeout(()=>{
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3000);
+    }
+
+    function shareArticlePlatform(platform){
+      const currentUrl = window.location.href;
+      const title = currentArticleData ? currentArticleData.judul : document.title;
+      const text = `Baca artikel "${title}" di HMI Badko Kalsel:`;
+
+      if(platform === 'wa'){
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + '\n' + currentUrl)}`, '_blank');
+      } else if(platform === 'fb'){
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, '_blank');
+      } else if(platform === 'tw'){
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(currentUrl)}`, '_blank');
+      } else if(platform === 'copy'){
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(currentUrl).then(()=>{
+            showShareToast('Tautan artikel berhasil disalin!');
+          }).catch(()=>{
+            prompt('Salin tautan artikel ini:', currentUrl);
+          });
+        } else {
+          prompt('Salin tautan artikel ini:', currentUrl);
+        }
+      } else if(platform === 'native' && navigator.share){
+        navigator.share({
+          title: title,
+          text: text,
+          url: currentUrl
+        }).catch(()=>{});
+      } else {
+        if(navigator.share){
+          navigator.share({ title, text, url: currentUrl }).catch(()=>{});
+        } else {
+          shareArticlePlatform('copy');
+        }
+      }
+    }
+
+    document.getElementById('heroShareBtn')?.addEventListener('click', () => shareArticlePlatform('native'));
+    document.getElementById('shareWaBtn')?.addEventListener('click', () => shareArticlePlatform('wa'));
+    document.getElementById('shareFbBtn')?.addEventListener('click', () => shareArticlePlatform('fb'));
+    document.getElementById('shareTwBtn')?.addEventListener('click', () => shareArticlePlatform('tw'));
+    document.getElementById('copyLinkBtn')?.addEventListener('click', () => shareArticlePlatform('copy'));
 
     async function loadArticle(articleId){
       if(!articleId) return null;
@@ -110,6 +188,7 @@
     }
 
     function renderArticle(article){
+      currentArticleData = article;
       const articleMeta=document.getElementById('articleMeta');
       const articleTitle=document.getElementById('articleTitle');
       const articleByline=document.getElementById('articleByline');
