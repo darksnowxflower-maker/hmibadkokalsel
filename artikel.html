@@ -44,6 +44,7 @@
         </aside>
         <div class="p-6 md:p-10">
           <div class="flex items-start justify-between gap-3 mb-8"><div><p class="text-xs uppercase tracking-[.16em] font-bold text-hmiGreen">Formulir Kontributor</p><h3 class="text-2xl font-extrabold mt-1">Lengkapi data tulisan</h3><span id="draftStatus" class="block text-xs text-gray-500 mt-2"><i class="far fa-floppy-disk mr-1"></i>Draf tersimpan otomatis</span></div><button id="closeArticleForm" type="button" class="shrink-0 w-11 h-11 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200" aria-label="Tutup formulir"><i class="fas fa-times"></i></button></div>
+          <div id="cardNotice" class="hidden mb-6 rounded-2xl p-5 text-sm transition-all border shadow-sm" role="alert"></div>
           <form id="articleForm" novalidate class="space-y-6">
             <div class="grid md:grid-cols-2 gap-5">
               <label class="text-sm font-bold">Nama lengkap <span class="text-red-600">*</span><input class="form-field mt-2 font-normal" name="nama" autocomplete="name" required placeholder="Nama penulis"></label>
@@ -344,12 +345,61 @@
       }catch(e){localStorage.removeItem(draftKey)}
     }
 
+    function renderNotice(title, msg, type = 'success'){
+      const cardNotice = document.getElementById('cardNotice');
+      const formMessage = document.getElementById('formMessage');
+
+      let bgClass, textClass, iconBg, iconHtml;
+
+      if(type === 'success'){
+        bgClass = 'bg-emerald-50 border-emerald-200 text-emerald-900';
+        textClass = 'text-emerald-800';
+        iconBg = 'bg-emerald-100 text-hmiGreen';
+        iconHtml = '<i class="fas fa-circle-check"></i>';
+      } else if(type === 'error'){
+        bgClass = 'bg-red-50 border-red-200 text-red-900';
+        textClass = 'text-red-800';
+        iconBg = 'bg-red-100 text-red-600';
+        iconHtml = '<i class="fas fa-circle-exclamation"></i>';
+      } else {
+        bgClass = 'bg-gray-50 border-gray-200 text-gray-900';
+        textClass = 'text-gray-700';
+        iconBg = 'bg-gray-100 text-gray-600';
+        iconHtml = '<i class="fas fa-info-circle"></i>';
+      }
+
+      if(cardNotice){
+        cardNotice.className = `mb-6 rounded-2xl p-5 text-sm transition-all border shadow-sm ${bgClass} block`;
+        cardNotice.innerHTML = `
+          <div class="flex items-start gap-3.5">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconBg} text-xl">${iconHtml}</div>
+            <div class="flex-1">
+              <h4 class="font-extrabold text-base leading-snug">${title}</h4>
+              <div class="mt-1 ${textClass} leading-relaxed">${msg}</div>
+            </div>
+            <button type="button" onclick="document.getElementById('cardNotice').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 p-1 shrink-0" aria-label="Tutup notifikasi"><i class="fas fa-times"></i></button>
+          </div>
+        `;
+        cardNotice.classList.remove('hidden');
+        cardNotice.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+
+      if(formMessage){
+        formMessage.className = `rounded-xl p-4 text-sm ${bgClass} block`;
+        formMessage.innerHTML = `<div class="flex items-center gap-2 font-bold mb-1">${iconHtml} <span>${title}</span></div><div>${msg}</div>`;
+        formMessage.classList.remove('hidden');
+      }
+
+      showModalNotice(title, msg, type);
+    }
+
     let suppressInputHide = false;
 
     form?.addEventListener('input',(event)=>{
       event.target.removeAttribute('aria-invalid');
       if(!suppressInputHide){
-        message.classList.add('hidden');
+        document.getElementById('cardNotice')?.classList.add('hidden');
+        document.getElementById('formMessage')?.classList.add('hidden');
         clearTimeout(window.saveTimer);
         window.saveTimer=setTimeout(saveDraft,500);
       }
@@ -362,17 +412,13 @@
       if(!file){fileName.textContent='Pilih gambar header';window.headerImageDataUrl='';return}
       if(!file.type.startsWith('image/')){
         event.target.value='';
-        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
-        message.classList.remove('hidden');
-        message.textContent='Hanya file gambar yang diizinkan.';
+        renderNotice('Berkas Tidak Valid', 'Hanya file gambar (PNG, JPG, JPEG) yang diizinkan.', 'error');
         fileName.textContent='Pilih gambar header';
         return;
       }
       if(file.size>5*1024*1024){
         event.target.value='';
-        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
-        message.classList.remove('hidden');
-        message.textContent='Ukuran gambar melebihi batas 5 MB.';
+        renderNotice('Ukuran Gambar Melebihi Batas', 'Ukuran gambar header tidak boleh melebihi batas 5 MB.', 'error');
         fileName.textContent='Pilih gambar header';
         return;
       }
@@ -390,9 +436,7 @@
       localStorage.removeItem(draftKey);
       document.getElementById('fileName').textContent='Pilih gambar header';
       updateCounters();
-      message.className='rounded-xl p-4 text-sm bg-gray-100 text-gray-700 block';
-      message.classList.remove('hidden');
-      message.textContent='Draf telah dihapus.';
+      renderNotice('Draf Dihapus', 'Draf tulisan Anda telah dibersihkan.', 'info');
     });
 
     form?.addEventListener('submit',async(event)=>{
@@ -422,11 +466,7 @@
           errText += `<br><span class="font-bold mt-1 block">• Isi tulisan kurang dari 200 karakter (saat ini ${curLen} karakter).</span>`;
         }
 
-        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
-        message.classList.remove('hidden');
-        message.innerHTML=`<i class="fas fa-circle-exclamation mr-2"></i>${errText}`;
-
-        showModalNotice('Formulir Belum Lengkap', errText, 'error');
+        renderNotice('Formulir Belum Lengkap', errText, 'error');
 
         first.focus();
         first.scrollIntoView({behavior:'smooth',block:'center'});
@@ -483,12 +523,7 @@
 
       const successNotice = `Tulisan Anda berjudul <strong>"${escapeHtml(data.judul)}"</strong> berhasil dikirim untuk ditinjau oleh tim moderasi artikel.${savedToServer?'':'<br><span class="text-xs text-amber-700 font-normal mt-1 block">(Disimpan ke memori cadangan lokal)</span>'}`;
 
-      message.className='rounded-xl p-4 text-sm bg-green-50 text-green-800 block';
-      message.classList.remove('hidden');
-      message.innerHTML=`<i class="fas fa-circle-check mr-2"></i><strong>Tulisan berhasil dikirim!</strong> ${successNotice}`;
-      message.scrollIntoView({behavior:'smooth',block:'center'});
-
-      showModalNotice('Tulisan Berhasil Dikirim! 🎉', successNotice, 'success');
+      renderNotice('Tulisan Berhasil Dikirim! 🎉', successNotice, 'success');
 
       if(submitBtn){
         submitBtn.disabled = false;
@@ -497,7 +532,7 @@
 
       setTimeout(()=>{
         suppressInputHide = false;
-      }, 1000);
+      }, 1500);
     });
 
     async function renderPublished(){
