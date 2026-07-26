@@ -292,20 +292,38 @@
       }catch(e){localStorage.removeItem(draftKey)}
     }
 
+    let suppressInputHide = false;
+
     form?.addEventListener('input',(event)=>{
       event.target.removeAttribute('aria-invalid');
-      message.classList.add('hidden');
+      if(!suppressInputHide){
+        message.classList.add('hidden');
+        clearTimeout(window.saveTimer);
+        window.saveTimer=setTimeout(saveDraft,500);
+      }
       updateCounters();
-      clearTimeout(window.saveTimer);
-      window.saveTimer=setTimeout(saveDraft,500);
     });
 
     document.getElementById('headerImage')?.addEventListener('change',async(event)=>{
       const file=event.target.files[0];
       const fileName=document.getElementById('fileName');
       if(!file){fileName.textContent='Pilih gambar header';window.headerImageDataUrl='';return}
-      if(!file.type.startsWith('image/')){event.target.value='';message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700';message.textContent='Hanya file gambar yang diizinkan.';fileName.textContent='Pilih gambar header';return}
-      if(file.size>5*1024*1024){event.target.value='';message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700';message.textContent='Ukuran gambar melebihi batas 5 MB.';fileName.textContent='Pilih gambar header';return}
+      if(!file.type.startsWith('image/')){
+        event.target.value='';
+        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
+        message.classList.remove('hidden');
+        message.textContent='Hanya file gambar yang diizinkan.';
+        fileName.textContent='Pilih gambar header';
+        return;
+      }
+      if(file.size>5*1024*1024){
+        event.target.value='';
+        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
+        message.classList.remove('hidden');
+        message.textContent='Ukuran gambar melebihi batas 5 MB.';
+        fileName.textContent='Pilih gambar header';
+        return;
+      }
       fileName.textContent=file.name;
       try{
         window.headerImageDataUrl=await readImageDataUrl(file);
@@ -314,11 +332,14 @@
 
     document.getElementById('clearDraft')?.addEventListener('click',()=>{
       if(!confirm('Hapus seluruh isi draf tulisan?'))return;
+      clearTimeout(window.saveTimer);
+      clearTimeout(window.draftTimer);
       form.reset();
       localStorage.removeItem(draftKey);
       document.getElementById('fileName').textContent='Pilih gambar header';
       updateCounters();
-      message.className='rounded-xl p-4 text-sm bg-gray-100 text-gray-700';
+      message.className='rounded-xl p-4 text-sm bg-gray-100 text-gray-700 block';
+      message.classList.remove('hidden');
       message.textContent='Draf telah dihapus.';
     });
 
@@ -331,11 +352,15 @@
         if(invalid&&!first)first=field;
       });
       if(first){
-        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700';
+        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700 block';
+        message.classList.remove('hidden');
         message.innerHTML='<i class="fas fa-circle-exclamation mr-2"></i>Mohon lengkapi semua kolom wajib dengan benar.';
         first.focus();
         return;
       }
+
+      clearTimeout(window.saveTimer);
+      clearTimeout(window.draftTimer);
 
       const fileInput=document.getElementById('headerImage');
       const file=fileInput?.files[0];
@@ -365,14 +390,22 @@
 
       savePendingLocally(data);
 
+      suppressInputHide = true;
       window.headerImageDataUrl='';
-      message.className='rounded-xl p-4 text-sm bg-green-50 text-green-800';
-      message.innerHTML=`<i class="fas fa-circle-check mr-2"></i><strong>Tulisan dikirim untuk ditinjau oleh admin artikel.</strong> ${savedToServer?'':'Server tidak tersedia, tulisan disimpan lokal sebagai cadangan.'}`;
-      message.scrollIntoView({behavior:'smooth',block:'nearest'});
       form.reset();
       localStorage.removeItem(draftKey);
       document.getElementById('fileName').textContent='Pilih berkas tulisan';
       updateCounters();
+      status.innerHTML='<i class="far fa-floppy-disk mr-1"></i>Draf tersimpan otomatis';
+
+      message.className='rounded-xl p-4 text-sm bg-green-50 text-green-800 block';
+      message.classList.remove('hidden');
+      message.innerHTML=`<i class="fas fa-circle-check mr-2"></i><strong>Tulisan berhasil dikirim untuk ditinjau oleh admin artikel.</strong> ${savedToServer?'':'Server tidak tersedia, tulisan disimpan lokal sebagai cadangan.'}`;
+      message.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+      setTimeout(()=>{
+        suppressInputHide = false;
+      }, 500);
     });
 
     async function renderPublished(){
