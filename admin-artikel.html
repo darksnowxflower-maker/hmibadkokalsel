@@ -254,9 +254,9 @@
             }
           }catch(err){
             console.error('Reject error:', err);
-            currentPending = currentPending.filter(a=>a.id!==article.id);
-            localStorage.setItem(pendingKey,JSON.stringify(currentPending));
           }
+          currentPending = currentPending.filter(a=>a.id!==article.id);
+          localStorage.setItem(pendingKey,JSON.stringify(currentPending));
           alert('Artikel ditolak dan dihapus.');
           await loadPending();
         };

@@ -59,8 +59,8 @@ function createArticleId() {
 
 async function getArticles(storage) {
   const articles = await readKV(storage.ARTICLES_KV, 'articles', null);
-  if (!articles || !Array.isArray(articles) || articles.length === 0) {
-    // Initialize dengan DEFAULT_ARTICLES jika kosong
+  if (articles === null || !Array.isArray(articles)) {
+    // Initialize dengan DEFAULT_ARTICLES hanya jika KV belum ada/null
     await writeKV(storage.ARTICLES_KV, 'articles', DEFAULT_ARTICLES);
     return DEFAULT_ARTICLES;
   }
@@ -203,10 +203,9 @@ async function handleRequest(request, env) {
     }
     const articles = await getArticles(env);
     const filtered = articles.filter((item) => item.id !== id);
-    if (filtered.length === articles.length) {
-      return jsonResponse({ error: 'Article not found' }, 404);
+    if (filtered.length !== articles.length) {
+      await writeKV(env.ARTICLES_KV, 'articles', filtered);
     }
-    await writeKV(env.ARTICLES_KV, 'articles', filtered);
     return jsonResponse({ success: true });
   }
 
