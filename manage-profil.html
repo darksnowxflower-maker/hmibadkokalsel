@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Profil — Dashboard HMI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="theme.css?v=20260711">
+</head>
+<body class="min-h-screen bg-slate-50 text-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto" />
+                    <div>
+                        <p class="text-sm font-semibold text-hmiGreen uppercase tracking-[0.2em]">Kelola Profil</p>
+                        <h1 class="text-3xl font-bold">Manajemen Konten Profil</h1>
+                    </div>
+                </a>
+            </div>
+            <a href="dashboard.html" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 transition">Kembali ke Dashboard</a>
+        </div>
+
+        <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
+            <form id="profileForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Badge Hero</label>
+                    <input id="heroBadge" type="text" class="w-full rounded-xl border border-gray-200 px-4 py-3" />
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Hero</label>
+                        <input id="heroTitle" type="text" class="w-full rounded-xl border border-gray-200 px-4 py-3" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Accent</label>
+                        <input id="heroAccent" type="text" class="w-full rounded-xl border border-gray-200 px-4 py-3" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Hero</label>
+                    <textarea id="heroDesc" rows="3" class="w-full rounded-xl border border-gray-200 px-4 py-3"></textarea>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Visi</label>
+                        <textarea id="vision" rows="4" class="w-full rounded-xl border border-gray-200 px-4 py-3"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Misi</label>
+                        <textarea id="mission" rows="4" class="w-full rounded-xl border border-gray-200 px-4 py-3"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Komitmen</label>
+                        <textarea id="commitment" rows="4" class="w-full rounded-xl border border-gray-200 px-4 py-3"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button id="saveBtn" class="rounded-xl bg-hmiGreen px-4 py-2 text-sm font-semibold text-white">Simpan</button>
+                    <button type="button" id="resetBtn" class="rounded-xl border border-gray-300 px-4 py-2 text-sm">Reset ke default</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const auth = JSON.parse(localStorage.getItem('hmiDashboardAuth') || 'null');
+        if (!auth || auth.role !== 'admin') {
+            window.location.href = 'login.html?denied=1';
+        }
+
+        const defaultProfile = {
+            hero: { badge: '8 Cabang Aktif', title: 'Profil Cabang', titleAccent: 'HMI Badko Kalsel', description: 'Setiap cabang adalah garda terdepan dalam membina kader, mengabdikan diri, dan menebarkan nilai-nilai Islam di tengah masyarakat.' },
+            section: { vision: 'Menjadikan HMI Badko Kalsel sebagai pusat pembinaan kader yang unggul, berakhlak Islami, dan berkontribusi nyata bagi bangsa.', mission: 'Menggerakkan kaderisasi, advokasi, dan pengabdian masyarakat yang berbasis pada nilai-nilai keislaman dan keindonesiaan.', commitment: 'Sinergi antarcabang, transparansi program, dan pemberdayaan kader secara berkelanjutan.' }
+        };
+
+        let profile = JSON.parse(localStorage.getItem('hmiProfileData') || 'null') || defaultProfile;
+
+        const heroBadge = document.getElementById('heroBadge');
+        const heroTitle = document.getElementById('heroTitle');
+        const heroAccent = document.getElementById('heroAccent');
+        const heroDesc = document.getElementById('heroDesc');
+        const vision = document.getElementById('vision');
+        const mission = document.getElementById('mission');
+        const commitment = document.getElementById('commitment');
+        const saveBtn = document.getElementById('saveBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function fill() {
+            heroBadge.value = profile.hero.badge || '';
+            heroTitle.value = profile.hero.title || '';
+            heroAccent.value = profile.hero.titleAccent || '';
+            heroDesc.value = profile.hero.description || '';
+            vision.value = profile.section.vision || '';
+            mission.value = profile.section.mission || '';
+            commitment.value = profile.section.commitment || '';
+        }
+
+        fill();
+
+        saveBtn.addEventListener('click', function(e){
+            e.preventDefault();
+            profile = {
+                hero: { badge: heroBadge.value.trim(), title: heroTitle.value.trim(), titleAccent: heroAccent.value.trim(), description: heroDesc.value.trim() },
+                section: { vision: vision.value.trim(), mission: mission.value.trim(), commitment: commitment.value.trim() }
+            };
+            localStorage.setItem('hmiProfileData', JSON.stringify(profile));
+            alert('Data profil berhasil disimpan.');
+        });
+
+        resetBtn.addEventListener('click', function(){
+            if (!confirm('Kembalikan konten profil ke nilai default?')) return;
+            localStorage.removeItem('hmiProfileData');
+            profile = JSON.parse(JSON.stringify(defaultProfile));
+            fill();
+            alert('Profil dikembalikan ke default.');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — HMI Badko Kalsel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hmiGreen: '#006B3F',
+                        hmiGreenLight: '#008c52',
+                        hmiDark: '#004d2c'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="theme.css?v=20260711">
+    <script src="theme-toggle.js?v=20260711"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-100 text-gray-800">
+    <div class="min-h-screen flex items-center justify-center px-4 py-10">
+        <div class="w-full max-w-5xl bg-white rounded-[2rem] shadow-2xl overflow-hidden grid md:grid-cols-[1.05fr_0.95fr]">
+            <div class="bg-pattern p-8 md:p-10 text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-black/20"></div>
+                <div class="relative z-10 h-full flex flex-col justify-between">
+                    <div>
+                        <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold bg-white/15 backdrop-blur rounded-full px-4 py-2 hover:bg-white/25 transition">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Beranda
+                        </a>
+                        <div class="mt-8 flex items-center gap-3">
+                            <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-14 w-auto" />
+                            <div>
+                                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-100">HMI Badko Kalsel</p>
+                                <h2 class="text-lg font-bold">Portal Admin & Pengurus</h2>
+                            </div>
+                        </div>
+                        <h1 class="text-3xl md:text-4xl font-extrabold mt-6 leading-tight">Akses Panel Admin & Pengurus</h1>
+                        <p class="mt-4 text-sm md:text-base text-emerald-50 leading-relaxed">
+                            Masuk untuk mengelola berita, kegiatan, pengurus, dan dokumen perpustakaan secara cepat dan aman.
+                        </p>
+                    </div>
+                    <!-- Demo card removed per request -->
+                </div>
+            </div>
+
+            <div class="p-8 md:p-10">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-hmiGreen text-xl">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold">Masuk ke Dashboard</h2>
+                        <p class="text-sm text-gray-500">Pilih peran Anda untuk melanjutkan</p>
+                    </div>
+                </div>
+
+                <form id="loginForm" class="space-y-5">
+                    <div>
+                        <label for="role" class="block text-sm font-semibold text-gray-700 mb-2">Peran</label>
+                        <select id="role" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen">
+                            <option value="admin">Admin</option>
+                            <option value="pengurus">Pengurus</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                        <input id="username" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="Masukkan username" />
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                            <input id="password" type="password" required class="w-full rounded-xl border border-gray-200 px-4 py-3 pr-14 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="Masukkan password" />
+                            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg text-gray-500 hover:text-hmiGreen hover:bg-emerald-50 transition-all duration-200 group" title="Tampilkan password">
+                                <i class="fas fa-eye-slash text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="errorMessage" class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"></div>
+
+                    <button type="submit" class="w-full rounded-xl bg-hmiGreen px-4 py-3 text-white font-semibold hover:bg-hmiDark transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Masuk
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .bg-pattern {
+            background: linear-gradient(135deg, rgba(0,107,63,0.95) 0%, rgba(0,77,44,0.95) 100%), url('https://www.transparenttextures.com/patterns/cubes.png');
+            background-size: cover, auto;
+        }
+    </style>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+
+        // Toggle password visibility
+        togglePasswordBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            
+            const icon = togglePasswordBtn.querySelector('i');
+            if (isPassword) {
+                // Password sekarang terlihat (text) - tampilkan eye (mata buka)
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+                togglePasswordBtn.classList.add('text-hmiGreen');
+                togglePasswordBtn.title = 'Sembunyikan password';
+            } else {
+                // Password sekarang disembunyikan (password) - tampilkan eye-slash (mata tutup)
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+                togglePasswordBtn.classList.remove('text-hmiGreen');
+                togglePasswordBtn.title = 'Tampilkan password';
+            }
+        });
+
+        const form = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Updated credentials: only admin account remains as requested
+        const credentials = {
+            admin: [ { username: 'admin', password: 'admin123' } ],
+            pengurus: []
+        };
+
+        // Clear existing admin/pengurus related localStorage data per request
+        (function clearAdminPengurusData(){
+            try{
+                const explicit = ['hmiDashboardAuth','hmiPengurusData','hmiMemberData','hmiAspirations','hmi_isAdmin'];
+                explicit.forEach(k=>localStorage.removeItem(k));
+                for(let i = localStorage.length - 1; i >= 0; i--){
+                    const key = localStorage.key(i);
+                    if(!key) continue;
+                    if(/pengurus|pengurusdata|hmiPengurus|admin|hmi_admin/i.test(key)){
+                        localStorage.removeItem(key);
+                    }
+                }
+                console.log('Admin/pengurus localStorage cleared');
+            }catch(e){ console.warn('Clearing storage failed', e); }
+        })();
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const role = document.getElementById('role').value;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            const roleCredentials = credentials[role] || [];
+            const matchedCredential = roleCredentials.find(item => item.username === username && item.password === password);
+
+            if (!matchedCredential) {
+                errorMessage.textContent = 'Username atau password salah. Silakan cek kembali kredensial demo.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            const userData = {
+                role: role,
+                username: username,
+                name: role === 'admin' ? 'Admin HMI' : 'Pengurus HMI'
+            };
+
+            localStorage.setItem('hmiDashboardAuth', JSON.stringify(userData));
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+
+</body>
+</html>

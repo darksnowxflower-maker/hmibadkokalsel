@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Artikel dan karya tulis kader HMI Badko Kalimantan Selatan."><title>Artikel — HMI Badko Kalimantan Selatan</title>
+  <script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>tailwind.config={theme:{extend:{colors:{hmiGreen:'#006B3F',hmiDark:'#004d2c'}}}}</script>
+  <style>.glass-nav{background:rgba(255,255,255,.9);backdrop-filter:blur(10px)}.bg-pattern{background:linear-gradient(135deg,rgba(0,107,63,.96),rgba(0,77,44,.96))}.form-field{width:100%;border:1px solid #d1d5db;border-radius:.85rem;padding:.8rem 1rem;background:#fff;outline:none;transition:.2s}.form-field:focus{border-color:#006b3f;box-shadow:0 0 0 3px rgba(0,107,63,.12)}.form-field[aria-invalid="true"]{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1)}</style>
+  <link rel="stylesheet" href="theme.css?v=20260712"><script src="theme-toggle.js?v=20260712"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans selection:bg-hmiGreen selection:text-white">
+  <nav class="glass-nav shadow-sm sticky top-0 z-50 mx-4 mt-4 rounded-full"><div class="max-w-7xl mx-auto px-4 sm:px-6"><div class="flex justify-between items-center h-20">
+    <a href="index.html" class="flex items-center gap-3"><img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto"><div><h1 class="font-extrabold text-lg leading-none text-hmiGreen">HMI Badko Kalimantan Selatan</h1><p class="hidden sm:block text-[10px] uppercase tracking-[.18em] text-gray-500 font-bold mt-1.5">Badan Koordinasi</p></div></a>
+    <div class="hidden lg:flex items-center gap-1"><a href="index.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Beranda</a><a href="artikel.html" class="px-4 py-3 font-bold text-hmiGreen border-b-2 border-hmiGreen">Artikel</a><a href="profil.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Profil</a><a href="pengurus.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Pengurus</a><a href="program-kerja.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Program Kerja</a><a href="perpustakaan.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Perpustakaan</a><a href="berita.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Berita</a><button class="theme-toggle ml-2 rounded-full border border-gray-200 bg-white px-3 py-2" aria-label="Ubah tema"><i class="fas fa-moon"></i><span class="sr-only">Gelap</span></button></div>
+    <button id="mobileBtn" class="lg:hidden p-3 text-xl" aria-label="Buka menu"><i class="fas fa-bars"></i></button>
+  </div><div id="mobileMenu" class="hidden lg:hidden pb-5 grid gap-1 border-t pt-3"><a href="index.html" class="p-2">Beranda</a><a href="artikel.html" class="p-2 rounded-lg bg-green-50 font-bold text-hmiGreen">Artikel</a><a href="profil.html" class="p-2">Profil</a><a href="pengurus.html" class="p-2">Pengurus</a><a href="program-kerja.html" class="p-2">Program Kerja</a><a href="perpustakaan.html" class="p-2">Perpustakaan</a><a href="berita.html" class="p-2">Berita</a></div></div></nav>
+  <main class="max-w-7xl mx-auto px-4 py-12">
+    <section class="rounded-[2rem] bg-pattern text-white p-8 md:p-12 shadow-2xl mb-12 relative overflow-hidden"><div class="absolute -right-20 -top-20 w-72 h-72 bg-white/5 rounded-full"></div><div class="relative max-w-2xl"><span class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm font-semibold"><i class="fas fa-pen-nib mr-2"></i>Karya Tulis Kader</span><h1 class="text-3xl md:text-4xl font-extrabold mt-4">Artikel</h1><p class="mt-3 text-emerald-100 text-lg">Wadah gagasan, kajian, opini, dan karya tulis kader Himpunan Mahasiswa Islam Kalimantan Selatan.</p><div class="mt-7 flex flex-wrap gap-3"><button id="openArticleForm" type="button" class="inline-flex items-center rounded-full bg-white px-6 py-3 font-bold text-hmiGreen shadow-lg hover:bg-green-50 transition" aria-expanded="false" aria-controls="kirim-tulisan"><i class="fas fa-paper-plane mr-2"></i>Kirim Tulisan</button><button id="adminLoginBtn" type="button" class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-6 py-3 font-bold text-white shadow-lg hover:bg-white/20 transition"><i class="fas fa-shield-halved mr-2"></i>Admin</button></div></div></section>
+    <section id="published-articles" class="rounded-[2rem] bg-white border border-gray-200 shadow-sm p-12 min-h-[300px]">
+      <div id="publishedContainer" class="max-w-7xl mx-auto grid gap-6">
+        <!-- Published articles will be rendered here by JS -->
+      </div>
+      <template id="emptyTemplate">
+        <div class="text-center py-16">
+          <div class="mx-auto w-20 h-20 rounded-full bg-green-50 text-hmiGreen grid place-items-center mb-5"><i class="fas fa-hourglass-half text-4xl"></i></div>
+          <h2 class="text-2xl font-bold mb-2">Sedang Diupdate</h2>
+          <p class="text-gray-600">Laman artikel sedang dipersiapkan untuk menampilkan karya-karya tulisan terbaik kader.</p>
+          <p class="text-sm text-gray-500 mt-2">Silakan kembali lagi dalam waktu dekat.</p>
+        </div>
+      </template>
+    </section>
+
+    <section id="kirim-tulisan" class="hidden mt-12 scroll-mt-28" aria-hidden="true">
+      <div class="grid lg:grid-cols-[.72fr_1.28fr] rounded-[2rem] overflow-hidden border border-gray-200 bg-white shadow-xl">
+        <aside class="bg-gradient-to-br from-hmiDark to-hmiGreen p-8 md:p-10 text-white">
+          <span class="inline-flex w-12 h-12 rounded-2xl bg-white/15 items-center justify-center text-xl"><i class="fas fa-file-pen"></i></span>
+          <h2 class="text-3xl font-extrabold mt-6">Kirim Tulisan</h2>
+          <p class="mt-4 text-emerald-100 leading-relaxed">Bagikan gagasan terbaikmu untuk memperkaya tradisi intelektual kader Himpunan Mahasiswa Islam Kalimantan Selatan.</p>
+          <div class="mt-8 pt-7 border-t border-white/15 space-y-5 text-sm">
+            <div class="flex gap-3"><i class="fas fa-circle-check mt-1 text-emerald-300"></i><p><strong class="block text-white">Tulisan orisinal</strong><span class="text-emerald-100/80">Belum pernah dipublikasikan atau memiliki izin publikasi ulang.</span></p></div>
+            <div class="flex gap-3"><i class="fas fa-spell-check mt-1 text-emerald-300"></i><p><strong class="block text-white">Bahasa yang baik</strong><span class="text-emerald-100/80">Argumentatif, santun, dan tidak mengandung unsur diskriminatif.</span></p></div>
+            <div class="flex gap-3"><i class="fas fa-user-pen mt-1 text-emerald-300"></i><p><strong class="block text-white">Proses kurasi</strong><span class="text-emerald-100/80">Redaksi dapat menyunting tanpa mengubah substansi tulisan.</span></p></div>
+          </div>
+        </aside>
+        <div class="p-6 md:p-10">
+          <div class="flex items-start justify-between gap-3 mb-8"><div><p class="text-xs uppercase tracking-[.16em] font-bold text-hmiGreen">Formulir Kontributor</p><h3 class="text-2xl font-extrabold mt-1">Lengkapi data tulisan</h3><span id="draftStatus" class="block text-xs text-gray-500 mt-2"><i class="far fa-floppy-disk mr-1"></i>Draf tersimpan otomatis</span></div><button id="closeArticleForm" type="button" class="shrink-0 w-11 h-11 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200" aria-label="Tutup formulir"><i class="fas fa-times"></i></button></div>
+          <form id="articleForm" novalidate class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-5">
+              <label class="text-sm font-bold">Nama lengkap <span class="text-red-600">*</span><input class="form-field mt-2 font-normal" name="nama" autocomplete="name" required placeholder="Nama penulis"></label>
+              <label class="text-sm font-bold">Asal cabang/komisariat <span class="text-red-600">*</span><input class="form-field mt-2 font-normal" name="asal" required placeholder="Contoh: HMI Cabang Banjarmasin"></label>
+              <label class="text-sm font-bold">Email <span class="text-red-600">*</span><input class="form-field mt-2 font-normal" name="email" type="email" autocomplete="email" required placeholder="nama@email.com"></label>
+              <label class="text-sm font-bold">Nomor WhatsApp <span class="text-red-600">*</span><input class="form-field mt-2 font-normal" name="whatsapp" type="tel" inputmode="tel" required placeholder="08xxxxxxxxxx"></label>
+            </div>
+            <div class="grid md:grid-cols-[1fr_.55fr] gap-5">
+              <label class="text-sm font-bold">Judul tulisan <span class="text-red-600">*</span><input class="form-field mt-2 font-normal" name="judul" required maxlength="120" placeholder="Judul yang ringkas dan menarik"><span class="block text-right text-xs text-gray-400 mt-1"><span id="titleCount">0</span>/120 karakter</span></label>
+              <label class="text-sm font-bold">Kategori <span class="text-red-600">*</span><select class="form-field mt-2 font-normal" name="kategori" required><option value="">Pilih kategori</option><option>Opini</option><option>Esai</option><option>Kajian</option><option>Refleksi</option><option>Keislaman</option><option>Kebangsaan</option><option>Pengabdian</option><option>Lainnya</option></select></label>
+            </div>
+            <label class="block text-sm font-bold">Ringkasan tulisan <span class="text-red-600">*</span><textarea class="form-field mt-2 font-normal min-h-24 resize-y" name="ringkasan" required maxlength="300" placeholder="Jelaskan pokok gagasan tulisan dalam 2–3 kalimat"></textarea></label>
+            <label class="block text-sm font-bold">Isi tulisan <span class="text-red-600">*</span><textarea id="content" class="form-field mt-2 font-normal min-h-72 resize-y leading-relaxed" name="isi" required minlength="200" placeholder="Tulis isi artikel di sini..."></textarea><span class="flex justify-between text-xs mt-1.5"><span class="text-gray-400">Minimal 200 karakter</span><span id="wordCount" class="font-semibold text-gray-500">0 kata</span></span></label>
+            <label class="block text-sm font-bold">Upload gambar header <span class="font-normal text-gray-400">(opsional)</span><span class="mt-2 flex items-center justify-center gap-3 border-2 border-dashed border-gray-300 rounded-2xl p-6 cursor-pointer hover:border-hmiGreen hover:bg-green-50 transition"><i class="fas fa-image text-2xl text-hmiGreen"></i><span><strong id="fileName" class="block text-sm">Pilih gambar header</strong><small class="font-normal text-gray-500">PNG, JPG, atau JPEG • Maksimal 5 MB</small></span><input id="headerImage" class="sr-only" name="headerImage" type="file" accept="image/png,image/jpeg,image/jpg"></span></label>
+            <label class="flex gap-3 items-start rounded-xl bg-gray-50 p-4 text-sm cursor-pointer"><input name="persetujuan" type="checkbox" required class="mt-1 accent-hmiGreen w-4 h-4"><span>Saya menyatakan tulisan ini orisinal dan menyetujui proses penyuntingan serta publikasi oleh pengelola laman. <span class="text-red-600">*</span></span></label>
+            <div id="formMessage" class="hidden rounded-xl p-4 text-sm" role="status"></div>
+            <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 pt-2"><button type="button" id="clearDraft" class="text-sm font-bold text-gray-500 hover:text-red-600"><i class="fas fa-trash-can mr-2"></i>Hapus draf</button><button type="submit" class="rounded-full bg-hmiGreen hover:bg-hmiDark text-white px-7 py-3.5 font-bold shadow-lg transition"><i class="fas fa-paper-plane mr-2"></i>Kirim Tulisan</button></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="adminLoginModal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/60 px-4 py-8">
+    <div class="w-full max-w-lg rounded-[2rem] bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <p class="text-sm uppercase tracking-[0.2em] text-hmiGreen font-semibold">Login Admin</p>
+          <h3 class="mt-2 text-2xl font-extrabold text-gray-900">Akses Dashboard Moderasi Artikel</h3>
+        </div>
+        <button id="closeAdminLogin" type="button" class="rounded-full bg-gray-100 p-3 text-gray-600 hover:bg-gray-200" aria-label="Tutup login admin"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="adminLoginForm" class="space-y-5">
+        <div>
+          <label class="block text-sm font-bold text-gray-700">ID Admin</label>
+          <input id="adminLoginId" class="form-field mt-2" placeholder="Masukkan ID admin" required />
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700">Password</label>
+          <input id="adminLoginPassword" type="password" class="form-field mt-2" placeholder="Masukkan password" required />
+        </div>
+        <div id="adminLoginError" class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"></div>
+        <button type="submit" class="w-full rounded-full bg-hmiGreen hover:bg-hmiDark text-white px-6 py-3 font-bold shadow-lg transition">Masuk ke Dashboard</button>
+      </form>
+    </div>
+  </div>
+  <footer class="bg-gray-900 text-white py-8 mt-12 border-t-4 border-hmiGreen"><div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400"><p>© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan.</p><p class="mt-1">Prototype by Muhammad Indra Kurniawan</p></div></footer>
+  <script>
+    const mobileBtn=document.getElementById('mobileBtn');
+    const mobileMenu=document.getElementById('mobileMenu');
+    if(mobileBtn&&mobileMenu){
+      mobileBtn.setAttribute('aria-expanded','false');
+      mobileBtn.addEventListener('click',()=>{
+        const isOpen = mobileMenu.classList.toggle('hidden') === false;
+        mobileBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+      mobileMenu.querySelectorAll('a').forEach((link)=>{
+        link.addEventListener('click',()=>{
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded','false');
+        });
+      });
+      document.addEventListener('click',(event)=>{
+        if(mobileMenu.classList.contains('hidden')) return;
+        if(event.target.closest('#mobileMenu') || event.target.closest('#mobileBtn')) return;
+        mobileMenu.classList.add('hidden');
+        mobileBtn.setAttribute('aria-expanded','false');
+      });
+      window.addEventListener('resize',()=>{
+        if(window.innerWidth>=1024 && !mobileMenu.classList.contains('hidden')){
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded','false');
+        }
+      });
+    }
+
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    const adminLoginError = document.getElementById('adminLoginError');
+    const adminLoginId = document.getElementById('adminLoginId');
+    const adminLoginPassword = document.getElementById('adminLoginPassword');
+    const closeAdminLogin = document.getElementById('closeAdminLogin');
+    const adminKey = 'hmiAdminLogged';
+    const adminAccounts = [{id:'masternasional', password:'opang123', role:'Admin Artikel'}];
+
+    function openAdminLogin(){
+      if(!adminLoginModal) return;
+      adminLoginModal.classList.remove('hidden');
+      adminLoginModal.classList.add('flex');
+      adminLoginId.focus();
+    }
+
+    function closeAdminLoginModal(){
+      if(!adminLoginModal) return;
+      adminLoginModal.classList.add('hidden');
+      adminLoginModal.classList.remove('flex');
+      adminLoginError.classList.add('hidden');
+      adminLoginError.textContent='';
+    }
+
+    if(adminLoginBtn){
+      adminLoginBtn.addEventListener('click',()=>{
+        if(localStorage.getItem(adminKey)){
+          window.location.href='admin-artikel.html';
+        } else {
+          openAdminLogin();
+        }
+      });
+    }
+
+    closeAdminLogin?.addEventListener('click',closeAdminLoginModal);
+    adminLoginModal?.addEventListener('click',(event)=>{if(event.target===adminLoginModal)closeAdminLoginModal();});
+
+    adminLoginForm?.addEventListener('submit',(event)=>{
+      event.preventDefault();
+      const id=adminLoginId.value.trim();
+      const pass=adminLoginPassword.value;
+      const valid=adminAccounts.some(account => account.id===id && account.password===pass);
+      if(!valid){
+        adminLoginError.textContent='ID atau password salah.';
+        adminLoginError.classList.remove('hidden');
+        return;
+      }
+      localStorage.setItem(adminKey, JSON.stringify({id, role:'Admin Artikel'}));
+      window.location.href='admin-artikel.html';
+    });
+
+    const form=document.getElementById('articleForm');
+    const draftKey='hmiArtikelDraft';
+    const pendingKey='pendingArticles_v1';
+    const status=document.getElementById('draftStatus');
+    const title=form?.elements.judul;
+    const content=document.getElementById('content');
+    const message=document.getElementById('formMessage');
+    const formSection=document.getElementById('kirim-tulisan');
+    const openFormButton=document.getElementById('openArticleForm');
+
+    const publishedKey='publishedArticles_v1';
+    const deletedArticlesKey='deletedArticleIds_v1';
+    const serverApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : `${window.location.origin}/api`;
+    const serverArticlesUrl=`${serverApiBase}/articles`;
+    const serverPendingUrl=`${serverApiBase}/pending`;
+    const defaultPublishedArticles=[
+      {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
+    ];
+
+    function getPublishedArticlesFallback(){
+      const stored=JSON.parse(localStorage.getItem(publishedKey)||'[]');
+      const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+      const merged=[
+        ...stored,
+        ...defaultPublishedArticles.filter(article=>!deletedIds.includes(article.id))
+      ];
+      return merged.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
+    }
+
+    async function loadPublishedArticles(){
+      try{
+        const response=await fetch(serverArticlesUrl,{cache:'no-store'});
+        if(!response.ok) throw new Error('Failed to fetch articles');
+        const data=await response.json();
+        if(!Array.isArray(data)) throw new Error('Invalid articles data');
+        return data;
+      }catch(error){
+        return getPublishedArticlesFallback();
+      }
+    }
+
+    function openArticleForm(){
+      if(!formSection||!openFormButton)return;
+      formSection.classList.remove('hidden');
+      formSection.setAttribute('aria-hidden','false');
+      openFormButton.setAttribute('aria-expanded','true');
+      requestAnimationFrame(()=>{
+        formSection.scrollIntoView({behavior:'smooth',block:'start'});
+        setTimeout(()=>form?.elements.nama?.focus(),450);
+      });
+    }
+
+    function closeArticleForm(){
+      if(!formSection||!openFormButton)return;
+      formSection.classList.add('hidden');
+      formSection.setAttribute('aria-hidden','true');
+      openFormButton.setAttribute('aria-expanded','false');
+      openFormButton.scrollIntoView({behavior:'smooth',block:'center'});
+      openFormButton.focus();
+    }
+
+    if(openFormButton) openFormButton.addEventListener('click',openArticleForm);
+    document.getElementById('closeArticleForm')?.addEventListener('click',closeArticleForm);
+    document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){ if(formSection && !formSection.classList.contains('hidden')) closeArticleForm();}});
+
+    function updateCounters(){
+      const titleValue=title?.value || '';
+      document.getElementById('titleCount').textContent=titleValue.length;
+      const words=content?.value.trim()?content.value.trim().split(/\s+/).length:0;
+      document.getElementById('wordCount').textContent=words+' kata';
+    }
+
+    function readImageDataUrl(file){
+      return new Promise((resolve,reject)=>{
+        if(!file) return resolve('');
+        const reader=new FileReader();
+        reader.onload=()=>resolve(reader.result||'');
+        reader.onerror=()=>reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function saveDraft(){
+      const data={};
+      new FormData(form).forEach((value,key)=>{if(key!=='headerImage') data[key]=value});
+      data.persetujuan=form.elements.persetujuan.checked;
+      if(window.headerImageDataUrl){
+        data.headerImageDataUrl=window.headerImageDataUrl;
+        data.headerImageName=form.elements.headerImage?.files[0]?.name || document.getElementById('fileName').textContent;
+      }
+      localStorage.setItem(draftKey,JSON.stringify(data));
+      status.innerHTML='<i class="fas fa-check mr-1 text-hmiGreen"></i>Draf tersimpan';
+      clearTimeout(window.draftTimer);
+      window.draftTimer=setTimeout(()=>status.innerHTML='<i class="far fa-floppy-disk mr-1"></i>Draf tersimpan otomatis',1500);
+    }
+
+    function savePendingLocally(article){
+      const pending=JSON.parse(localStorage.getItem(pendingKey)||'[]');
+      const filtered=pending.filter(a=>a.id!==article.id);
+      filtered.unshift(article);
+      localStorage.setItem(pendingKey,JSON.stringify(filtered));
+    }
+
+    function loadDraft(){
+      try{
+        const data=JSON.parse(localStorage.getItem(draftKey)||'{}');
+        Object.entries(data).forEach(([key,value])=>{
+          const field=form.elements[key];
+          if(!field) return;
+          if(field.type==='checkbox') field.checked=!!value; else field.value=value;
+        });
+        if(data.headerImageDataUrl){
+          window.headerImageDataUrl=data.headerImageDataUrl;
+          document.getElementById('fileName').textContent=data.headerImageName || 'Gambar header tersimpan';
+        }
+        updateCounters();
+      }catch(e){localStorage.removeItem(draftKey)}
+    }
+
+    form?.addEventListener('input',(event)=>{
+      event.target.removeAttribute('aria-invalid');
+      message.classList.add('hidden');
+      updateCounters();
+      clearTimeout(window.saveTimer);
+      window.saveTimer=setTimeout(saveDraft,500);
+    });
+
+    document.getElementById('headerImage')?.addEventListener('change',async(event)=>{
+      const file=event.target.files[0];
+      const fileName=document.getElementById('fileName');
+      if(!file){fileName.textContent='Pilih gambar header';window.headerImageDataUrl='';return}
+      if(!file.type.startsWith('image/')){event.target.value='';message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700';message.textContent='Hanya file gambar yang diizinkan.';fileName.textContent='Pilih gambar header';return}
+      if(file.size>5*1024*1024){event.target.value='';message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700';message.textContent='Ukuran gambar melebihi batas 5 MB.';fileName.textContent='Pilih gambar header';return}
+      fileName.textContent=file.name;
+      try{
+        window.headerImageDataUrl=await readImageDataUrl(file);
+      }catch(e){window.headerImageDataUrl='';}
+    });
+
+    document.getElementById('clearDraft')?.addEventListener('click',()=>{
+      if(!confirm('Hapus seluruh isi draf tulisan?'))return;
+      form.reset();
+      localStorage.removeItem(draftKey);
+      document.getElementById('fileName').textContent='Pilih gambar header';
+      updateCounters();
+      message.className='rounded-xl p-4 text-sm bg-gray-100 text-gray-700';
+      message.textContent='Draf telah dihapus.';
+    });
+
+    form?.addEventListener('submit',async(event)=>{
+      event.preventDefault();
+      let first=null;
+      form.querySelectorAll('[required]').forEach(field=>{
+        const invalid=!field.checkValidity();
+        field.setAttribute('aria-invalid',invalid?'true':'false');
+        if(invalid&&!first)first=field;
+      });
+      if(first){
+        message.className='rounded-xl p-4 text-sm bg-red-50 text-red-700';
+        message.innerHTML='<i class="fas fa-circle-exclamation mr-2"></i>Mohon lengkapi semua kolom wajib dengan benar.';
+        first.focus();
+        return;
+      }
+
+      const fileInput=document.getElementById('headerImage');
+      const file=fileInput?.files[0];
+      const data={
+        id:'a-'+Date.now(),
+        nama:form.elements.nama.value,
+        asal:form.elements.asal.value,
+        email:form.elements.email.value,
+        whatsapp:form.elements.whatsapp.value,
+        judul:form.elements.judul.value,
+        kategori:form.elements.kategori.value,
+        ringkasan:form.elements.ringkasan.value,
+        isi:form.elements.isi.value,
+        headerImage:file?file.name:'',
+        headerImageDataUrl:file?window.headerImageDataUrl||'':'',
+        status:'pending',
+        submittedAt:new Date().toISOString()
+      };
+
+      let savedToServer=false;
+      try{
+        const response=await fetch(serverPendingUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        if(response.ok){
+          savedToServer=true;
+        }
+      }catch(e){ }
+
+      savePendingLocally(data);
+
+      window.headerImageDataUrl='';
+      message.className='rounded-xl p-4 text-sm bg-green-50 text-green-800';
+      message.innerHTML=`<i class="fas fa-circle-check mr-2"></i><strong>Tulisan dikirim untuk ditinjau oleh admin artikel.</strong> ${savedToServer?'':'Server tidak tersedia, tulisan disimpan lokal sebagai cadangan.'}`;
+      message.scrollIntoView({behavior:'smooth',block:'nearest'});
+      form.reset();
+      localStorage.removeItem(draftKey);
+      document.getElementById('fileName').textContent='Pilih berkas tulisan';
+      updateCounters();
+    });
+
+    async function renderPublished(){
+      const published=await loadPublishedArticles();
+      const container=document.getElementById('publishedContainer');
+      container.innerHTML='';
+      if(!published.length){
+        container.appendChild(document.getElementById('emptyTemplate').content.cloneNode(true));
+        return;
+      }
+      published.forEach((article)=>{
+        const card=document.createElement('article');
+        card.className='rounded-2xl border border-gray-200 p-6 bg-white shadow-sm';
+        card.innerHTML=`
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-hmiGreen">${escapeHtml(article.kategori || 'Artikel')}</span>
+            <span class="text-sm text-gray-500">${escapeHtml(article.nama || 'Kader HMI')}</span>
+          </div>
+          <h3 class="mt-4 text-2xl font-extrabold text-hmiGreen">${escapeHtml(article.judul || 'Judul artikel')}</h3>
+          <p class="mt-2 text-sm text-gray-500">${escapeHtml(article.asal || 'HMI Badko Kalsel')} • ${new Date(article.publishedAt || article.submittedAt || Date.now()).toLocaleDateString('id-ID')}</p>
+          <p class="mt-4 text-gray-700">${escapeHtml(article.ringkasan || 'Ringkasan artikel belum tersedia.')}</p>
+          <a href="detail-artikel.html?id=${escapeHtml(String(article.id || ''))}" class="detailButton mt-5 inline-flex items-center font-bold text-hmiGreen">Baca selengkapnya <i class="fas fa-arrow-right ml-2"></i></a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(value){
+      return String(value || '').replace(/[&<>"']/g,(character)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+    }
+
+    renderPublished();
+    loadDraft();
+  </script>
+</body></html>

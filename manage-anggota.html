@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Pendaftaran & Database Anggota — HMI Badko Kalsel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hmiGreen: '#006B3F',
+                        hmiGreenLight: '#008c52',
+                        hmiDark: '#004d2c'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="theme.css?v=20260711">
+    <script src="theme-toggle.js?v=20260711"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-gray-800">
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="flex items-center gap-3">
+                        <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto" />
+                        <div>
+                            <p class="text-sm font-semibold text-hmiGreen uppercase tracking-[0.2em]">Panel Kendali</p>
+                            <h1 class="text-2xl font-bold">Kelola Pendaftaran & Database Anggota</h1>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="dashboard.html" class="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-50 transition">
+                        <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div class="grid lg:grid-cols-4 gap-6">
+                <!-- Sidebar Statistik / Filter -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6">
+                        <h3 class="font-bold text-lg mb-4 text-gray-800">Ikhtisar Pendaftaran</h3>
+                        <div class="space-y-4">
+                            <div class="rounded-xl bg-amber-50 p-4 border border-amber-100">
+                                <p class="text-xs text-amber-700 font-bold uppercase tracking-wider">Menunggu Tinjauan</p>
+                                <p id="countPending" class="text-3xl font-black text-amber-800 mt-1">0</p>
+                            </div>
+                            <div class="rounded-xl bg-emerald-50 p-4 border border-emerald-100">
+                                <p class="text-xs text-emerald-700 font-bold uppercase tracking-wider">Telah Disetujui</p>
+                                <p id="countApproved" class="text-3xl font-black text-emerald-800 mt-1">0</p>
+                            </div>
+                            <div class="rounded-xl bg-rose-50 p-4 border border-rose-100">
+                                <p class="text-xs text-rose-700 font-bold uppercase tracking-wider">Tolak / Nonaktif</p>
+                                <p id="countRejected" class="text-3xl font-black text-rose-800 mt-1">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">Filter Cabang</h3>
+                        <select id="filterCabang" class="w-full rounded-xl border border-gray-200 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm">
+                            <option value="Semua">Semua Cabang</option>
+                            <option value="Banjarmasin">Cabang Banjarmasin</option>
+                            <option value="Banjarbaru">Cabang Banjarbaru</option>
+                            <option value="Kandangan">Cabang Kandangan</option>
+                            <option value="Barabai">Cabang Barabai</option>
+                            <option value="Amuntai">Cabang Amuntai</option>
+                            <option value="Tanjung">Cabang Tanjung</option>
+                            <option value="Tanah Laut">Cabang Tanah Laut</option>
+                            <option value="Kotabaru">Cabang Kotabaru</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Main Table Area -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                            <div>
+                                <h2 class="text-xl font-bold">Daftar Pendaftar & Kader</h2>
+                                <p class="text-sm text-gray-500 mt-0.5">Tinjau registrasi masuk dari formulir pendaftaran online.</p>
+                            </div>
+                            <div class="relative w-full md:w-72">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input id="searchMember" type="text" placeholder="Cari nama, komisariat..." class="w-full rounded-xl border border-gray-200 pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-hmiGreen" />
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="border-b border-gray-200 text-gray-500 font-semibold">
+                                        <th class="py-3.5 pr-4">Nama Lengkap</th>
+                                        <th class="py-3.5 pr-4">Cabang & Komisariat</th>
+                                        <th class="py-3.5 pr-4">Tahun LK1</th>
+                                        <th class="py-3.5 pr-4">WhatsApp</th>
+                                        <th class="py-3.5 pr-4">Status</th>
+                                        <th class="py-3.5">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="memberList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script JavaScript untuk Logika Kelola Anggota -->
+    <script>
+        const auth = JSON.parse(localStorage.getItem('hmiDashboardAuth') || 'null');
+        if (!auth) {
+            window.location.href = 'login.html';
+        } else if (auth.role !== 'admin') {
+            window.location.href = 'dashboard.html?denied=1';
+        }
+
+        const memberList = document.getElementById('memberList');
+        const searchMember = document.getElementById('searchMember');
+        const filterCabang = document.getElementById('filterCabang');
+        const countPending = document.getElementById('countPending');
+        const countApproved = document.getElementById('countApproved');
+        const countRejected = document.getElementById('countRejected');
+
+        // Data awal/demo anggota jika local storage kosong
+        const defaultMembers = [
+            {
+                id: 1,
+                name: 'Muhammad Indra Kurniawan',
+                cabang: 'Banjarbaru',
+                komisariat: 'Teknik ULM',
+                lk1Year: '2024',
+                whatsapp: '081234567890',
+                email: 'mindra@example.com',
+                reason: 'Ingin mengembangkan kapasitas diri dan berkontribusi bagi umat.',
+                status: 'Disetujui',
+                createdAt: '2026-07-01T10:00:00Z'
+            },
+            {
+                id: 2,
+                name: 'Ahmad Rafiqi',
+                cabang: 'Banjarmasin',
+                komisariat: 'Hukum ULM',
+                lk1Year: '2025',
+                whatsapp: '089876543210',
+                email: 'rafiqi@example.com',
+                reason: 'Memperluas jaringan relasi kader serta belajar kepemimpinan Islam.',
+                status: 'Pending',
+                createdAt: '2026-07-06T15:30:00Z'
+            }
+        ];
+
+        let memberData = JSON.parse(localStorage.getItem('hmiMemberData') || 'null');
+        if (!memberData) {
+            memberData = defaultMembers;
+            localStorage.setItem('hmiMemberData', JSON.stringify(memberData));
+        }
+
+        function saveMembers() {
+            localStorage.setItem('hmiMemberData', JSON.stringify(memberData));
+        }
+
+        function updateCounts() {
+            const pending = memberData.filter(m => m.status === 'Pending').length;
+            const approved = memberData.filter(m => m.status === 'Disetujui').length;
+            const rejected = memberData.filter(m => m.status === 'Ditolak').length;
+
+            countPending.textContent = pending;
+            countApproved.textContent = approved;
+            countRejected.textContent = rejected;
+        }
+
+        function renderMembers() {
+            memberList.innerHTML = '';
+            
+            const q = searchMember.value.toLowerCase().trim();
+            const cabang = filterCabang.value;
+
+            const filtered = memberData.filter(item => {
+                const matchesQ = q === '' || 
+                    item.name.toLowerCase().includes(q) || 
+                    item.komisariat.toLowerCase().includes(q) || 
+                    item.email.toLowerCase().includes(q);
+                
+                const matchesCabang = cabang === 'Semua' || item.cabang === cabang;
+
+                return matchesQ && matchesCabang;
+            });
+
+            if (!filtered.length) {
+                memberList.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-sm text-gray-500">Tidak ada data anggota yang sesuai.</td></tr>';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100 hover:bg-slate-50 transition';
+
+                let statusBadge = '';
+                if (item.status === 'Pending') {
+                    statusBadge = '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800"><i class="fas fa-hourglass-half mr-1"></i>Pending</span>';
+                } else if (item.status === 'Disetujui') {
+                    statusBadge = '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800"><i class="fas fa-check-circle mr-1"></i>Disetujui</span>';
+                } else {
+                    statusBadge = '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800"><i class="fas fa-times-circle mr-1"></i>Ditolak</span>';
+                }
+
+                let actions = '';
+                if (item.status === 'Pending') {
+                    actions = `
+                        <button data-action="approve" data-id="${item.id}" class="text-emerald-600 font-bold hover:text-emerald-800 text-xs mr-3"><i class="fas fa-check mr-0.5"></i> Setujui</button>
+                        <button data-action="reject" data-id="${item.id}" class="text-amber-600 font-bold hover:text-amber-800 text-xs mr-3"><i class="fas fa-ban mr-0.5"></i> Tolak</button>
+                    `;
+                } else if (item.status === 'Disetujui') {
+                    actions = `
+                        <button data-action="reject" data-id="${item.id}" class="text-amber-600 font-bold hover:text-amber-800 text-xs mr-3"><i class="fas fa-ban mr-0.5"></i> Batalkan</button>
+                    `;
+                } else if (item.status === 'Ditolak') {
+                    actions = `
+                        <button data-action="approve" data-id="${item.id}" class="text-emerald-600 font-bold hover:text-emerald-800 text-xs mr-3"><i class="fas fa-check mr-0.5"></i> Setujui</button>
+                    `;
+                }
+                actions += `<button data-action="delete" data-id="${item.id}" class="text-red-500 font-semibold hover:text-red-700 text-xs"><i class="fas fa-trash"></i></button>`;
+
+                row.innerHTML = `
+                    <td class="py-3.5 pr-4">
+                        <div class="font-bold text-gray-900">${item.name}</div>
+                        <div class="text-xs text-gray-500">${item.email}</div>
+                    </td>
+                    <td class="py-3.5 pr-4">
+                        <div class="font-medium text-gray-800">Cabang ${item.cabang}</div>
+                        <div class="text-xs text-gray-500">Kom. ${item.komisariat}</div>
+                    </td>
+                    <td class="py-3.5 pr-4 font-semibold text-gray-700">${item.lk1Year}</td>
+                    <td class="py-3.5 pr-4">
+                        <a href="https://wa.me/${item.whatsapp.replace(/\D/g,'')}" target="_blank" class="text-hmiGreen hover:underline font-medium">
+                            <i class="fab fa-whatsapp mr-1"></i>${item.whatsapp}
+                        </a>
+                    </td>
+                    <td class="py-3.5 pr-4">${statusBadge}</td>
+                    <td class="py-3.5">${actions}</td>
+                `;
+                
+                // Tambahkan alasan di baris berikutnya secara expandable jika dibutuhkan
+                const detailRow = document.createElement('tr');
+                detailRow.className = 'border-b border-gray-100 bg-slate-50/50';
+                detailRow.innerHTML = `
+                    <td colspan="6" class="px-4 py-2 text-xs text-gray-600">
+                        <strong>Alasan bergabung:</strong> "${item.reason || '-'}"
+                    </td>
+                `;
+
+                memberList.appendChild(row);
+                memberList.appendChild(detailRow);
+            });
+        }
+
+        memberList.addEventListener('click', function(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const action = button.getAttribute('data-action');
+            const id = Number(button.getAttribute('data-id'));
+
+            if (action === 'approve') {
+                const member = memberData.find(m => m.id === id);
+                if (member) {
+                    member.status = 'Disetujui';
+                    saveMembers();
+                    updateCounts();
+                    renderMembers();
+                }
+            }
+
+            if (action === 'reject') {
+                const member = memberData.find(m => m.id === id);
+                if (member) {
+                    member.status = 'Ditolak';
+                    saveMembers();
+                    updateCounts();
+                    renderMembers();
+                }
+            }
+
+            if (action === 'delete') {
+                if (confirm('Apakah Anda yakin ingin menghapus data anggota ini?')) {
+                    memberData = memberData.filter(m => m.id !== id);
+                    saveMembers();
+                    updateCounts();
+                    renderMembers();
+                }
+            }
+        });
+
+        searchMember.addEventListener('input', renderMembers);
+        filterCabang.addEventListener('change', renderMembers);
+
+        // Inisialisasi
+        updateCounts();
+        renderMembers();
+    </script>
+
+</body>
+</html>

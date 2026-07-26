@@ -1,0 +1,30 @@
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Internal links exit transition
+            const internalLinks = Array.from(document.querySelectorAll('a[href$=".html"]'));
+            internalLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('mailto:') || link.target) return;
+                try {
+                    const url = new URL(link.href, location.origin);
+                    if (url.origin !== location.origin) return;
+                    if (url.pathname === location.pathname && !url.hash) return;
+                } catch (err) {
+                    return;
+                }
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.add('page-exit');
+                    setTimeout(() => window.location.href = link.href, 240);
+                });
+            });
+        });

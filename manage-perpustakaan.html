@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Perpustakaan — Dashboard HMI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hmiGreen: '#006B3F',
+                        hmiGreenLight: '#008c52',
+                        hmiDark: '#004d2c'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="theme.css?v=20260711">
+    <script src="theme-toggle.js?v=20260711"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto" />
+                    <div>
+                        <p class="text-sm font-semibold text-hmiGreen uppercase tracking-[0.2em]">Kelola Dokumen</p>
+                        <h1 class="text-3xl font-bold">Manajemen Perpustakaan</h1>
+                    </div>
+                </a>
+            </div>
+            <a href="dashboard.html" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 transition">Kembali ke Dashboard</a>
+        </div>
+
+        <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-6">
+            <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold">Daftar Dokumen</h2>
+                        <p class="text-sm text-gray-500">Tambah dan atur file PDF serta materi bacaan digital.</p>
+                    </div>
+                    <button id="showFormBtn" class="rounded-xl bg-hmiGreen px-4 py-2 text-sm font-semibold text-white hover:bg-hmiDark transition">
+                        <i class="fas fa-plus mr-2"></i>Tambah Dokumen
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-left text-gray-600">
+                                <th class="py-3 pr-4">Judul</th>
+                                <th class="py-3 pr-4">Kategori</th>
+                                <th class="py-3 pr-4">Penulis</th>
+                                <th class="py-3 pr-4">File</th>
+                                <th class="py-3">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="libraryList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 id="formTitle" class="text-xl font-bold">Tambah Dokumen Baru</h2>
+                        <p class="text-sm text-gray-500">Isi data dokumen secara lengkap.</p>
+                    </div>
+                    <button id="cancelEditBtn" class="hidden rounded-xl border border-gray-300 px-3 py-2 text-sm font-medium hover:bg-gray-50 transition">Batal</button>
+                </div>
+
+                <form id="libraryForm" class="space-y-4">
+                    <input type="hidden" id="libraryId" />
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Judul Dokumen</label>
+                        <input id="title" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori</label>
+                        <select id="category" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen">
+                            <option value="Modul">Modul</option>
+                            <option value="Buku">Buku</option>
+                            <option value="Artikel">Artikel</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Penulis / Penerjemah</label>
+                        <input id="author" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="Nama penulis atau penerjemah" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">URL File / Nama File</label>
+                        <input id="fileUrl" type="text" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="https://... atau nama file PDF" />
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Ukuran</label>
+                            <input id="size" type="text" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="Contoh: 1.1 MB" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                            <select id="status" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen">
+                                <option value="Tersedia">Tersedia</option>
+                                <option value="Segera Hadir">Segera Hadir</option>
+                                <option value="Sedang Diperbarui">Sedang Diperbarui</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Singkat</label>
+                        <textarea id="description" rows="4" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen"></textarea>
+                    </div>
+                    <div class="w-full flex flex-wrap items-start justify-start gap-3 mt-4 pt-2 pl-0 border-t border-gray-100">
+                        <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-gray-800 hover:bg-gray-50 active:bg-emerald-600 active:text-white active:border-emerald-600 transition shadow-sm border border-gray-300 min-w-[100px]">Simpan</button>
+                        <button type="button" id="doneFormBtn" class="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 active:bg-emerald-600 active:text-white active:border-emerald-600 transition min-w-[100px] shadow-sm">Selesai</button>
+                        <button type="button" id="clearFormBtn" class="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 active:bg-emerald-600 active:text-white active:border-emerald-600 transition min-w-[100px] shadow-sm">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const auth = JSON.parse(localStorage.getItem('hmiDashboardAuth') || 'null');
+        if (!auth) {
+            window.location.href = 'login.html';
+        } else if (auth.role !== 'admin') {
+            window.location.href = 'dashboard.html?denied=1';
+        }
+
+        const libraryForm = document.getElementById('libraryForm');
+        const libraryList = document.getElementById('libraryList');
+        const formTitle = document.getElementById('formTitle');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const showFormBtn = document.getElementById('showFormBtn');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const doneFormBtn = document.getElementById('doneFormBtn');
+
+        const defaultLibrary = [
+            {
+                id: 1,
+                title: 'Kerangka Berpikir Ilmiah',
+                category: 'Modul',
+                author: 'Muhammad Indra Kurniawan',
+                fileUrl: 'KERANGKA%20BERPIKIR%20ILMIAH%20-%20Muhammad%20Indra%20Kurniawan.pdf',
+                size: '1.1 MB',
+                status: 'Tersedia',
+                description: 'Karya tulis ilmiah yang menguraikan metodologi, logika berpikir, serta pembentukan kerangka epistemologi yang kritis untuk kader HMI.'
+            },
+            {
+                id: 2,
+                title: 'Kitab Raksasa (Book of Giants)',
+                category: 'Buku',
+                author: 'Muhammad Indra Kurniawan',
+                fileUrl: 'Kitab%20Raksasa%20(Book%20of%20Giants)%20Terjemahan%20oleh%20Muhammad%20Indra%20Kurniawan.pdf',
+                size: '16.5 MB',
+                status: 'Tersedia',
+                description: 'Terjemahan dari literatur klasik/apokrifa kuno yang mengeksplorasi riwayat peradaban kuno, teologi, dan makhluk-makhluk raksasa.'
+            },
+            {
+                id: 3,
+                title: 'Modul Latihan Kader I',
+                category: 'Modul',
+                author: 'Bidang Pembinaan Anggota',
+                fileUrl: '',
+                size: '-',
+                status: 'Segera Hadir',
+                description: 'Panduan dan silabus resmi Latihan Kader I untuk membangun pemahaman dasar kader dalam sejarah, perjuangan, dan jihad intelektual.'
+            }
+        ];
+
+        let libraryData = JSON.parse(localStorage.getItem('hmiLibraryData') || 'null') || defaultLibrary;
+        let editingId = null;
+
+        function saveLibrary() {
+            localStorage.setItem('hmiLibraryData', JSON.stringify(libraryData));
+        }
+
+        function renderLibrary() {
+            libraryList.innerHTML = '';
+            if (!libraryData.length) {
+                libraryList.innerHTML = '<tr><td colspan="5" class="py-6 text-center text-sm text-gray-500">Belum ada dokumen. Tambahkan dokumen baru untuk menampilkannya di sini.</td></tr>';
+                return;
+            }
+
+            libraryData.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100';
+                row.innerHTML = `
+                    <td class="py-3 pr-4 font-medium text-gray-800">${item.title}</td>
+                    <td class="py-3 pr-4">${item.category}</td>
+                    <td class="py-3 pr-4">${item.author}</td>
+                    <td class="py-3 pr-4">${item.fileUrl ? 'PDF' : 'Tidak tersedia'}</td>
+                    <td class="py-3">
+                        <button data-action="edit" data-id="${item.id}" class="text-hmiGreen font-semibold text-sm mr-3">Edit</button>
+                        <button data-action="delete" data-id="${item.id}" class="text-red-600 font-semibold text-sm">Hapus</button>
+                    </td>
+                `;
+                libraryList.appendChild(row);
+            });
+        }
+
+        function resetForm() {
+            libraryForm.reset();
+            document.getElementById('libraryId').value = '';
+            editingId = null;
+            formTitle.textContent = 'Tambah Dokumen Baru';
+            cancelEditBtn.classList.add('hidden');
+        }
+
+        function fillForm(item) {
+            document.getElementById('libraryId').value = item.id;
+            document.getElementById('title').value = item.title;
+            document.getElementById('category').value = item.category;
+            document.getElementById('author').value = item.author;
+            document.getElementById('fileUrl').value = item.fileUrl;
+            document.getElementById('size').value = item.size;
+            document.getElementById('status').value = item.status;
+            document.getElementById('description').value = item.description;
+            formTitle.textContent = 'Edit Dokumen';
+            cancelEditBtn.classList.remove('hidden');
+            editingId = item.id;
+        }
+
+        libraryForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value.trim();
+            const category = document.getElementById('category').value;
+            const author = document.getElementById('author').value.trim();
+            const fileUrl = document.getElementById('fileUrl').value.trim();
+            const size = document.getElementById('size').value.trim();
+            const status = document.getElementById('status').value;
+            const description = document.getElementById('description').value.trim();
+
+            if (!title || !author) {
+                alert('Judul dan penulis/penerjemah wajib diisi.');
+                return;
+            }
+
+            const documentItem = {
+                id: editingId || Date.now(),
+                title,
+                category,
+                author,
+                fileUrl,
+                size: size || '-',
+                status,
+                description
+            };
+
+            if (editingId) {
+                libraryData = libraryData.map(item => item.id === editingId ? documentItem : item);
+            } else {
+                libraryData.unshift(documentItem);
+            }
+
+            saveLibrary();
+            renderLibrary();
+            resetForm();
+            alert('Dokumen perpustakaan berhasil disimpan.');
+        });
+
+        libraryList.addEventListener('click', function (e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+            const action = button.getAttribute('data-action');
+            const id = Number(button.getAttribute('data-id'));
+
+            if (action === 'edit') {
+                const item = libraryData.find(entry => entry.id === id);
+                if (item) {
+                    fillForm(item);
+                    window.scrollTo({ top: libraryForm.offsetTop - 24, behavior: 'smooth' });
+                }
+            }
+
+            if (action === 'delete') {
+                if (confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) {
+                    libraryData = libraryData.filter(entry => entry.id !== id);
+                    saveLibrary();
+                    renderLibrary();
+                    if (editingId === id) resetForm();
+                }
+            }
+        });
+
+        showFormBtn.addEventListener('click', function () {
+            resetForm();
+            window.scrollTo({ top: libraryForm.offsetTop - 24, behavior: 'smooth' });
+        });
+
+        clearFormBtn.addEventListener('click', resetForm);
+        cancelEditBtn.addEventListener('click', resetForm);
+        doneFormBtn.addEventListener('click', resetForm);
+
+        renderLibrary();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Artikel — HMI Badko</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{hmiGreen:'#006B3F',hmiDark:'#004d2c'}}}}</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="theme.css?v=20260712">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <nav class="glass-nav shadow-sm sticky top-0 z-50 mx-4 mt-4 rounded-full"><div class="max-w-7xl mx-auto px-4 sm:px-6"><div class="flex justify-between items-center h-20">
+    <a href="index.html" class="flex items-center gap-3"><img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto"><div><h1 class="font-extrabold text-lg leading-none text-hmiGreen">HMI Badko Kalimantan Selatan</h1></div></a>
+    <div class="flex items-center gap-2"><a href="artikel.html" class="px-4 py-2 text-gray-600 hover:text-hmiGreen">Kembali ke publik</a><button id="logout" type="button" class="px-4 py-2 bg-red-50 text-red-600 rounded-full">Logout</button></div>
+  </div></div></nav>
+  <main class="max-w-6xl mx-auto p-6">
+    <div id="loginModal" class="fixed inset-0 z-[60] hidden items-center justify-center overflow-y-auto bg-black/50 px-4 py-8">
+      <div class="w-full max-w-md rounded-[1.5rem] bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="text-center mb-5">
+          <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-hmiGreen"><i class="fas fa-user-shield text-xl"></i></div>
+          <h2 class="text-xl font-extrabold">Login Admin Artikel</h2>
+          <p class="mt-2 text-sm text-gray-500">Masukkan ID dan password untuk mengakses dashboard moderasi.</p>
+        </div>
+        <form id="loginForm" class="space-y-4">
+          <label class="block text-sm font-bold">ID Admin<input id="adminId" class="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3" placeholder="Masukkan ID"></label>
+          <label class="block text-sm font-bold">Password<input id="adminPassword" type="password" class="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3" placeholder="Masukkan password"></label>
+          <button id="loginSubmit" type="submit" class="w-full rounded-full bg-[#006B3F] px-4 py-3 font-bold text-white hover:bg-[#004d2c] transition">Masuk</button>
+          <p id="loginError" class="hidden text-sm text-red-600"></p>
+        </form>
+      </div>
+    </div>
+
+    <div id="previewModal" class="fixed inset-0 z-[70] hidden items-center justify-center overflow-y-auto bg-black/60 px-4 py-8">
+      <div class="w-full max-w-4xl rounded-[2rem] bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.2em] text-hmiGreen font-semibold">Pratinjau Artikel</p>
+            <h3 id="previewTitle" class="mt-2 text-3xl font-extrabold text-gray-900"></h3>
+            <p id="previewMeta" class="mt-2 text-sm text-gray-500"></p>
+          </div>
+          <button id="closePreviewModal" type="button" class="rounded-full bg-gray-100 p-3 text-gray-600 hover:bg-gray-200" aria-label="Tutup pratinjau"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="previewContent" class="space-y-4 text-gray-700 leading-relaxed"></div>
+      </div>
+    </div>
+
+    <header class="flex items-center justify-between mb-6"><h1 class="text-2xl font-extrabold">Dashboard Artikel</h1><div class="text-sm text-gray-500">Peran: Admin Artikel</div></header>
+    <section class="grid grid-cols-1 gap-6">
+      <div class="bg-white p-4 rounded-2xl shadow-sm">
+        <h2 class="font-bold mb-3">Artikel Menunggu Persetujuan <span id="pendingCount" class="text-hmiGreen font-extrabold"></span></h2>
+        <div id="pendingList" class="space-y-4"></div>
+      </div>
+      <div class="bg-white p-4 rounded-2xl shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold">Riwayat Diterbitkan</h2>
+          <span id="publishedCount" class="text-sm text-hmiGreen font-semibold"></span>
+        </div>
+        <div id="publishedList" class="space-y-4"></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const adminKey='hmiAdminLogged';
+    const adminAccounts=[{id:'masternasional', password:'opang123', role:'Admin Artikel'}];
+    const loginModal=document.getElementById('loginModal');
+    const loginError=document.getElementById('loginError');
+    const adminIdInput=document.getElementById('adminId');
+    const adminPasswordInput=document.getElementById('adminPassword');
+
+    function isValidAdmin(id, pass){
+      return adminAccounts.some(account => account.id === id && account.password === pass);
+    }
+
+    function showLogin(){
+      loginModal.classList.remove('hidden');
+      loginModal.classList.add('flex');
+      adminIdInput.focus();
+    }
+
+    function hideLogin(){
+      loginModal.classList.add('hidden');
+      loginModal.classList.remove('flex');
+    }
+
+    function requireLogin(){
+      if(localStorage.getItem(adminKey)){
+        hideLogin();
+        return;
+      }
+      showLogin();
+      const submitBtn=document.getElementById('loginSubmit');
+      submitBtn.classList.remove('hidden');
+    }
+
+    function logoutSession(){
+      localStorage.removeItem(adminKey);
+      loginError.classList.add('hidden');
+      adminIdInput.value='';
+      adminPasswordInput.value='';
+      hideLogin();
+      window.location.href='artikel.html';
+    }
+
+    const loginForm=document.getElementById('loginForm');
+    function toggleLoginButton(){
+      const submitBtn=document.getElementById('loginSubmit');
+      submitBtn.classList.remove('opacity-70');
+    }
+
+    adminIdInput.addEventListener('input',toggleLoginButton);
+    adminPasswordInput.addEventListener('input',toggleLoginButton);
+
+    loginForm.addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const id=adminIdInput.value.trim();
+      const pass=adminPasswordInput.value.trim();
+      if(isValidAdmin(id, pass)){
+        localStorage.setItem(adminKey, JSON.stringify({id, role:'Admin Artikel'}));
+        hideLogin();
+        loginError.classList.add('hidden');
+        location.reload();
+      } else {
+        loginError.textContent='ID atau password salah.';
+        loginError.classList.remove('hidden');
+      }
+    });
+
+    requireLogin();
+
+    const pendingKey='pendingArticles_v1';
+    const pubKey='publishedArticles_v1';
+    const deletedArticlesKey='deletedArticleIds_v1';
+    const serverApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : `${window.location.origin}/api`;
+    const serverArticlesUrl = `${serverApiBase}/articles`;
+    const serverPendingUrl = `${serverApiBase}/pending`;
+    const publishUrl = `${serverApiBase}/publish`;
+    const articleUrl = `${serverApiBase}/article`;
+    const defaultPublishedArticles=[
+      {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
+    ];
+    let currentPending = [];
+
+    async function loadPublishedArticles(){
+      try{
+        const response=await fetch(serverArticlesUrl,{cache:'no-store'});
+        if(response.ok){
+          const data=await response.json();
+          if(Array.isArray(data)){
+            return data.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
+          }
+        }
+      }catch(e){ }
+      return getPublishedArticles();
+    }
+
+    function getPublishedArticles(){
+      const stored=JSON.parse(localStorage.getItem(pubKey)||'[]');
+      const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+      const articles=[...stored];
+      defaultPublishedArticles.forEach(article=>{
+        if(!deletedIds.includes(article.id) && !articles.some(a=>a.id===article.id)){
+          articles.push(article);
+        }
+      });
+      return articles.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
+    }
+
+    async function loadPending(){
+      let pending=[];
+      try{
+        const response=await fetch(serverPendingUrl,{cache:'no-store'});
+        if(response.ok){
+          const data=await response.json();
+          if(Array.isArray(data)){
+            pending=data;
+          } else {
+            pending=JSON.parse(localStorage.getItem(pendingKey)||'[]');
+          }
+        } else {
+          pending=JSON.parse(localStorage.getItem(pendingKey)||'[]');
+        }
+      }catch(e){
+        pending=JSON.parse(localStorage.getItem(pendingKey)||'[]');
+      }
+      currentPending = pending;
+      const list=document.getElementById('pendingList');
+      list.innerHTML='';
+      document.getElementById('pendingCount').textContent=pending.length?('('+pending.length+')'):'(0)';
+      if(!pending.length){
+        list.innerHTML='<div class="text-gray-500">Tidak ada artikel yang menunggu.</div>';
+        return;
+      }
+      pending.forEach(a=>{
+        const card=document.createElement('div');
+        card.className='p-4 border rounded-xl flex flex-col md:flex-row md:items-start md:justify-between gap-4';
+        card.innerHTML=`<div><h3 class="font-bold text-lg">${escapeHtml(a.judul)}</h3><p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.submittedAt).toLocaleString()}</p><p class="mt-2 text-gray-700">${escapeHtml(a.ringkasan)}</p></div><div class="flex flex-wrap gap-2"><button data-article-id="${a.id}" class="previewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2">Preview</button><button class="approveBtn rounded-full bg-hmiGreen text-white px-4 py-2">Approve</button><button class="rejectBtn rounded-full border px-4 py-2">Reject</button></div>`;
+        list.appendChild(card);
+      });
+      attachActions();
+    }
+
+    function attachActions(){
+      document.querySelectorAll('.previewBtn').forEach((btn)=>{
+        btn.onclick=()=>{
+          const articleId=btn.dataset.articleId;
+          const article=currentPending.find(a=>a.id===articleId);
+          if(!article) return;
+          document.getElementById('previewTitle').textContent=article.judul;
+          document.getElementById('previewMeta').textContent=`oleh ${article.nama} • ${article.asal || 'HMI Badko Kalsel'}`;
+          document.getElementById('previewContent').innerHTML=`<p class="text-sm text-gray-500">Kategori: ${escapeHtml(article.kategori || 'Artikel')}</p><p class="mt-4 text-gray-700">${escapeHtml(article.ringkasan)}</p><div class="mt-6 text-gray-700">${escapeHtml(article.isi).replace(/\n/g,'<br>')}</div>`;
+          const previewModal=document.getElementById('previewModal');
+          previewModal.classList.remove('hidden');
+          previewModal.classList.add('flex');
+        };
+      });
+      document.querySelectorAll('.approveBtn').forEach((btn,i)=>{btn.onclick=async ()=>{const article=currentPending[i];if(!article)return;article.status='published';article.publishedAt=new Date().toISOString();try{const response=await fetch(publishUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(article)});if(!response.ok)throw new Error('Publish failed');const deleteResponse=await fetch(`${serverPendingUrl}?id=${encodeURIComponent(article.id)}`,{method:'DELETE'});if(!deleteResponse.ok)throw new Error('Pending delete failed');alert('Artikel telah dipublikasikan.');await loadPending();await renderPublishedList();}catch(err){alert('Gagal mempublikasikan artikel. Pastikan server berjalan.');}});
+      document.querySelectorAll('.rejectBtn').forEach((btn,i)=>{btn.onclick=async ()=>{if(!confirm('Tolak artikel ini dan hapus dari antrean?'))return;const article=currentPending[i];if(!article)return;try{const response=await fetch(`${serverPendingUrl}?id=${encodeURIComponent(article.id)}`,{method:'DELETE'});if(!response.ok)throw new Error('Pending delete failed');}catch(err){currentPending = currentPending.filter(a=>a.id!==article.id);localStorage.setItem(pendingKey,JSON.stringify(currentPending));}alert('Artikel ditolak dan dihapus.');await loadPending();}});
+    }
+
+    async function renderPublishedList(){
+      const published=await loadPublishedArticles();
+      const list=document.getElementById('publishedList');
+      const countLabel=document.getElementById('publishedCount');
+      list.innerHTML='';
+      countLabel.textContent=published.length?('('+published.length+')'):'(0)';
+      if(!published.length){
+        list.innerHTML='<div class="text-gray-500">Belum ada artikel yang dipublikasikan.</div>';
+        return;
+      }
+      published.slice(0,20).forEach((a, index)=>{
+        const card=document.createElement('div');
+        card.className='p-4 border rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4';
+        card.innerHTML=`
+          <div>
+            <h3 class="font-bold text-lg">${escapeHtml(a.judul)}</h3>
+            <p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.publishedAt||a.submittedAt||Date.now()).toLocaleString()}</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button data-article-id="${escapeHtml(a.id)}" class="viewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2">Lihat</button>
+            <button data-article-id="${escapeHtml(a.id)}" class="deleteBtn rounded-full bg-red-50 text-red-600 px-4 py-2">Hapus</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      attachPublishedActions();
+    }
+
+    function attachPublishedActions(){
+      document.querySelectorAll('.viewBtn').forEach((btn)=>{
+        btn.onclick=()=>{
+          const articleId=btn.dataset.articleId;
+          if(articleId){
+            window.open(`detail-artikel.html?id=${encodeURIComponent(articleId)}`, '_blank');
+          }
+        };
+      });
+      document.querySelectorAll('.deleteBtn').forEach((btn)=>{
+        btn.onclick=async ()=>{
+          const articleId=btn.dataset.articleId;
+          if(!articleId || !confirm('Hapus artikel ini dari publikasi?')) return;
+          try{
+            const response=await fetch(`${articleUrl}?id=${encodeURIComponent(articleId)}`,{method:'DELETE'});
+            if(!response.ok) throw new Error('Delete failed');
+            alert('Artikel terpublish berhasil dihapus.');
+            renderPublishedList();
+          }catch(err){
+            const stored=JSON.parse(localStorage.getItem(pubKey)||'[]');
+            const filtered=stored.filter(a=>a.id!==articleId);
+            if(filtered.length !== stored.length){
+              localStorage.setItem(pubKey,JSON.stringify(filtered));
+            } else {
+              const deletedIds=JSON.parse(localStorage.getItem(deletedArticlesKey)||'[]');
+              if(!deletedIds.includes(articleId)){
+                deletedIds.push(articleId);
+                localStorage.setItem(deletedArticlesKey,JSON.stringify(deletedIds));
+              }
+            }
+            alert('Server tidak tersedia, artikel dihapus secara lokal.');
+            renderPublishedList();
+          }
+        };
+      });
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    }
+
+    const previewModal = document.getElementById('previewModal');
+    const closePreviewModal = document.getElementById('closePreviewModal');
+
+    closePreviewModal?.addEventListener('click', () => {
+      previewModal?.classList.add('hidden');
+      previewModal?.classList.remove('flex');
+    });
+
+    previewModal?.addEventListener('click', (event) => {
+      if (event.target === previewModal) {
+        previewModal.classList.add('hidden');
+        previewModal.classList.remove('flex');
+      }
+    });
+
+    document.getElementById('logout').addEventListener('click', (e) => {
+      e.preventDefault();
+      logoutSession();
+    });
+
+    loadPending();
+    renderPublishedList();
+  </script>
+</body>
+</html>

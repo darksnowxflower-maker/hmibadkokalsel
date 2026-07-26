@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kelola Aspirasi & Saran — HMI Badko Kalsel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hmiGreen: '#006B3F',
+                        hmiGreenLight: '#008c52',
+                        hmiDark: '#004d2c'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="theme.css?v=20260711">
+    <script src="theme-toggle.js?v=20260711"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-gray-800">
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="flex items-center gap-3">
+                        <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto" />
+                        <div>
+                            <p class="text-sm font-semibold text-hmiGreen uppercase tracking-[0.2em]">Panel Kendali</p>
+                            <h1 class="text-2xl font-bold">Kelola Aspirasi & Masukan</h1>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="dashboard.html" class="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-50 transition">
+                        <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold">Aspirasi Kader & Umum</h2>
+                        <p class="text-sm text-gray-500 mt-0.5">Membaca masukan, aspirasi, atau pengaduan yang dikirimkan melalui halaman depan.</p>
+                    </div>
+                    <div id="aspirationCountBadge" class="rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-bold text-hmiGreen">
+                        0 Pesan
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-gray-500 font-semibold">
+                                <th class="py-3.5 pr-4 w-1/4">Pengirim</th>
+                                <th class="py-3.5 pr-4 w-1/6">Cabang</th>
+                                <th class="py-3.5 pr-4 w-1/2">Aspirasi</th>
+                                <th class="py-3.5 pr-4 w-1/6">Tanggal</th>
+                                <th class="py-3.5">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aspirationList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script JavaScript untuk Kelola Aspirasi -->
+    <script>
+        const auth = JSON.parse(localStorage.getItem('hmiDashboardAuth') || 'null');
+        if (!auth) {
+            window.location.href = 'login.html';
+        } else if (auth.role !== 'admin') {
+            window.location.href = 'dashboard.html?denied=1';
+        }
+
+        const aspirationList = document.getElementById('aspirationList');
+        const aspirationCountBadge = document.getElementById('aspirationCountBadge');
+
+        const defaultAspirations = [
+            {
+                id: 1,
+                name: 'Syaifullah',
+                email: 'syaifullah@example.com',
+                cabang: 'Banjarmasin',
+                message: 'Mohon agar perpustakaan digital diperbanyak lagi bukunya, terutama literatur sejarah perjuangan HMI.',
+                date: '2026-07-06T12:00:00Z'
+            },
+            {
+                id: 2,
+                name: 'Kader HMI Kalsel',
+                email: 'kader@example.com',
+                cabang: 'Banjarbaru',
+                message: 'Kaderisasi LK1 di cabang Banjarbaru sebaiknya dikoordinasikan secara sinkron dengan jadwal regional Badko agar tidak bentrok.',
+                date: '2026-07-07T08:45:00Z'
+            }
+        ];
+
+        let aspirations = JSON.parse(localStorage.getItem('hmiAspirations') || 'null');
+        if (!aspirations) {
+            aspirations = defaultAspirations;
+            localStorage.setItem('hmiAspirations', JSON.stringify(aspirations));
+        }
+
+        function saveAspirations() {
+            localStorage.setItem('hmiAspirations', JSON.stringify(aspirations));
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (Number.isNaN(date.getTime())) return dateString;
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderAspirations() {
+            aspirationList.innerHTML = '';
+            aspirationCountBadge.textContent = `${aspirations.length} Pesan`;
+
+            if (!aspirations.length) {
+                aspirationList.innerHTML = '<tr><td colspan="5" class="py-12 text-center text-sm text-gray-500"><i class="far fa-envelope-open text-3xl block mb-2 text-gray-300"></i>Kotak masuk aspirasi masih kosong.</td></tr>';
+                return;
+            }
+
+            // Urutkan dari yang terbaru
+            const sorted = [...aspirations].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            sorted.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100 hover:bg-slate-50 transition';
+
+                row.innerHTML = `
+                    <td class="py-4 pr-4">
+                        <div class="font-bold text-gray-900">${item.name}</div>
+                        <div class="text-xs text-gray-500">${item.email}</div>
+                    </td>
+                    <td class="py-4 pr-4">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-hmiGreen">Cabang ${item.cabang}</span>
+                    </td>
+                    <td class="py-4 pr-4 text-gray-600 font-medium">
+                        <div class="line-clamp-2 hover:line-clamp-none cursor-pointer" title="Klik untuk membuka pesan penuh">
+                            ${item.message}
+                        </div>
+                    </td>
+                    <td class="py-4 pr-4 text-gray-400 text-xs">${formatDate(item.date)}</td>
+                    <td class="py-4">
+                        <button data-action="delete" data-id="${item.id}" class="text-red-500 hover:text-red-700 font-semibold text-xs"><i class="fas fa-trash mr-1"></i>Hapus</button>
+                    </td>
+                `;
+                aspirationList.appendChild(row);
+            });
+        }
+
+        aspirationList.addEventListener('click', function(e) {
+            const button = e.target.closest('button');
+            if (!button) return;
+
+            const action = button.getAttribute('data-action');
+            const id = Number(button.getAttribute('data-id'));
+
+            if (action === 'delete') {
+                if (confirm('Apakah Anda yakin ingin menghapus pesan aspirasi ini?')) {
+                    aspirations = aspirations.filter(item => item.id !== id);
+                    saveAspirations();
+                    renderAspirations();
+                }
+            }
+        });
+
+        // Inisialisasi
+        renderAspirations();
+    </script>
+
+</body>
+</html>

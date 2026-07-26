@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Detail artikel HMI Badko Kalimantan Selatan.">
+  <title>Detail Artikel — HMI Badko Kalimantan Selatan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>tailwind.config={theme:{extend:{colors:{hmiGreen:'#006B3F',hmiDark:'#004d2c'}}}}</script>
+  <style>.glass-nav{background:rgba(255,255,255,.9);backdrop-filter:blur(10px)}.bg-pattern{background:linear-gradient(135deg,rgba(0,107,63,.96),rgba(0,77,44,.96))}.prose p{margin-top:1.25em;margin-bottom:1.25em}.prose blockquote{border-left:4px solid rgba(0,107,63,.2);padding-left:1rem;color:#065f46}.prose img{border-radius:1.25rem}.form-field{width:100%;border:1px solid #d1d5db;border-radius:.85rem;padding:.8rem 1rem;background:#fff;outline:none;transition:.2s}.form-field:focus{border-color:#006b3f;box-shadow:0 0 0 3px rgba(0,107,63,.12)}.form-field[aria-invalid="true"]{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1)}</style>
+  <link rel="stylesheet" href="theme.css?v=20260712">
+  <script src="theme-toggle.js?v=20260712"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans selection:bg-hmiGreen selection:text-white">
+  <nav class="glass-nav shadow-sm sticky top-0 z-50 mx-4 mt-4 rounded-full"><div class="max-w-7xl mx-auto px-4 sm:px-6"><div class="flex justify-between items-center h-20">
+    <a href="index.html" class="flex items-center gap-3"><img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto"><div><h1 class="font-extrabold text-lg leading-none text-hmiGreen">HMI Badko Kalimantan Selatan</h1><p class="hidden sm:block text-[10px] uppercase tracking-[.18em] text-gray-500 font-bold mt-1.5">Badan Koordinasi</p></div></a>
+    <div class="hidden lg:flex items-center gap-1"><a href="index.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Beranda</a><a href="artikel.html" class="px-4 py-3 font-bold text-hmiGreen border-b-2 border-hmiGreen">Artikel</a><a href="profil.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Profil</a><a href="pengurus.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Pengurus</a><a href="program-kerja.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Program Kerja</a><a href="perpustakaan.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Perpustakaan</a><a href="berita.html" class="px-4 py-3 font-medium text-gray-600 hover:text-hmiGreen">Berita</a><button class="theme-toggle ml-2 rounded-full border border-gray-200 bg-white px-3 py-2" aria-label="Ubah tema"><i class="fas fa-moon"></i><span class="sr-only">Gelap</span></button></div>
+    <button id="mobileBtn" class="lg:hidden p-3 text-xl" aria-label="Buka menu"><i class="fas fa-bars"></i></button>
+  </div><div id="mobileMenu" class="hidden lg:hidden pb-5 grid gap-1 border-t pt-3"><a href="index.html" class="p-2">Beranda</a><a href="artikel.html" class="p-2 rounded-lg bg-green-50 font-bold text-hmiGreen">Artikel</a><a href="profil.html" class="p-2">Profil</a><a href="pengurus.html" class="p-2">Pengurus</a><a href="program-kerja.html" class="p-2">Program Kerja</a><a href="perpustakaan.html" class="p-2">Perpustakaan</a><a href="berita.html" class="p-2">Berita</a></div></div></nav>
+  <main class="max-w-6xl mx-auto px-4 py-12">
+    <section id="articleDetail" class="rounded-[2rem] bg-white border border-gray-200 shadow-xl overflow-hidden">
+      <div id="hero" class="bg-gradient-to-br from-hmiDark to-hmiGreen text-white p-10 md:p-14">
+        <div class="max-w-3xl">
+          <p id="articleMeta" class="inline-flex items-center rounded-full bg-white/15 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white"></p>
+          <h1 id="articleTitle" class="mt-6 text-4xl md:text-5xl font-extrabold leading-tight"></h1>
+          <div id="articleByline" class="mt-5 text-sm text-emerald-100"></div>
+          <p id="articleExcerpt" class="mt-8 max-w-3xl text-lg leading-relaxed text-emerald-100/90"></p>
+          <div class="mt-8 flex flex-wrap gap-3"><a href="artikel.html" class="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-bold text-hmiDark shadow hover:bg-gray-100"><i class="fas fa-arrow-left mr-2"></i>Kembali ke Artikel</a></div>
+        </div>
+      </div>
+      <div class="p-8 md:p-12">
+        <div id="articleImageContainer" class="mb-10 hidden overflow-hidden rounded-[1.75rem]"></div>
+        <article id="articleContent" class="prose prose-lg max-w-none text-gray-800"></article>
+      </div>
+    </section>
+    <section id="notFound" class="hidden rounded-[2rem] bg-white border border-gray-200 shadow-sm p-12 text-center">
+      <div class="text-center max-w-xl mx-auto">
+        <p class="text-5xl text-hmiGreen"><i class="fas fa-exclamation-circle"></i></p>
+        <h2 class="mt-6 text-3xl font-bold">Artikel tidak ditemukan</h2>
+        <p class="mt-4 text-gray-600">ID artikel tidak valid atau artikel belum tersedia. Silakan kembali ke daftar artikel untuk memilih karya tulisan lain.</p>
+        <a href="artikel.html" class="mt-6 inline-flex items-center rounded-full bg-hmiGreen px-6 py-3 text-white font-bold hover:bg-hmiDark"><i class="fas fa-arrow-left mr-2"></i>Kembali ke Artikel</a>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-gray-900 text-white py-8 mt-12 border-t-4 border-hmiGreen"><div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400"><p>© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan.</p><p class="mt-1">Prototype by Muhammad Indra Kurniawan</p></div></footer>
+  <script>
+    const mobileBtn=document.getElementById('mobileBtn');
+    const mobileMenu=document.getElementById('mobileMenu');
+    if(mobileBtn&&mobileMenu){
+      mobileBtn.setAttribute('aria-expanded','false');
+      mobileBtn.addEventListener('click',()=>{
+        const isOpen = mobileMenu.classList.toggle('hidden') === false;
+        mobileBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+      mobileMenu.querySelectorAll('a').forEach((link)=>{
+        link.addEventListener('click',()=>{
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded','false');
+        });
+      });
+      document.addEventListener('click',(event)=>{
+        if(mobileMenu.classList.contains('hidden')) return;
+        if(event.target.closest('#mobileMenu') || event.target.closest('#mobileBtn')) return;
+        mobileMenu.classList.add('hidden');
+        mobileBtn.setAttribute('aria-expanded','false');
+      });
+      window.addEventListener('resize',()=>{
+        if(window.innerWidth>=1024 && !mobileMenu.classList.contains('hidden')){
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded','false');
+        }
+      });
+    }
+
+    const defaultPublishedArticles=[
+      {id:'sample-1',nama:'Muhammad Indra Kurniawan',asal:'HMI Badko Kalsel',judul:'Menjaga Semangat Intelektual di Tengah Tantangan Zaman',kategori:'Kajian',ringkasan:'Refleksi singkat tentang pentingnya literasi, ideologi, dan kontribusi kader dalam membangun ruang diskusi yang sehat.',isi:'Kader HMI dituntut untuk terus mengembangkan wawasan intelektual dan memperkuat tradisi diskusi yang produktif. Dalam dunia yang cepat berubah, kemampuan berpikir kritis, menjaga nilai, dan menghubungkan ilmu dengan amal menjadi kunci peran kader.',publishedAt:new Date().toISOString()}
+    ];
+
+    const serverApiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : `${window.location.origin}/api`;
+
+    function escapeHtml(value){
+      return String(value || '').replace(/[&<>"']/g,(character)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+    }
+
+    function convertTextToHtml(text){
+      return String(text || '').split(/\n{2,}/).map((paragraph)=>{
+        return '<p>'+escapeHtml(paragraph.trim()).replace(/\n/g,'<br>')+'</p>';
+      }).join('');
+    }
+
+    async function loadArticle(articleId){
+      if(!articleId) return null;
+      try{
+        const response=await fetch(`${serverApiBase}/article?id=${encodeURIComponent(articleId)}`,{cache:'no-store'});
+        if(response.ok){
+          const article=await response.json();
+          if(article && !article.error) return article;
+        }
+      }catch(e){
+      }
+      const publishedStorage=JSON.parse(localStorage.getItem('publishedArticles_v1')||'[]');
+      const deletedIds=JSON.parse(localStorage.getItem('deletedArticleIds_v1')||'[]');
+      return [
+        ...publishedStorage,
+        ...defaultPublishedArticles.filter(article=>!deletedIds.includes(article.id) && !publishedStorage.some(a=>a.id===article.id))
+      ].find(item=>item.id===articleId) || null;
+    }
+
+    function renderArticle(article){
+      const articleMeta=document.getElementById('articleMeta');
+      const articleTitle=document.getElementById('articleTitle');
+      const articleByline=document.getElementById('articleByline');
+      const articleExcerpt=document.getElementById('articleExcerpt');
+      const articleContent=document.getElementById('articleContent');
+      const articleImageContainer=document.getElementById('articleImageContainer');
+
+      articleMeta.textContent=`${article.kategori || 'Artikel'}`;
+      articleTitle.textContent=article.judul || 'Judul Artikel';
+      articleByline.textContent=`oleh ${article.nama || 'Kader HMI'} • ${article.asal || 'HMI Badko Kalsel'} • ${new Date(article.publishedAt || article.submittedAt || Date.now()).toLocaleDateString('id-ID')}`;
+      articleExcerpt.textContent=article.ringkasan || 'Ringkasan artikel belum tersedia.';
+
+      if(article.headerImageDataUrl){
+        articleImageContainer.innerHTML=`<img src="${escapeHtml(article.headerImageDataUrl)}" alt="Gambar header artikel" class="w-full object-cover" />`;
+        articleImageContainer.classList.remove('hidden');
+      } else {
+        articleImageContainer.classList.add('hidden');
+      }
+
+      articleContent.innerHTML=convertTextToHtml(article.isi || article.ringkasan || 'Konten artikel belum tersedia.');
+    }
+
+    function showNotFound(){
+      document.getElementById('articleDetail').classList.add('hidden');
+      document.getElementById('notFound').classList.remove('hidden');
+    }
+
+    const params=new URLSearchParams(window.location.search);
+    const articleId=params.get('id');
+    loadArticle(articleId).then((article)=>{
+      if(!article){
+        showNotFound();
+      } else {
+        renderArticle(article);
+      }
+    });
+  </script>
+</body>
+</html>

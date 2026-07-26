@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Anggota — HMI Badan Koordinasi Kalimantan Selatan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hmiGreen: '#006B3F',
+                        hmiGreenLight: '#008c52',
+                        hmiDark: '#004d2c'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        body.transition-page { transition: opacity .35s ease, transform .35s ease; }
+        body.page-exit { opacity: 0; transform: translateY(16px); }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('transition-page');
+
+            const savedLang = 'id';
+            const translations = {
+                id: {
+                    nav: { home: 'Beranda', pengurus: 'Pengurus', program: 'Program Kerja', profile: 'Profil', sejarah: 'Sejarah', perpustakaan: 'Perpustakaan', ideology: 'Pustaka Ideologis', berita: 'Berita' },
+                    page: { badge: 'Registrasi Online', title: 'Formulir Pendataan Anggota', description: 'Silakan lengkapi data diri Anda secara benar untuk terdata dalam database resmi HMI Badko Kalimantan Selatan.', successTitle: 'Pendaftaran Berhasil Terkirim!', successText: 'Terima kasih telah melakukan pengisian data. Pendaftaran Anda saat ini berstatus Pending dan sedang menunggu peninjauan oleh Pengurus/Admin Badko HMI Kalsel.', viewDatabase: 'Lihat Database Kader', backHome: 'Kembali Ke Beranda', fullName: 'Nama Lengkap', email: 'Alamat Email', branch: 'HMI Cabang', branchPlaceholder: 'Pilih Cabang Anda', komisariat: 'Komisariat', lk1: 'Tahun LK1 (Basic Training)', whatsapp: 'Nomor WhatsApp', reason: 'Alasan Bergabung / Menjadi Kader HMI', submit: 'Kirim Data Pendaftaran' },
+                    placeholders: { name: 'Contoh: Muhammad Indra Kurniawan', email: 'Contoh: indra@gmail.com', komisariat: 'Contoh: Teknik ULM / Syariah UIN', lk1: 'Contoh: 2024', whatsapp: 'Contoh: 08123456789', reason: 'Ceritakan motivasi atau alasan Anda bergabung...' }
+                },
+                en: {
+                    nav: { home: 'Home', pengurus: 'Board', program: 'Programs', profile: 'Profile', sejarah: 'History', perpustakaan: 'Library', ideology: 'Ideology Library', berita: 'News' },
+                    page: { badge: 'Online Registration', title: 'Member Registration Form', description: 'Please complete your personal data accurately so you can be included in the official HMI Badko South Kalimantan database.', successTitle: 'Registration Sent Successfully!', successText: 'Thank you for completing the form. Your registration is currently Pending and is awaiting review by the Badko HMI South Kalimantan Board/Admin.', viewDatabase: 'View Cadre Database', backHome: 'Back to Home', fullName: 'Full Name', email: 'Email Address', branch: 'HMI Branch', branchPlaceholder: 'Select Your Branch', komisariat: 'Commissariat', lk1: 'LK1 Year (Basic Training)', whatsapp: 'WhatsApp Number', reason: 'Reason for Joining / Becoming an HMI Cadre', submit: 'Submit Registration Data' },
+                    placeholders: { name: 'Example: Muhammad Indra Kurniawan', email: 'Example: indra@gmail.com', komisariat: 'Example: Engineering ULM / Shariah UIN', lk1: 'Example: 2024', whatsapp: 'Example: 08123456789', reason: 'Tell us your motivation or reason for joining...' }
+                }
+            };
+
+            function getTranslationValue(data, path) {
+                return path.split('.').reduce((acc, key) => acc?.[key], data);
+            }
+
+            function applyTranslations(lang) {
+                const data = translations[lang] || translations.id;
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const value = getTranslationValue(data, el.dataset.i18n);
+                    if (value) el.textContent = value;
+                });
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const value = getTranslationValue(data, el.dataset.i18nPlaceholder);
+                    if (value) el.placeholder = value;
+                });
+            }
+
+            function setLanguage() {
+                const activeLang = 'id';
+                applyTranslations(activeLang);
+            }
+
+            setLanguage();
+
+            const internalLinks = Array.from(document.querySelectorAll('a[href$=".html"]'));
+            internalLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('mailto:') || link.target) return;
+                try {
+                    const url = new URL(link.href, location.origin);
+                    if (url.origin !== location.origin) return;
+                    if (url.pathname === location.pathname) return;
+                } catch (err) {
+                    return;
+                }
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.add('page-exit');
+                    setTimeout(() => window.location.href = link.href, 240);
+                });
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="theme.css?v=20260711">
+    <script src="theme-toggle.js?v=20260711"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <!-- Navigation -->
+    <nav class="glass-nav shadow-sm sticky top-0 z-50 transition-all duration-300 mx-4 mt-4 rounded-full" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center group gap-3">
+                    <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto mr-1 drop-shadow-md group-hover:scale-105 transition-transform duration-300">
+                    <div>
+                        <h1 class="font-extrabold text-lg leading-none text-hmiGreen group-hover:text-hmiGreenLight transition-colors whitespace-nowrap">HMI Badko Kalimantan Selatan</h1>
+                        <p class="hidden sm:block text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold mt-1.5">Badan Koordinasi</p>
+                    </div>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <a href="index.html" class="text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.home">Beranda</a>
+                    <a href="artikel.html" class="text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap">Artikel</a>
+                    <div class="relative nav-dropdown">
+                        <button type="button" class="nav-dropdown-btn text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap inline-flex items-center gap-1.5" data-i18n="nav.profile" aria-haspopup="true" aria-expanded="false">
+                            Profil <i class="fas fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                        </button>
+                        <div class="nav-dropdown-menu hidden absolute left-0 top-full mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                            <a href="profil.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Profil Cabang</a>
+                            <a href="pengurus.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Pengurus</a>
+                            <a href="program-kerja.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Program Kerja</a>
+                            <a href="sejarah.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Sejarah</a>
+                        </div>
+                    </div>
+                    <a href="perpustakaan.html" class="text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.perpustakaan">Perpustakaan</a>
+                    <a href="berita.html" class="text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-4 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.berita">Berita</a>
+                    <div class="flex items-center gap-2 ml-3">
+                        <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-sm font-semibold text-gray-600 transition-all" aria-label="Ubah mode gelap/terang">
+                            <i class="fas fa-moon"></i>
+                            <span>Dark</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center lg:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-hmiGreen focus:outline-none p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full rounded-b-2xl">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Beranda</a>
+                <a href="artikel.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Artikel</a>
+                <details class="group">
+                    <summary class="list-none cursor-pointer flex items-center justify-between block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">
+                        <span >Profil</span>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-200 group-open:rotate-180"></i>
+                    </summary>
+                    <div class="pl-4 mt-1 space-y-1">
+                        <a href="profil.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Profil Cabang</a>
+                        <a href="pengurus.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Pengurus</a>
+                        <a href="program-kerja.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Program Kerja</a>
+                        <a href="sejarah.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Sejarah</a>
+                    </div>
+                </details>
+                <a href="perpustakaan.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Perpustakaan</a>
+                <a href="berita.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Berita</a>
+                <div class="flex items-center justify-end gap-2 px-3 pt-1">
+                    <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-sm font-semibold text-gray-600 transition-all" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                        <span>Gelap</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-4 py-12">
+        <div class="bg-white rounded-[2rem] shadow-xl border border-gray-100 overflow-hidden">
+            <!-- Header Card -->
+            <div class="bg-gradient-to-br from-hmiGreen to-hmiDark text-white p-8 md:p-10 text-center relative">
+                <div class="relative z-10">
+                    <span class="inline-flex items-center rounded-full bg-white/15 px-3.5 py-1 text-xs font-semibold backdrop-blur tracking-wider uppercase"><i class="fas fa-user-plus mr-1.5"></i><span data-i18n="page.badge">Registrasi Online</span></span>
+                    <h2 class="text-3xl font-extrabold mt-4" data-i18n="page.title">Formulir Pendataan Anggota</h2>
+                    <p class="mt-2 text-emerald-100 text-sm max-w-lg mx-auto" data-i18n="page.description">Silakan lengkapi data diri Anda secara benar untuk terdata dalam database resmi HMI Badko Kalimantan Selatan.</p>
+                </div>
+            </div>
+
+            <!-- Success Alert -->
+            <div id="successCard" class="hidden p-8 text-center space-y-6">
+                <div class="w-20 h-20 rounded-full bg-emerald-100 text-hmiGreen flex items-center justify-center text-4xl mx-auto animate-pulse">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800" data-i18n="page.successTitle">Pendaftaran Berhasil Terkirim!</h3>
+                    <p class="text-gray-500 mt-2 max-w-md mx-auto" data-i18n="page.successText">Terima kasih telah melakukan pengisian data. Pendaftaran Anda saat ini berstatus <span class="font-bold text-amber-500">Pending</span> dan sedang menunggu peninjauan oleh Pengurus/Admin Badko HMI Kalsel.</p>
+                </div>
+                <div class="pt-4 flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="database-anggota.html" class="inline-flex items-center justify-center rounded-xl bg-hmiGreen text-white font-bold px-6 py-3 hover:bg-hmiDark transition">
+                        <i class="fas fa-users mr-2"></i><span data-i18n="page.viewDatabase">Lihat Database Kader</span>
+                    </a>
+                    <a href="index.html" class="inline-flex items-center justify-center rounded-xl border border-gray-300 font-semibold px-6 py-3 hover:bg-gray-50 transition">
+                        <span data-i18n="page.backHome">Kembali Ke Beranda</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form id="registrationForm" class="p-8 md:p-10 space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.fullName">Nama Lengkap</label>
+                        <input id="name" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm" data-i18n-placeholder="placeholders.name" placeholder="Contoh: Muhammad Indra Kurniawan" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.email">Alamat Email</label>
+                        <input id="email" type="email" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm" data-i18n-placeholder="placeholders.email" placeholder="Contoh: indra@gmail.com" />
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.branch">HMI Cabang</label>
+                        <select id="cabang" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm">
+                            <option value="" disabled selected data-i18n="page.branchPlaceholder">Pilih Cabang Anda</option>
+                            <option value="Banjarmasin">Cabang Banjarmasin</option>
+                            <option value="Banjarbaru">Cabang Banjarbaru</option>
+                            <option value="Kandangan">Cabang Kandangan</option>
+                            <option value="Barabai">Cabang Barabai</option>
+                            <option value="Amuntai">Cabang Amuntai</option>
+                            <option value="Tanjung">Cabang Tanjung</option>
+                            <option value="Tanah Laut">Cabang Tanah Laut</option>
+                            <option value="Kotabaru">Cabang Kotabaru</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.komisariat">Komisariat</label>
+                        <input id="komisariat" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm" data-i18n-placeholder="placeholders.komisariat" placeholder="Contoh: Teknik ULM / Syariah UIN" />
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.lk1">Tahun LK1 (Basic Training)</label>
+                        <input id="lk1Year" type="number" min="1947" max="2026" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm" data-i18n-placeholder="placeholders.lk1" placeholder="Contoh: 2024" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.whatsapp">Nomor WhatsApp</label>
+                        <input id="whatsapp" type="tel" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm" data-i18n-placeholder="placeholders.whatsapp" placeholder="Contoh: 08123456789" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="page.reason">Alasan Bergabung / Menjadi Kader HMI</label>
+                    <textarea id="reason" rows="4" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen text-sm" data-i18n-placeholder="placeholders.reason" placeholder="Ceritakan motivasi atau alasan Anda bergabung..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full rounded-xl bg-hmiGreen text-white font-bold py-3.5 hover:bg-hmiDark transition shadow-lg text-sm tracking-wider uppercase" data-i18n="page.submit">Kirim Data Pendaftaran</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-6 border-t-4 border-hmiGreen mt-10 mx-4 mb-4 rounded-t-[2rem]">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-10 w-auto mx-auto mb-4">
+            <p class="text-sm font-semibold text-gray-400">© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan. Seluruh hak dilindungi.</p>
+            <p class="text-xs text-gray-500 mt-2">Prototype by Muhammad Indra Kurniawan</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Form Submit
+        const form = document.getElementById('registrationForm');
+        const successCard = document.getElementById('successCard');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const cabang = document.getElementById('cabang').value;
+            const komisariat = document.getElementById('komisariat').value.trim();
+            const lk1Year = document.getElementById('lk1Year').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const reason = document.getElementById('reason').value.trim();
+
+            const memberItem = {
+                id: Date.now(),
+                name,
+                email,
+                cabang,
+                komisariat,
+                lk1Year,
+                whatsapp,
+                reason,
+                status: 'Pending',
+                createdAt: new Date().toISOString()
+            };
+
+            const existing = JSON.parse(localStorage.getItem('hmiMemberData') || '[]');
+            existing.unshift(memberItem);
+            localStorage.setItem('hmiMemberData', JSON.stringify(existing));
+
+            form.classList.add('hidden');
+            successCard.classList.remove('hidden');
+            window.scrollTo({ top: successCard.offsetTop - 100, behavior: 'smooth' });
+        });
+    </script>
+
+
+    <script>
+        // ======= NAV "Profil" DROPDOWN (desktop) =======
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.nav-dropdown').forEach(wrapper => {
+                const btn = wrapper.querySelector('.nav-dropdown-btn');
+                const menu = wrapper.querySelector('.nav-dropdown-menu');
+                if (!btn || !menu) return;
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = !menu.classList.contains('hidden');
+                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
+                    document.querySelectorAll('.nav-dropdown-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+                    if (!isOpen) {
+                        menu.classList.remove('hidden');
+                        btn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
+                document.querySelectorAll('.nav-dropdown-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
+            });
+        });
+    </script>
+</body>
+</html>
