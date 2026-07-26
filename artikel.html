@@ -367,13 +367,19 @@
 
     async function loadPublishedArticles(){
       try{
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout untuk mobile
         const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}&cache=${Math.random()}`,{
           cache:'no-store',
+          signal: controller.signal,
           headers:{'Cache-Control':'no-cache, no-store, must-revalidate','Pragma':'no-cache'}
         });
+        clearTimeout(timeoutId);
         if(!response.ok) throw new Error('Failed to fetch articles');
         const data=await response.json();
         if(!Array.isArray(data)) throw new Error('Invalid articles data');
+        // Cache hasil ke localStorage untuk fallback offline/mobile
+        try { localStorage.setItem(publishedKey, JSON.stringify(data)); } catch(e){}
         return data.sort((a,b)=>new Date(b.publishedAt||b.submittedAt||0)-new Date(a.publishedAt||a.submittedAt||0));
       }catch(error){
         return getPublishedArticlesFallback();

@@ -104,12 +104,17 @@ async function handleRequest(request, env) {
 
   if (pathname === '/articles' && request.method === 'GET') {
     const articles = await getArticles(env);
-    return jsonResponse(articles);
+    // Strip field berat dari list: headerImageDataUrl (base64) dan isi (konten panjang)
+    // Data lengkap hanya di /article?id=... (halaman detail)
+    const lightArticles = articles.map(({ headerImageDataUrl, isi, ...rest }) => rest);
+    return jsonResponse(lightArticles);
   }
 
   if (pathname === '/pending' && request.method === 'GET') {
     const pending = await getPending(env);
-    return jsonResponse(pending);
+    // Strip headerImageDataUrl dari list pending juga
+    const lightPending = pending.map(({ headerImageDataUrl, ...rest }) => rest);
+    return jsonResponse(lightPending);
   }
 
   if (pathname === '/article' && request.method === 'GET') {
