@@ -140,9 +140,8 @@
 
     async function loadPublishedArticles(){
       try{
-        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}&cache=${Math.random()}`,{
-          cache:'no-store',
-          headers:{'Cache-Control':'no-cache, no-store, must-revalidate','Pragma':'no-cache'}
+        const response=await fetch(`${serverArticlesUrl}?t=${Date.now()}&v=${Math.random()}`,{
+          cache:'no-store'
         });
         if(response.ok){
           const data=await response.json();
