@@ -13,7 +13,7 @@
     <title>Berita Terbaru — HMI Badko Kalimantan Selatan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>tailwind.config={theme:{extend:{colors:{hmiGreen:'#006B3F',hmiGreenLight:'#008c52',hmiDark:'#004d2c'}}}}</script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{hmiGreen:'#006B3F',hmiGreenLight:'#008c52',hmiDark:'#004d2c'}}}}</script>
   <style>
     .glass-nav{background:rgba(255,255,255,.9);backdrop-filter:blur(10px)}
     .bg-pattern{background:linear-gradient(135deg,rgba(0,107,63,.96),rgba(0,77,44,.96))}
@@ -312,13 +312,13 @@
 
             if (filtered.length === 0) {
                 newsGrid.innerHTML = `
-                    <div class="col-span-full rounded-3xl bg-gradient-to-br from-emerald-50/90 via-white to-green-50/70 dark:from-emerald-950/30 dark:via-emerald-900/10 dark:to-green-950/20 border border-emerald-200/80 dark:border-emerald-800/40 p-8 md:p-12 shadow-lg text-center relative overflow-hidden transition-all duration-300">
-                        <div class="absolute -top-16 -right-16 w-48 h-48 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="absolute -bottom-16 -left-16 w-48 h-48 bg-hmiGreen/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="col-span-full rounded-3xl bg-white border border-gray-200 p-8 md:p-12 shadow-xl text-center relative overflow-hidden transition-all duration-300">
+                        <div class="absolute -top-20 -right-20 w-56 h-56 bg-emerald-100/60 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="absolute -bottom-20 -left-20 w-56 h-56 bg-green-100/60 rounded-full blur-3xl pointer-events-none"></div>
                         
                         <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
                             <div class="relative mb-6">
-                                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-hmiGreen to-emerald-500 text-white flex items-center justify-center text-3xl shadow-xl shadow-hmiGreen/20">
+                                <div class="w-20 h-20 rounded-2xl bg-hmiGreen text-white flex items-center justify-center text-3xl shadow-lg shadow-hmiGreen/20">
                                     <i class="fas fa-newspaper"></i>
                                 </div>
                                 <span class="absolute -bottom-1 -right-1 flex h-6 w-6">
@@ -329,39 +329,39 @@
                                 </span>
                             </div>
 
-                            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700/50 mb-4 shadow-sm">
-                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 mb-5 shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
                                 Pemberitahuan Resmi
                             </span>
 
-                            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white leading-tight tracking-tight mb-4">
+                            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
                                 Halaman Berita sedang dalam proses pembaruan data.
                             </h2>
 
-                            <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed mb-8 max-w-xl">
+                            <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-8 max-w-xl">
                                 Saat ini tim redaksi dan Humas HMI Badko Kalimantan Selatan sedang melakukan verifikasi, penataan ulang, serta pembaruan data publikasi berita resmi organisasi. Konten berita terbaru akan segera disajikan.
                             </p>
 
-                            <div class="grid sm:grid-cols-3 gap-3 w-full mb-8">
-                                <div class="bg-white/80 dark:bg-emerald-900/20 backdrop-blur border border-emerald-100 dark:border-emerald-800/40 rounded-2xl p-4 text-left shadow-sm">
-                                    <div class="text-hmiGreen dark:text-emerald-400 text-sm font-bold flex items-center gap-2 mb-1">
+                            <div class="grid sm:grid-cols-3 gap-4 w-full mb-8">
+                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-left shadow-sm">
+                                    <div class="text-hmiGreen text-sm font-bold flex items-center gap-2 mb-1">
                                         <i class="fas fa-tools"></i> Status Redaksi
                                     </div>
-                                    <p class="text-xs text-gray-600 dark:text-gray-300 font-medium">Restrukturisasi Data</p>
+                                    <p class="text-xs text-gray-700 font-semibold">Restrukturisasi Data</p>
                                 </div>
 
-                                <div class="bg-white/80 dark:bg-emerald-900/20 backdrop-blur border border-emerald-100 dark:border-emerald-800/40 rounded-2xl p-4 text-left shadow-sm">
-                                    <div class="text-hmiGreen dark:text-emerald-400 text-sm font-bold flex items-center gap-2 mb-1">
+                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-left shadow-sm">
+                                    <div class="text-hmiGreen text-sm font-bold flex items-center gap-2 mb-1">
                                         <i class="fas fa-clock"></i> Estimasi Update
                                     </div>
-                                    <p class="text-xs text-gray-600 dark:text-gray-300 font-medium">Segera Hadir</p>
+                                    <p class="text-xs text-gray-700 font-semibold">Segera Hadir</p>
                                 </div>
 
-                                <div class="bg-white/80 dark:bg-emerald-900/20 backdrop-blur border border-emerald-100 dark:border-emerald-800/40 rounded-2xl p-4 text-left shadow-sm">
-                                    <div class="text-hmiGreen dark:text-emerald-400 text-sm font-bold flex items-center gap-2 mb-1">
+                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-left shadow-sm">
+                                    <div class="text-hmiGreen text-sm font-bold flex items-center gap-2 mb-1">
                                         <i class="fas fa-shield-halved"></i> Kanal Resmi
                                     </div>
-                                    <p class="text-xs text-gray-600 dark:text-gray-300 font-medium">HMI Badko Kalsel</p>
+                                    <p class="text-xs text-gray-700 font-semibold">HMI Badko Kalsel</p>
                                 </div>
                             </div>
 
@@ -369,7 +369,7 @@
                                 <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-hmiGreen hover:bg-hmiDark text-white font-bold text-sm shadow-md transition-all hover:scale-[1.02]">
                                     <i class="fas fa-home"></i> Kembali ke Beranda
                                 </a>
-                                <a href="artikel.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-emerald-900/40 border border-gray-200 dark:border-emerald-700/50 text-gray-700 dark:text-emerald-200 hover:text-hmiGreen font-bold text-sm shadow-sm transition-all hover:scale-[1.02]">
+                                <a href="artikel.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gray-100 border border-gray-300 text-gray-800 hover:text-hmiGreen hover:bg-gray-200 font-bold text-sm shadow-sm transition-all hover:scale-[1.02]">
                                     <i class="fas fa-newspaper"></i> Baca Artikel Kader
                                 </a>
                             </div>
