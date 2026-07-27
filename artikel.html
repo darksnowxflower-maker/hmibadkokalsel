@@ -84,16 +84,16 @@
     </nav>
   <main class="max-w-7xl mx-auto px-4 py-12">
     <section class="rounded-[2rem] bg-pattern text-white p-8 md:p-12 shadow-2xl mb-12 relative overflow-hidden"><div class="absolute -right-20 -top-20 w-72 h-72 bg-white/5 rounded-full"></div><div class="relative max-w-2xl"><span class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm font-semibold"><i class="fas fa-pen-nib mr-2"></i>Karya Tulis Kader</span><h1 class="text-3xl md:text-4xl font-extrabold mt-4">Artikel</h1><p class="mt-3 text-emerald-100 text-lg">Wadah gagasan, kajian, opini, dan karya tulis kader Himpunan Mahasiswa Islam Kalimantan Selatan.</p><div class="mt-7 flex flex-wrap gap-3"><button id="openArticleForm" type="button" class="inline-flex items-center rounded-full bg-white px-6 py-3 font-bold text-hmiGreen shadow-lg hover:bg-green-50 transition" aria-expanded="false" aria-controls="kirim-tulisan"><i class="fas fa-paper-plane mr-2"></i>Kirim Tulisan</button><button id="adminLoginBtn" type="button" class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-6 py-3 font-bold text-white shadow-lg hover:bg-white/20 transition"><i class="fas fa-shield-halved mr-2"></i>Admin</button></div></div></section>
-    <section id="published-articles" class="rounded-[2rem] bg-white border border-gray-200 shadow-sm p-12 min-h-[300px]">
-      <div id="publishedContainer" class="max-w-7xl mx-auto grid gap-6">
+    <section id="published-articles" class="rounded-[2rem] bg-white border border-gray-200 shadow-sm p-6 md:p-12 min-h-[300px]">
+      <div id="publishedContainer" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Published articles will be rendered here by JS -->
       </div>
       <template id="emptyTemplate">
-        <div class="text-center py-16">
-          <div class="mx-auto w-20 h-20 rounded-full bg-green-50 text-hmiGreen grid place-items-center mb-5"><i class="fas fa-hourglass-half text-4xl"></i></div>
-          <h2 class="text-2xl font-bold mb-2">Sedang Diupdate</h2>
-          <p class="text-gray-600">Laman artikel sedang dipersiapkan untuk menampilkan karya-karya tulisan terbaik kader.</p>
-          <p class="text-sm text-gray-500 mt-2">Silakan kembali lagi dalam waktu dekat.</p>
+        <div class="text-center py-16 col-span-full">
+          <div class="mx-auto w-20 h-20 rounded-full bg-green-50 text-hmiGreen grid place-items-center mb-5"><i class="fas fa-newspaper text-4xl"></i></div>
+          <h2 class="text-2xl font-bold mb-2">Belum Ada Artikel Baru</h2>
+          <p class="text-gray-600">Laman artikel ini akan menampilkan karya-karya tulisan terbaik dari kader HMI.</p>
+          <p class="text-sm text-gray-500 mt-2">Silakan klik tombol "Kirim Tulisan" di atas untuk berkontribusi.</p>
         </div>
       </template>
     </section>
@@ -353,7 +353,28 @@
     const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
     const serverArticlesUrl=`${serverApiBase}/articles`;
     const serverPendingUrl=`${serverApiBase}/pending`;
-    const defaultPublishedArticles=[];
+    const defaultPublishedArticles=[
+      {
+        id: "meratus",
+        nama: "Kader HMI",
+        asal: "HMI Badko Kalsel",
+        judul: "Meratus: Merawat Alam dan Identitas Lokal",
+        kategori: "Lingkungan",
+        ringkasan: "Kajian tentang hubungan kader HMI dengan alam Meratus sebagai sumber inspirasi dan semangat konservasi.",
+        isi: "Hutan Meratus adalah saksi perjuangan panjang masyarakat Kalimantan Selatan. Kader HMI dituntut untuk menjaga kelestariannya melalui literasi lingkungan, riset lokal, dan aksi pengabdian yang berpijak pada nilai keislaman dan kebangsaan. Alam bukan hanya ruang, melainkan sanad kultural yang harus diwariskan kepada generasi berikut.",
+        publishedAt: "2026-07-26T00:00:00.000Z"
+      },
+      {
+        id: "alam",
+        nama: "Kader HMI",
+        asal: "HMI Badko Kalsel",
+        judul: "Alam sebagai Guru: Refleksi Kader terhadap Ekosistem dan Etika",
+        kategori: "Keislaman",
+        ringkasan: "Tulisan reflektif tentang bagaimana alam mengajarkan etika pengelolaan sumber daya dan merawat kemaslahatan bersama.",
+        isi: "Alam memberi pelajaran kesabaran, rekonsiliasi, dan kedermawanan. Sebagai kader, kita belajar bahawa etika ilmiah dan religi bertemu dalam menjaga keseimbangan lingkungan. Langkah kecil konservasi, seperti menghormati sumber air dan merawat hutan, adalah cermin dari komitmen kita terhadap umat dan negeri.",
+        publishedAt: "2026-07-26T00:00:00.000Z"
+      }
+    ];
 
     function getPublishedArticlesFallback(){
       const stored=JSON.parse(localStorage.getItem(publishedKey)||'[]');
@@ -683,21 +704,39 @@
       const container=document.getElementById('publishedContainer');
       container.innerHTML='';
       if(!published.length){
-        container.appendChild(document.getElementById('emptyTemplate').content.cloneNode(true));
+        const emptyEl = document.getElementById('emptyTemplate');
+        if(emptyEl){
+          container.appendChild(emptyEl.content.cloneNode(true));
+        } else {
+          container.innerHTML = '<div class="text-center py-12 text-gray-500 col-span-full">Belum ada artikel yang dipublikasikan.</div>';
+        }
         return;
       }
       published.forEach((article)=>{
         const card=document.createElement('article');
-        card.className='rounded-2xl border border-gray-200 p-6 bg-white shadow-sm';
+        card.className='rounded-2xl border border-gray-200 p-6 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between';
+        
+        let headerImageHtml = '';
+        if(article.headerImageDataUrl){
+          headerImageHtml = `<div class="mb-4 overflow-hidden rounded-xl h-48 w-full"><img src="${escapeHtml(article.headerImageDataUrl)}" alt="${escapeHtml(article.judul)}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" /></div>`;
+        }
+
         card.innerHTML=`
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-hmiGreen">${escapeHtml(article.kategori || 'Artikel')}</span>
-            <span class="text-sm text-gray-500">${escapeHtml(article.nama || 'Kader HMI')}</span>
+          <div>
+            ${headerImageHtml}
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-hmiGreen">${escapeHtml(article.kategori || 'Artikel')}</span>
+              <span class="text-sm text-gray-500">${escapeHtml(article.nama || 'Kader HMI')}</span>
+            </div>
+            <h3 class="mt-4 text-xl md:text-2xl font-extrabold text-hmiGreen hover:text-hmiDark transition-colors">
+              <a href="detail-artikel.html?id=${escapeHtml(String(article.id || ''))}">${escapeHtml(article.judul || 'Judul artikel')}</a>
+            </h3>
+            <p class="mt-2 text-xs md:text-sm text-gray-500">${escapeHtml(article.asal || 'HMI Badko Kalsel')} • ${new Date(article.publishedAt || article.submittedAt || Date.now()).toLocaleDateString('id-ID')}</p>
+            <p class="mt-4 text-gray-700 text-sm leading-relaxed">${escapeHtml(article.ringkasan || 'Ringkasan artikel belum tersedia.')}</p>
           </div>
-          <h3 class="mt-4 text-2xl font-extrabold text-hmiGreen">${escapeHtml(article.judul || 'Judul artikel')}</h3>
-          <p class="mt-2 text-sm text-gray-500">${escapeHtml(article.asal || 'HMI Badko Kalsel')} • ${new Date(article.publishedAt || article.submittedAt || Date.now()).toLocaleDateString('id-ID')}</p>
-          <p class="mt-4 text-gray-700">${escapeHtml(article.ringkasan || 'Ringkasan artikel belum tersedia.')}</p>
-          <a href="detail-artikel.html?id=${escapeHtml(String(article.id || ''))}" class="detailButton mt-5 inline-flex items-center font-bold text-hmiGreen">Baca selengkapnya <i class="fas fa-arrow-right ml-2"></i></a>
+          <div class="mt-6 pt-4 border-t border-gray-100">
+            <a href="detail-artikel.html?id=${escapeHtml(String(article.id || ''))}" class="detailButton inline-flex items-center font-bold text-hmiGreen hover:text-hmiDark transition-colors text-sm">Baca selengkapnya <i class="fas fa-arrow-right ml-2 text-xs"></i></a>
+          </div>
         `;
         container.appendChild(card);
       });

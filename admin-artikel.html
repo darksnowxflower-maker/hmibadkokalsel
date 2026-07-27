@@ -135,7 +135,28 @@
     const serverPendingUrl = `${serverApiBase}/pending`;
     const publishUrl = `${serverApiBase}/publish`;
     const articleUrl = `${serverApiBase}/article`;
-    const defaultPublishedArticles=[];
+    const defaultPublishedArticles=[
+      {
+        id: "meratus",
+        nama: "Kader HMI",
+        asal: "HMI Badko Kalsel",
+        judul: "Meratus: Merawat Alam dan Identitas Lokal",
+        kategori: "Lingkungan",
+        ringkasan: "Kajian tentang hubungan kader HMI dengan alam Meratus sebagai sumber inspirasi dan semangat konservasi.",
+        isi: "Hutan Meratus adalah saksi perjuangan panjang masyarakat Kalimantan Selatan. Kader HMI dituntut untuk menjaga kelestariannya melalui literasi lingkungan, riset lokal, dan aksi pengabdian yang berpijak pada nilai keislaman dan kebangsaan. Alam bukan hanya ruang, melainkan sanad kultural yang harus diwariskan kepada generasi berikut.",
+        publishedAt: "2026-07-26T00:00:00.000Z"
+      },
+      {
+        id: "alam",
+        nama: "Kader HMI",
+        asal: "HMI Badko Kalsel",
+        judul: "Alam sebagai Guru: Refleksi Kader terhadap Ekosistem dan Etika",
+        kategori: "Keislaman",
+        ringkasan: "Tulisan reflektif tentang bagaimana alam mengajarkan etika pengelolaan sumber daya dan merawat kemaslahatan bersama.",
+        isi: "Alam memberi pelajaran kesabaran, rekonsiliasi, dan kedermawanan. Sebagai kader, kita belajar bahawa etika ilmiah dan religi bertemu dalam menjaga keseimbangan lingkungan. Langkah kecil konservasi, seperti menghormati sumber air dan merawat hutan, adalah cermin dari komitmen kita terhadap umat dan negeri.",
+        publishedAt: "2026-07-26T00:00:00.000Z"
+      }
+    ];
     let currentPending = [];
 
     async function loadPublishedArticles(){
