@@ -912,36 +912,42 @@
 
             // ======= DATA CABANG HMI KALSEL =======
             const cabangData = [
-                { id: 'banjarmasin', nama: 'Cabang Banjarmasin', tag: 'Pusat Koordinasi', icon: 'fa-city', deskripsi: 'Pusat pergerakan dan koordinasi utama kader HMI di Kota Banjarmasin.', statistik: { anggota: '1.200+', program: '24', prestasi: '12' }, kontak: 'banjarmasin@hmibadkokalsel.or.id', alamat: 'Jl. Ahmad Yani Km. 4.5, Banjarmasin', ketua: 'M. Rizky Ramadhan', periode: '2024–2026', programUnggulan: ['Kaderisasi Khusus', 'Advokasi Isu Perkotaan', 'Bhakti Kampus'], sosialMedia: { instagram: '@hmi_banjarmasin', twitter: '@hmibjm' } },
-                { id: 'banjarbaru', nama: 'Cabang Banjarbaru', tag: 'Pengembangan Kader', icon: 'fa-graduation-cap', deskripsi: 'Pusat pengembangan kajian intelektual dan akademik mahasiswa di Banjarbaru.', statistik: { anggota: '850+', program: '18', prestasi: '9' }, kontak: 'banjarbaru@hmibadkokalsel.or.id', alamat: 'Jl. Unlam No. 12, Banjarbaru', ketua: 'Ahmad Fauzi', periode: '2024–2026', programUnggulan: ['Forum Riset Kader', 'Pelatihan Public Speaking', 'HMI Mengajar'], sosialMedia: { instagram: '@hmi_banjarbaru', twitter: '@hmibjb' } },
-                { id: 'kandangan', nama: 'Cabang Kandangan', tag: 'Literasi & Edukasi', icon: 'fa-book-open', deskripsi: 'Pelopor gerakan literasi masyarakat dan kaderisasi daerah Hulu Sungai Selatan.', statistik: { anggota: '450+', program: '14', prestasi: '6' }, kontak: 'kandangan@hmibadkokalsel.or.id', alamat: 'Jl. Pangeran Antasari Kandangan', ketua: 'Nur Hidayat', periode: '2024–2026', programUnggulan: ['Pustaka Keliling Desa', 'Kajian Keislaman', 'Bakti Sosial Hulu Sungai'], sosialMedia: { instagram: '@hmi_kandangan', twitter: '@hmikdg' } },
-                { id: 'barabai', nama: 'Cabang Barabai', tag: 'Pemberdayaan Pemuda', icon: 'fa-users-cog', deskripsi: 'Penggerak advokasi lingkungan hidup dan pemberdayaan pemuda Hulu Sungai Tengah.', statistik: { anggota: '400+', program: '12', prestasi: '5' }, kontak: 'barabai@hmibadkokalsel.or.id', alamat: 'Jl. Murakata Barabai', ketua: 'Hasanuddin', periode: '2024–2026', programUnggulan: ['Aksi Lingkungan Meratus', 'Workshop Pemuda', 'Pelatihan Kepemimpinan'], sosialMedia: { instagram: '@hmi_barabai', twitter: '@hmibrb' } },
-                { id: 'amuntai', nama: 'Cabang Amuntai', tag: 'Dakwah & Kepedulian', icon: 'fa-mosque', deskripsi: 'Pusat dakwah Islamiyah dan solidaritas sosial daerah Hulu Sungai Utara.', statistik: { anggota: '380+', program: '15', prestasi: '7' }, kontak: 'amuntai@hmibadkokalsel.or.id', alamat: 'Jl. Norman Umar Amuntai', ketua: 'Muammar', periode: '2024–2026', programUnggulan: ['Safari Dakwah Kampus', 'Bantuan Bencana', 'Rumah Tahfidz Kader'], sosialMedia: { instagram: '@hmi_amuntai', twitter: '@hmiamt' } },
-                { id: 'tanjung', nama: 'Cabang Tanjung', tag: 'Inovasi Kader', icon: 'fa-lightbulb', deskripsi: 'Pelopor kewirausahaan dan pelatihan keterampilan kerja kader di Tabalong.', statistik: { anggota: '320+', program: '10', prestasi: '4' }, kontak: 'tanjung@hmibadkokalsel.or.id', alamat: 'Jl. Jend. Sudirman Tanjung', ketua: 'Zulkifli', periode: '2024–2026', programUnggulan: ['Inkubator Bisnis Kader', 'Workshop Digital Marketing', 'Kajian Industri'], sosialMedia: { instagram: '@hmi_tanjung', twitter: '@hmitjg' } },
-                { id: 'tanah-laut', nama: 'Cabang Tanah Laut', tag: 'Kebersamaan & Aksi', icon: 'fa-handshake', deskripsi: 'Pengabdi masyarakat dan jaringan kemitraan mahasiswa di Pelaihari.', statistik: { anggota: '300+', program: '11', prestasi: '4' }, kontak: 'tanahlaut@hmibadkokalsel.or.id', alamat: 'Jl. Hadji Boejasin Pelaihari', ketua: 'Fahmi Redha', periode: '2024–2026', programUnggulan: ['Desa Binaan Pesisir', 'Advokasi Agraria', 'Kaderisasi Terpadu'], sosialMedia: { instagram: '@hmi_tanahlaut', twitter: '@hmitala' } },
-                { id: 'kotabaru', nama: 'Cabang Kotabaru', tag: 'Pengabdian Daerah', icon: 'fa-map-marked-alt', deskripsi: 'Garda terdepan kaderisasi di wilayah kepulauan dan pesisir Kotabaru.', statistik: { anggota: '250+', program: '9', prestasi: '3' }, kontak: 'kotabaru@hmibadkokalsel.or.id', alamat: 'Jl. St. Hasanuddin Kotabaru', ketua: 'Syarifuddin', periode: '2024–2026', programUnggulan: ['Pengabdian Pulau Terluar', 'Sekolah Bahari', 'Dialog Kebangsaan'], sosialMedia: { instagram: '@hmi_kotabaru', twitter: '@hmiktb' } }
+                { id: 'banjarmasin', nama: 'Cabang Banjarmasin', icon: 'fa-city' },
+                { id: 'banjarbaru', nama: 'Cabang Banjarbaru', icon: 'fa-graduation-cap' },
+                { id: 'kandangan', nama: 'Cabang Kandangan', icon: 'fa-book-open' },
+                { id: 'barabai', nama: 'Cabang Barabai', icon: 'fa-users-cog' },
+                { id: 'amuntai', nama: 'Cabang Amuntai', icon: 'fa-mosque' },
+                { id: 'tanjung', nama: 'Cabang Tanjung', icon: 'fa-lightbulb' },
+                { id: 'tanah-laut', nama: 'Cabang Tanah Laut', icon: 'fa-handshake' },
+                { id: 'kotabaru', nama: 'Cabang Kotabaru', icon: 'fa-map-marked-alt' }
             ];
 
             const grid = document.getElementById('cabangGrid');
             if (grid) {
                 cabangData.forEach(cabang => {
                     const card = document.createElement('div');
-                    card.className = 'cabang-card bg-white rounded-[1.5rem] border border-gray-200 shadow-sm p-6 hover:shadow-xl transition-all cursor-pointer';
+                    card.className = 'cabang-card bg-white rounded-[1.5rem] border border-gray-200 shadow-sm p-6 hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between';
                     card.innerHTML = `
-                        <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center card-icon text-hmiGreen font-bold shrink-0">
-                                    <i class="fas ${cabang.icon} text-2xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-extrabold text-gray-800 text-lg">${cabang.nama}</h3>
-                                    <span class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-hmiGreen border border-emerald-200 mt-1">${cabang.tag}</span>
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center card-icon text-hmiGreen font-bold shrink-0">
+                                        <i class="fas ${cabang.icon} text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-extrabold text-gray-800 text-lg">${cabang.nama}</h3>
+                                        <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 mt-1">
+                                            <i class="fas fa-clock text-[9px]"></i> Dalam Pembaruan
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+                            <p class="text-gray-500 text-xs leading-relaxed mb-4">
+                                Data informasi cabang sedang dalam proses pembaruan oleh pengurus HMI Badko Kalsel.
+                            </p>
                         </div>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4 flex-1">${cabang.deskripsi}</p>
-                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-                            <span><i class="fas fa-users text-hmiGreen mr-1"></i> ${cabang.statistik.anggota} Kader</span>
+                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                            <span class="text-amber-600 font-semibold"><i class="fas fa-exclamation-circle mr-1"></i> Status Informasi</span>
                             <span class="text-hmiGreen font-bold hover:underline">Detail <i class="fas fa-arrow-right ml-1"></i></span>
                         </div>
                     `;
@@ -963,39 +969,22 @@
                         <div>
                             <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">${cabang.nama}</h2>
                             <div class="flex items-center gap-2 mt-1">
-                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-hmiGreen">${cabang.tag}</span>
-                                <span class="text-xs text-gray-500">• Periode ${cabang.periode}</span>
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200">Dalam Pembaruan</span>
+                                <span class="text-xs text-gray-500">• Badko Kalsel</span>
                             </div>
                         </div>
                     </div>
-                    <div class="grid sm:grid-cols-3 gap-4 mb-6">
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
-                            <p class="text-xs text-gray-400 font-bold uppercase">Ketua Cabang</p>
-                            <p class="font-extrabold text-gray-800 mt-1">${cabang.ketua}</p>
+                    <div class="rounded-2xl bg-amber-50/80 border border-amber-200/80 p-6 text-center text-amber-900 my-4">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3 text-xl">
+                            <i class="fas fa-hourglass-half"></i>
                         </div>
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
-                            <p class="text-xs text-gray-400 font-bold uppercase">Anggota Aktif</p>
-                            <p class="font-extrabold text-gray-800 mt-1">${cabang.statistik.anggota}</p>
-                        </div>
-                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
-                            <p class="text-xs text-gray-400 font-bold uppercase">Program Kerja</p>
-                            <p class="font-extrabold text-gray-800 mt-1">${cabang.statistik.program} Agenda</p>
-                        </div>
+                        <h4 class="font-extrabold text-base mb-1">Informasi Sedang Dipersiapkan</h4>
+                        <p class="text-xs md:text-sm text-amber-800 leading-relaxed max-w-md mx-auto">
+                            Data profil lengkap, susunan pengurus cabang, statistik kader, serta kontak resmi <strong>${cabang.nama}</strong> sedang dalam proses pembaruan data oleh pengurus HMI Badko Kalsel.
+                        </p>
                     </div>
-                    <div class="mb-6">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">📌 Deskripsi Cabang</h4>
-                        <p class="text-gray-700 leading-relaxed text-sm">${cabang.deskripsi}</p>
-                    </div>
-                    <div class="mb-6">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">🌟 Program Unggulan</h4>
-                        <ul class="grid sm:grid-cols-2 gap-2">
-                            ${cabang.programUnggulan.map(p => `<li class="flex items-center gap-2 text-sm bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100"><i class="fas fa-check-circle text-hmiGreen"></i> ${p}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs text-gray-600 space-y-1">
-                        <p><strong>📍 Alamat:</strong> ${cabang.alamat}</p>
-                        <p><strong>📧 Kontak:</strong> ${cabang.kontak}</p>
-                        <p><strong>🔗 Instagram:</strong> ${cabang.sosialMedia.instagram}</p>
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs text-gray-500 text-center">
+                        <p><i class="fas fa-info-circle mr-1 text-hmiGreen"></i> Silakan hubungi pengurus Badko Kalsel untuk konfirmasi informasi terkini seputar cabang ini.</p>
                     </div>
                 `;
                 cabangModal.classList.add('active');
