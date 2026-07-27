@@ -750,118 +750,35 @@
 
         <!-- ==================== TAB 4: SEJARAH ==================== -->
         <div id="tab-content-sejarah" class="tab-content hidden">
-            <!-- HERO SEJARAH -->
-            <section class="rounded-[2rem] bg-gradient-to-r from-emerald-950 via-hmiDark to-hmiGreen text-white p-6 md:p-10 shadow-xl mb-8 relative overflow-hidden">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 relative z-10">
-                    <div class="max-w-2xl">
-                        <span class="inline-flex items-center rounded-full bg-white/20 px-3.5 py-1 text-xs font-semibold backdrop-blur tracking-wide">
-                            <i class="fas fa-history mr-2"></i> Rekam Perjuangan &amp; Pergerakan
-                        </span>
-                        <h2 class="text-3xl md:text-4xl font-extrabold mt-3">Sejarah HMI Badko Kalsel</h2>
-                        <p class="mt-2 text-emerald-100/90 text-sm md:text-base leading-relaxed">
-                            Jejak sejarah, dinamika pergerakan kader, serta komitmen kebangsaan dan keislaman HMI di Tanah Banjar dari masa ke masa.
-                        </p>
+            <!-- BANNER PENGUMUMAN PEMBARUAN DATA SEJARAH -->
+            <section class="rounded-[2.25rem] bg-gradient-to-br from-emerald-950 via-hmiDark to-[#002b1a] text-white p-8 md:p-14 shadow-2xl relative overflow-hidden text-center my-4">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-hmiGreenLight/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-emerald-300/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-3xl mx-auto py-6">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur rounded-3xl border border-white/20 flex items-center justify-center mx-auto mb-6 text-emerald-300 text-3xl shadow-inner">
+                        <i class="fas fa-clock-rotate-left"></i>
                     </div>
-                    <div class="flex flex-wrap gap-3 bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/15 shrink-0">
-                        <div class="px-4 py-2 border-r border-white/10 last:border-0 text-center">
-                            <p class="text-xs text-emerald-200">Berdiri Sejak</p>
-                            <p class="text-2xl font-black text-emerald-300">1947</p>
-                        </div>
-                        <div class="px-4 py-2 border-r border-white/10 last:border-0 text-center">
-                            <p class="text-xs text-emerald-200">Wilayah Pergerakan</p>
-                            <p class="text-2xl font-black text-white">8 Cabang</p>
-                        </div>
-                        <div class="px-4 py-2 text-center">
-                            <p class="text-xs text-emerald-200">Alumni &amp; Kader</p>
-                            <p class="text-2xl font-black text-yellow-300">Ribuan</p>
-                        </div>
+                    
+                    <span class="inline-flex items-center gap-2 rounded-full bg-amber-400/20 border border-amber-300/30 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-amber-200 backdrop-blur mb-6">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> 
+                        Pembaruan Data Sejarah
+                    </span>
+                    
+                    <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-5">
+                        Halaman Sejarah Sedang Dalam Proses Pembaruan Data
+                    </h2>
+                    
+                    <p class="text-emerald-100/90 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
+                        Informasi dan dokumentasi rekam jejak perjuangan HMI Badan Koordinasi Kalimantan Selatan sedang diselaraskan dan disempurnakan oleh tim redaksi &amp; keorganisasian.
+                    </p>
+
+                    <div class="inline-flex flex-col sm:flex-row items-center gap-3 bg-white/10 backdrop-blur px-6 py-4 rounded-2xl border border-white/15 text-xs md:text-sm font-semibold text-emerald-100">
+                        <i class="fas fa-circle-info text-emerald-300 text-lg"></i>
+                        <span>Arsip dan data histori lengkap akan segera ditampilkan kembali setelah proses verifikasi selesai.</span>
                     </div>
                 </div>
             </section>
-
-            <!-- KARTU LINIMASA & SEJARAH BRING UP -->
-            <div class="grid lg:grid-cols-3 gap-6 mb-8">
-                <div class="lg:col-span-2 content-surface p-6 sm:p-8">
-                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-hmiGreen flex items-center justify-center font-bold text-lg">
-                                <i class="fas fa-timeline"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-black text-gray-900">Linimasa Perjalanan Badko Kalsel</h3>
-                                <p class="text-xs text-gray-500">Milestone perkembangan organisasi dan kepemimpinan</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative border-l-2 border-emerald-200 ml-4 space-y-8 pl-6">
-                        <div class="relative">
-                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-hmiGreen ring-4 ring-emerald-100"></div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-hmiGreen text-xs font-black mb-1">1947 — Lahirnya HMI</span>
-                            <h4 class="text-base font-extrabold text-gray-800">Pendirian HMI oleh Lafran Pane</h4>
-                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                                Didirikan pada 14 Rabiul Awal 1366 H / 5 Februari 1947 di Yogyakarta dengan cita-cita mempertahankan NKRI dan mempertinggi derajat rakyat Indonesia serta menyiarkan agama Islam.
-                            </p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-hmiGreen ring-4 ring-emerald-100"></div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-hmiGreen text-xs font-black mb-1">Era Perintisan Banua</span>
-                            <h4 class="text-base font-extrabold text-gray-800">Ekspansi Kaderisasi di Kalimantan Selatan</h4>
-                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                                Pembentukan cabang-cabang perintis di Kalimantan Selatan seperti Cabang Banjarmasin, Banjarbaru, hingga menjangkau kawasan Hulu Sungai dan Pesisir.
-                            </p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-hmiGreen ring-4 ring-emerald-100"></div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-hmiGreen text-xs font-black mb-1">Konsolidasi Badko</span>
-                            <h4 class="text-base font-extrabold text-gray-800">Pembentukan Badan Koordinasi Kalsel</h4>
-                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                                Badko HMI Kalsel resmi berdiri menjadi wadah koordinasi 8 cabang aktif, mensinergikan arah perjuangan, advokasi sosial, dan perkaderan di Kalimantan Selatan.
-                            </p>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-hmiGreen ring-4 ring-emerald-100"></div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-hmiGreen text-xs font-black mb-1">Era Digital 2026</span>
-                            <h4 class="text-base font-extrabold text-gray-800">Modernisasi &amp; Organisasi Terpadu</h4>
-                            <p class="text-sm text-gray-600 mt-1 leading-relaxed">
-                                Peluncuran portal terpadu, sistem database kader, dan penguatan transparansi program kerja untuk menjawab tantangan era digital.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DOKTRIN & BACA SELENGKAPNYA -->
-                <div class="space-y-6">
-                    <div class="content-surface p-6 bg-gradient-to-br from-emerald-50 to-white">
-                        <div class="w-12 h-12 rounded-2xl bg-hmiGreen text-white flex items-center justify-center font-bold text-xl mb-4 shadow-md">
-                            <i class="fas fa-book-bookmark"></i>
-                        </div>
-                        <h3 class="text-lg font-black text-gray-900 mb-2">Nilai Dasar Perjuangan (NDP)</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed mb-4">
-                            Landasan ideologis dan filosofis kader HMI dalam melangkah, berpikir kritis, serta berjuang demi kemanusiaan dan keadilan.
-                        </p>
-                        <ul class="space-y-2 text-xs font-bold text-gray-700">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-hmiGreen"></i> Keindonesiaan &amp; Keislaman</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-hmiGreen"></i> Independensi Etis &amp; Organisatoris</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-hmiGreen"></i> Keadilan Sosial &amp; Advokasi Rakyat</li>
-                        </ul>
-                    </div>
-
-                    <div class="rounded-2xl bg-hmiDark text-white p-6 shadow-lg border border-emerald-800 text-center relative overflow-hidden">
-                        <div class="relative z-10">
-                            <i class="fas fa-landmark-flag text-3xl text-emerald-300 mb-3 block"></i>
-                            <h4 class="text-lg font-extrabold mb-2">Ingin Membaca Dokumentasi Sejarah Lengkap?</h4>
-                            <p class="text-xs text-emerald-100/80 mb-5 leading-relaxed">
-                                Buka halaman Sejarah interaktif kami untuk melihat arsip lengkap, galeri dokumentasi, dan ikhtisar perjuangan para pendiri.
-                            </p>
-                            <a href="sejarah.html" class="inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-full bg-hmiGreen hover:bg-hmiGreenLight text-white font-extrabold text-xs tracking-wide transition-all shadow-md hover:scale-[1.02]">
-                                <span>Buka Halaman Sejarah Selengkapnya</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 
