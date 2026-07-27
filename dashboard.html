@@ -307,7 +307,8 @@
                 { id: 3, title: 'Advokasi Mahasiswa & Komunitas', category: 'Advokasi', status: 'Berjalan', progress: 82, target: '150+' }
             ];
 
-            const news = JSON.parse(localStorage.getItem('hmiNewsData') || 'null') || defaultNews;
+            const rawNews = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
+            const news = Array.isArray(rawNews) ? rawNews.filter(item => item && ![1, 2, 3, '1', '2', '3'].includes(item.id) && (!item.title || (!item.title.toLowerCase().includes('persiapan rapat kerja') && !item.title.toLowerCase().includes('latihan kader ii')))) : defaultNews;
             const events = JSON.parse(localStorage.getItem('hmiEventData') || 'null') || defaultEvents;
             const pengurus = JSON.parse(localStorage.getItem('hmiPengurusData') || 'null') || defaultPengurus;
             const library = JSON.parse(localStorage.getItem('hmiLibraryData') || 'null') || defaultLibrary;

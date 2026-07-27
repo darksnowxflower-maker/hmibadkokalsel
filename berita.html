@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="cache-version" content="2026.07.27.1408" />
+  <!-- FORCE REBUILD & CACHE PURGE: 2026-07-27T14:08:00+08:00 -->
   <meta name="description" content="Berita terbaru HMI Badko Kalimantan Selatan — informasi, kegiatan, pengumuman, dan agenda organisasi.">
       <!-- Favicon Resmi HMI -->
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -16,8 +18,8 @@
     .glass-nav{background:rgba(255,255,255,.9);backdrop-filter:blur(10px)}
     .bg-pattern{background:linear-gradient(135deg,rgba(0,107,63,.96),rgba(0,77,44,.96))}
   </style>
-  <link rel="stylesheet" href="theme.css?v=20260712">
-  <script src="theme-toggle.js?v=20260712"></script>
+  <link rel="stylesheet" href="theme.css?v=20260727_v2">
+  <script src="theme-toggle.js?v=20260727_v2"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans selection:bg-hmiGreen selection:text-white">
 
@@ -246,13 +248,35 @@
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
         });
 
+        // Helper to detect and filter out legacy dummy news items
+        function isDummyNews(item) {
+            if (!item) return true;
+            const dummyIds = [1, 2, 3, '1', '2', '3'];
+            if (dummyIds.includes(item.id)) return true;
+            const title = String(item.title || '').toLowerCase();
+            if (
+                title.includes('persiapan rapat kerja') || 
+                title.includes('latihan kader ii') || 
+                title.includes('peluncuran website') ||
+                title.includes('intermediate training') ||
+                title.includes('portal digital hmi badko')
+            ) {
+                return true;
+            }
+            return false;
+        }
+
         // Default News Data (Empty - in process of data update)
         const defaultNews = [];
 
         let rawNews = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
-        // Filter out legacy dummy news items if present
         if (Array.isArray(rawNews)) {
-            rawNews = rawNews.filter(item => item && item.id !== 1 && item.id !== 2 && item.id !== 3 && (!item.title || !item.title.includes('Persiapan Rapat Kerja Wilayah')));
+            rawNews = rawNews.filter(item => !isDummyNews(item));
+            if (rawNews.length === 0) {
+                localStorage.removeItem('hmiNewsData');
+            } else {
+                localStorage.setItem('hmiNewsData', JSON.stringify(rawNews));
+            }
         }
         let allNews = (rawNews && Array.isArray(rawNews)) ? rawNews : defaultNews;
 

@@ -123,11 +123,33 @@
         const clearFormBtn = document.getElementById('clearFormBtn');
         const doneFormBtn = document.getElementById('doneFormBtn');
 
+        function isDummyNews(item) {
+            if (!item) return true;
+            const dummyIds = [1, 2, 3, '1', '2', '3'];
+            if (dummyIds.includes(item.id)) return true;
+            const title = String(item.title || '').toLowerCase();
+            if (
+                title.includes('persiapan rapat kerja') || 
+                title.includes('latihan kader ii') || 
+                title.includes('peluncuran website') ||
+                title.includes('intermediate training') ||
+                title.includes('portal digital hmi badko')
+            ) {
+                return true;
+            }
+            return false;
+        }
+
         const defaultNews = [];
 
         let rawNewsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
         if (Array.isArray(rawNewsData)) {
-            rawNewsData = rawNewsData.filter(item => item && item.id !== 1 && item.id !== 2 && item.id !== 3 && (!item.title || !item.title.includes('Persiapan Rapat Kerja Wilayah')));
+            rawNewsData = rawNewsData.filter(item => !isDummyNews(item));
+            if (rawNewsData.length === 0) {
+                localStorage.removeItem('hmiNewsData');
+            } else {
+                localStorage.setItem('hmiNewsData', JSON.stringify(rawNewsData));
+            }
         }
         let newsData = (rawNewsData && Array.isArray(rawNewsData)) ? rawNewsData : defaultNews;
         let editingId = null;
