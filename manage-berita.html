@@ -123,30 +123,13 @@
         const clearFormBtn = document.getElementById('clearFormBtn');
         const doneFormBtn = document.getElementById('doneFormBtn');
 
-        const defaultNews = [
-            {
-                id: 1,
-                title: 'Persiapan Rapat Kerja Wilayah',
-                category: 'Informasi',
-                date: '2026-07-15',
-                status: 'Terbit',
-                summary: 'Agenda koordinasi struktural HMI Badko Kalsel.',
-                content: 'HMI Badko Kalsel sedang mempersiapkan Rapat Kerja Wilayah untuk memperkuat sinergi antar cabang dan program kerja.',
-                image: ''
-            },
-            {
-                id: 2,
-                title: 'Persiapan Latihan Kader I',
-                category: 'Informasi',
-                date: '2026-07-10',
-                status: 'Draft',
-                summary: 'Pendaftaran latihan kader segera dibuka.',
-                content: 'Informasi terkait pendaftaran dan persiapan latihan kader akan segera diumumkan.',
-                image: ''
-            }
-        ];
+        const defaultNews = [];
 
-        let newsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null') || defaultNews;
+        let rawNewsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
+        if (Array.isArray(rawNewsData)) {
+            rawNewsData = rawNewsData.filter(item => item && item.id !== 1 && item.id !== 2 && item.id !== 3 && (!item.title || !item.title.includes('Persiapan Rapat Kerja Wilayah')));
+        }
+        let newsData = (rawNewsData && Array.isArray(rawNewsData)) ? rawNewsData : defaultNews;
         let editingId = null;
 
         function renderNews() {
