@@ -1030,9 +1030,9 @@
                         <span class="rounded-full bg-white/10 px-2.5 py-1 text-[9px] uppercase font-black text-emerald-100">Aktif</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="w-16 h-20 rounded-xl overflow-hidden border-2 border-white/80 shrink-0 bg-white/10 flex items-center justify-center text-white font-bold text-xl">
-                            ${leader.photoUrl ? `<img src="${leader.photoUrl}" class="w-full h-full object-cover" onerror="this.remove()">` : ''}
-                            <span>${leader.name.charAt(0)}</span>
+                        <div class="relative w-16 h-20 rounded-xl overflow-hidden border-2 border-white/80 shrink-0 bg-white/10 flex items-center justify-center text-white font-bold text-xl">
+                            ${leader.photoUrl ? `<img src="${leader.photoUrl}" alt="${leader.name}" class="absolute inset-0 w-full h-full object-cover z-10" onerror="this.remove()">` : ''}
+                            <span class="w-full h-full flex items-center justify-center text-white font-bold text-xl">${leader.name.charAt(0)}</span>
                         </div>
                         <div>
                             <h3 class="text-xl font-black text-white">${leader.name}</h3>
@@ -1094,9 +1094,9 @@
                 gridView.innerHTML = filtered.map(p => `
                     <div class="member-card p-5 cursor-pointer" onclick="openProfileModal(${p.id})">
                         <div class="flex items-start justify-between gap-3 mb-4">
-                            <div class="member-photo">
-                                ${p.photoUrl ? `<img src="${p.photoUrl}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.remove()">` : ''}
-                                <span>${p.name.split(' ').map(n=>n[0]).slice(0,2).join('')}</span>
+                            <div class="member-photo relative overflow-hidden">
+                                ${p.photoUrl ? `<img src="${p.photoUrl}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover z-10" onerror="this.remove()">` : ''}
+                                <span class="w-full h-full flex items-center justify-center">${p.name.split(' ').map(n=>n[0]).slice(0,2).join('')}</span>
                             </div>
                             <span class="member-status">${p.status || 'Aktif'}</span>
                         </div>
@@ -1137,7 +1137,7 @@
                 document.getElementById('modal-status').textContent = member.status || 'Aktif';
                 
                 const photoBox = document.getElementById('modal-photo');
-                photoBox.innerHTML = member.photoUrl ? `<img src="${member.photoUrl}" class="w-full h-full object-cover" onerror="this.remove()">` : member.name.charAt(0);
+                photoBox.innerHTML = member.photoUrl ? `<div class="relative w-full h-full overflow-hidden rounded-xl"><img src="${member.photoUrl}" alt="${member.name}" class="absolute inset-0 w-full h-full object-cover z-10" onerror="this.remove()"><span class="w-full h-full flex items-center justify-center">${member.name.charAt(0)}</span></div>` : member.name.charAt(0);
 
                 document.getElementById('profile-modal-backdrop').classList.add('open');
             };
