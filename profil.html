@@ -685,67 +685,35 @@
 
         <!-- ==================== TAB 3: PROGRAM KERJA ==================== -->
         <div id="tab-content-proker" class="tab-content hidden">
-            <!-- HERO PROKER STATS -->
-            <section class="rounded-[2rem] bg-pattern text-white p-6 md:p-10 shadow-xl mb-8 relative overflow-hidden">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 relative z-10">
-                    <div class="max-w-2xl">
-                        <span class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur">
-                            <i class="fa-solid fa-bullseye mr-2"></i> Program Strategis 2026
-                        </span>
-                        <h2 class="text-3xl md:text-4xl font-extrabold mt-3">Agenda &amp; Program Kerja</h2>
-                        <p class="mt-2 text-emerald-100/90 text-sm md:text-base leading-relaxed">
-                            Rencana kerja taktis, strategis, dan pengabdian HMI Badko Kalsel demi terwujudnya masyarakat adil makmur yang diridhoi Allah SWT.
-                        </p>
+            <!-- BANNER PENGUMUMAN PEMBARUAN DATA PROGRAM KERJA -->
+            <section class="rounded-[2.25rem] bg-gradient-to-br from-emerald-950 via-hmiDark to-[#002b1a] text-white p-8 md:p-14 shadow-2xl relative overflow-hidden text-center my-4">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-hmiGreenLight/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-emerald-300/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-3xl mx-auto py-6">
+                    <div class="w-20 h-20 bg-white/10 backdrop-blur rounded-3xl border border-white/20 flex items-center justify-center mx-auto mb-6 text-emerald-300 text-3xl shadow-inner">
+                        <i class="fas fa-list-check"></i>
                     </div>
-                    <div class="flex flex-wrap gap-3 bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/15 shrink-0" id="prokerStatsContainer">
-                        <div class="px-4 py-2 border-r border-white/10 last:border-0 text-center">
-                            <p class="text-xs text-emerald-200">Total Program</p>
-                            <p class="text-2xl font-black" id="prokerStatTotal">0</p>
-                        </div>
-                        <div class="px-4 py-2 border-r border-white/10 last:border-0 text-center">
-                            <p class="text-xs text-emerald-200">Berjalan</p>
-                            <p class="text-2xl font-black text-emerald-300" id="prokerStatRunning">0</p>
-                        </div>
-                        <div class="px-4 py-2 text-center">
-                            <p class="text-xs text-emerald-200">Progres Rata-rata</p>
-                            <p class="text-2xl font-black text-yellow-300" id="prokerStatAvgProgress">0%</p>
-                        </div>
+                    
+                    <span class="inline-flex items-center gap-2 rounded-full bg-amber-400/20 border border-amber-300/30 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-amber-200 backdrop-blur mb-6">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> 
+                        Pembaruan Data Program Kerja
+                    </span>
+                    
+                    <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-5">
+                        Halaman Program Kerja Sedang Dalam Proses Pembaruan Data
+                    </h2>
+                    
+                    <p class="text-emerald-100/90 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
+                        Informasi agenda, program kerja taktis, serta proyek pengabdian HMI Badan Koordinasi Kalimantan Selatan sedang diselaraskan dan disempurnakan oleh bidang keorganisasian.
+                    </p>
+
+                    <div class="inline-flex flex-col sm:flex-row items-center gap-3 bg-white/10 backdrop-blur px-6 py-4 rounded-2xl border border-white/15 text-xs md:text-sm font-semibold text-emerald-100">
+                        <i class="fas fa-circle-info text-emerald-300 text-lg"></i>
+                        <span>Daftar dan rincian program kerja lengkap akan segera ditampilkan kembali setelah proses verifikasi selesai.</span>
                     </div>
                 </div>
             </section>
-
-            <!-- PROKER SEARCH & FILTERS -->
-            <section class="mb-6">
-                <div class="content-surface p-4 sm:p-5 lg:p-6">
-                    <div class="grid lg:grid-cols-[1.5fr_1fr] gap-3">
-                        <div class="search-wrap">
-                            <i class="fas fa-magnifying-glass"></i>
-                            <input id="proker-search-input" type="search" class="control-input search-input" placeholder="Cari nama program, kategori, atau deskripsi..." autocomplete="off">
-                        </div>
-                        <select id="proker-status-select" class="control-input select-input">
-                            <option value="all">Semua Status</option>
-                            <option value="Berjalan">Status: Berjalan</option>
-                            <option value="Rencana">Status: Rencana</option>
-                            <option value="Selesai">Status: Selesai</option>
-                        </select>
-                    </div>
-                    <div class="mt-4 flex gap-2 overflow-x-auto pb-1" id="proker-category-chips"></div>
-                </div>
-            </section>
-
-            <!-- PROKER GRID -->
-            <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6" id="prokerGrid"></div>
-
-            <div id="proker-empty-state" class="hidden mt-6 content-surface px-5 py-14 text-center">
-                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl mb-4">
-                    <i class="fas fa-clipboard-list"></i>
-                </div>
-                <h3 class="text-xl font-black text-gray-900">Program kerja tidak ditemukan</h3>
-                <p class="mt-2 text-sm text-gray-500">Coba ubah kata kunci atau ganti filter kategori.</p>
-                <button id="reset-proker-filter" type="button" class="mt-5 inline-flex items-center gap-2 rounded-full bg-hmiGreen px-5 py-2.5 text-sm font-extrabold text-white hover:bg-hmiDark transition">
-                    <i class="fas fa-rotate-left"></i> Tampilkan Semua Program
-                </button>
-            </div>
         </div>
 
         <!-- ==================== TAB 4: SEJARAH ==================== -->
