@@ -949,31 +949,33 @@
 
             const grid = document.getElementById('cabangGrid');
             if (grid) {
+                grid.innerHTML = '';
                 cabangData.forEach(cabang => {
                     const card = document.createElement('div');
-                    card.className = 'cabang-card bg-white rounded-[1.5rem] border border-gray-200 shadow-sm p-6 hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between';
+                    card.className = 'cabang-card group bg-white rounded-[1.5rem] border border-gray-200 shadow-sm p-6 hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between';
                     card.innerHTML = `
                         <div>
                             <div class="flex items-start justify-between gap-3 mb-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center card-icon text-hmiGreen font-bold shrink-0">
-                                        <i class="fas ${cabang.icon} text-2xl"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-extrabold text-gray-800 text-lg">${cabang.nama}</h3>
-                                        <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 mt-1">
-                                            <i class="fas fa-clock text-[9px]"></i> Dalam Pembaruan
-                                        </span>
-                                    </div>
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center card-icon text-hmiGreen font-bold shrink-0 shadow-sm">
+                                    <i class="fas ${cabang.icon} text-xl"></i>
                                 </div>
+                                <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-extrabold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200/80">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                    Dalam Pembaruan
+                                </span>
                             </div>
+                            <h3 class="font-extrabold text-gray-900 text-lg mb-2 group-hover:text-hmiGreen transition-colors">${cabang.nama}</h3>
                             <p class="text-gray-500 text-xs leading-relaxed mb-4">
                                 Data informasi cabang sedang dalam proses pembaruan oleh pengurus HMI Badko Kalsel.
                             </p>
                         </div>
-                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
-                            <span class="text-amber-600 font-semibold"><i class="fas fa-exclamation-circle mr-1"></i> Status Informasi</span>
-                            <span class="text-hmiGreen font-bold hover:underline">Detail <i class="fas fa-arrow-right ml-1"></i></span>
+                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                            <span class="inline-flex items-center gap-1.5 font-medium text-amber-700">
+                                <i class="fas fa-arrows-rotate text-amber-500 text-[11px]"></i> Status Data
+                            </span>
+                            <span class="text-hmiGreen font-bold hover:underline inline-flex items-center gap-1">
+                                Lihat Detail <i class="fas fa-arrow-right text-[10px]"></i>
+                            </span>
                         </div>
                     `;
                     card.addEventListener('click', () => openCabangModal(cabang));
@@ -988,28 +990,54 @@
             function openCabangModal(cabang) {
                 modalBody.innerHTML = `
                     <div class="flex items-start gap-4 mb-6">
-                        <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center text-hmiGreen shrink-0 text-3xl font-bold">
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-hmiGreen shrink-0 text-3xl font-bold shadow-sm">
                             <i class="fas ${cabang.icon}"></i>
                         </div>
                         <div>
                             <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">${cabang.nama}</h2>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200">Dalam Pembaruan</span>
-                                <span class="text-xs text-gray-500">• Badko Kalsel</span>
+                            <div class="flex items-center gap-2 mt-2">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Dalam Pembaruan Data
+                                </span>
+                                <span class="text-xs text-gray-500 font-medium">• HMI Badko Kalsel</span>
                             </div>
                         </div>
                     </div>
-                    <div class="rounded-2xl bg-amber-50/80 border border-amber-200/80 p-6 text-center text-amber-900 my-4">
-                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3 text-xl">
+
+                    <div class="rounded-2xl bg-amber-50/80 border border-amber-200/80 p-6 text-center text-amber-900 my-5 shadow-sm">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3 text-xl shadow-inner">
                             <i class="fas fa-hourglass-half"></i>
                         </div>
-                        <h4 class="font-extrabold text-base mb-1">Informasi Sedang Dipersiapkan</h4>
-                        <p class="text-xs md:text-sm text-amber-800 leading-relaxed max-w-md mx-auto">
-                            Data profil lengkap, susunan pengurus cabang, statistik kader, serta kontak resmi <strong>${cabang.nama}</strong> sedang dalam proses pembaruan data oleh pengurus HMI Badko Kalsel.
+                        <h4 class="font-extrabold text-base mb-1">Data Informasi Cabang Sedang Dalam Proses Pembaruan</h4>
+                        <p class="text-xs md:text-sm text-amber-800 leading-relaxed max-w-lg mx-auto">
+                            Rincian profil, susunan kepengurusan cabang, statistik anggota, program kerja, alamat sekretariat, serta kontak resmi <strong>${cabang.nama}</strong> sedang dalam proses pemutakhiran data oleh pengurus HMI Badko Kalsel.
                         </p>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs text-gray-500 text-center">
-                        <p><i class="fas fa-info-circle mr-1 text-hmiGreen"></i> Silakan hubungi pengurus Badko Kalsel untuk konfirmasi informasi terkini seputar cabang ini.</p>
+
+                    <div class="grid sm:grid-cols-2 gap-3 my-4">
+                        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
+                            <span class="text-gray-500 font-medium flex items-center gap-2"><i class="fas fa-user-tie text-emerald-600"></i> Nama Ketua Cabang</span>
+                            <span class="font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full text-[10px]">Dalam Pembaruan</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
+                            <span class="text-gray-500 font-medium flex items-center gap-2"><i class="fas fa-users text-emerald-600"></i> Anggota & Proker</span>
+                            <span class="font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full text-[10px]">Dalam Pembaruan</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
+                            <span class="text-gray-500 font-medium flex items-center gap-2"><i class="fas fa-location-dot text-emerald-600"></i> Alamat Sekretariat</span>
+                            <span class="font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full text-[10px]">Dalam Pembaruan</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
+                            <span class="text-gray-500 font-medium flex items-center gap-2"><i class="fas fa-phone-flip text-emerald-600"></i> Kontak & Sosmed</span>
+                            <span class="font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full text-[10px]">Dalam Pembaruan</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50/70 border border-emerald-100 p-4 rounded-2xl text-xs text-gray-600 text-center">
+                        <p class="flex items-center justify-center gap-2 font-medium">
+                            <i class="fas fa-circle-info text-hmiGreen text-sm"></i>
+                            <span>Informasi resmi terbaru akan segera dipublikasikan setelah seluruh data diverifikasi oleh HMI Badko Kalsel.</span>
+                        </p>
                     </div>
                 `;
                 cabangModal.classList.add('active');
