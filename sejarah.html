@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- Favicon Resmi HMI -->
+    <!-- Favicon Resmi HMI -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" href="favicon.png" />
@@ -24,10 +24,6 @@
         }
     </script>
     <style>
-
-    </style>
-<style>
-    /* ===== Merged from pengurus.html ===== */
         :root {
             --board-surface: #ffffff;
             --board-surface-soft: #f5f9f7;
@@ -51,6 +47,7 @@
             --board-green-soft: #143526;
             --board-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
         }
+
         .hero-shell {
             position: relative;
             isolation: isolate;
@@ -75,19 +72,6 @@
             mask-image: linear-gradient(to right, transparent, #000 35%, #000);
         }
 
-        .hero-orb {
-            position: absolute;
-            width: 22rem;
-            height: 22rem;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.07);
-            filter: blur(.2px);
-        }
-
-        .hero-orb.one { top: -9rem; right: -5rem; }
-        .hero-orb.two { right: 15rem; bottom: -17rem; }
-
         .hero-kicker {
             display: inline-flex;
             align-items: center;
@@ -104,467 +88,34 @@
             backdrop-filter: blur(8px);
         }
 
-        .pulse-dot {
-            width: .48rem;
-            height: .48rem;
-            border-radius: 999px;
-            background: #86efac;
-            box-shadow: 0 0 0 0 rgba(134, 239, 172, .5);
-            animation: pulse-ring 2.2s infinite;
+        .timeline-card {
+            transition: all 0.3s cubic-bezier(0.2, .9, .2, 1);
+        }
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -5px rgba(0, 107, 63, 0.12);
         }
 
-        @keyframes pulse-ring {
-            70% { box-shadow: 0 0 0 8px rgba(134, 239, 172, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(134, 239, 172, 0); }
-        }
-
-        .spotlight-card {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 1.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 1px rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(18px);
-        }
-
-        .spotlight-photo {
-            overflow: hidden;
-            width: 5.2rem;
-            height: 6.6rem;
-            border: 3px solid rgba(255, 255, 255, .8);
-            border-radius: 1.2rem;
-            background: rgba(255, 255, 255, .14);
-            box-shadow: 0 16px 34px rgba(0, 0, 0, .18);
-            transform: rotate(2deg);
-        }
-
-        .spotlight-photo img,
-        .member-photo img,
-        .modal-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        .stat-card {
-            border: 1px solid var(--board-line);
-            border-radius: 1.35rem;
-            background: var(--board-surface);
-            box-shadow: var(--board-shadow);
-        }
-
-        .stat-icon {
-            display: grid;
-            width: 2.65rem;
-            height: 2.65rem;
-            place-items: center;
-            border-radius: .9rem;
-            background: var(--board-green-soft);
-            color: var(--board-green);
-        }
-
-        .content-surface {
-            border: 1px solid var(--board-line);
-            border-radius: 2rem;
-            background: color-mix(in srgb, var(--board-surface) 95%, transparent);
-            box-shadow: var(--board-shadow);
-        }
-
-        .search-wrap { position: relative; }
-
-        .search-wrap i {
-            position: absolute;
-            top: 50%;
-            left: 1rem;
-            color: #809087;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .control-input {
-            min-height: 3rem;
-            width: 100%;
-            border: 1px solid var(--board-line);
-            border-radius: 1rem;
-            background: var(--board-surface-soft);
-            color: var(--board-ink);
-            font-size: .9rem;
-            outline: none;
-            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
-        }
-
-        .control-input:focus {
-            border-color: var(--board-green);
-            background: var(--board-surface);
-            box-shadow: 0 0 0 4px rgba(0, 140, 82, .11);
-        }
-
-        .search-input { padding: .75rem 2.7rem .75rem 2.8rem; }
-        .select-input { padding: .75rem 2.4rem .75rem 1rem; }
-
-        .clear-search {
-            position: absolute;
-            top: 50%;
-            right: .65rem;
+        .modal-overlay {
             display: none;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 999px;
-            color: var(--board-body);
-            transform: translateY(-50%);
-        }
-
-        .clear-search.visible { display: grid; place-items: center; }
-        .clear-search:hover { background: var(--board-green-soft); color: var(--board-green); }
-
-        .filter-chip,
-        .view-button {
-            border: 1px solid var(--board-line);
-            border-radius: 999px;
-            background: var(--board-surface);
-            color: var(--board-body);
-            font-size: .78rem;
-            font-weight: 800;
-            transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
-        }
-
-        .filter-chip { padding: .58rem .9rem; }
-        .view-button { padding: .58rem .78rem; }
-
-        .filter-chip:hover,
-        .view-button:hover {
-            border-color: var(--board-green);
-            color: var(--board-green);
-            transform: translateY(-1px);
-        }
-
-        .filter-chip.active,
-        .view-button.active {
-            border-color: var(--board-green);
-            background: var(--board-green);
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(0, 107, 63, .18);
-        }
-
-        html[data-theme="dark"] .filter-chip.active,
-        html[data-theme="dark"] .view-button.active {
-            color: #062719 !important;
-        }
-
-        .member-card {
-            position: relative;
-            display: flex;
-            min-height: 100%;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid var(--board-line);
-            border-radius: 1.65rem;
-            background: var(--board-surface);
-            box-shadow: 0 12px 36px rgba(15, 45, 29, .055);
-            transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
-        }
-
-        .member-card::before {
-            position: absolute;
-            top: 0;
-            right: 1.5rem;
-            left: 1.5rem;
-            height: 3px;
-            border-radius: 0 0 999px 999px;
-            background: linear-gradient(90deg, #006b3f, #34d399);
-            content: "";
             opacity: 0;
-            transform: scaleX(.35);
-            transition: opacity .25s ease, transform .25s ease;
-        }
-
-        .member-card:hover {
-            border-color: rgba(0, 140, 82, .38);
-            box-shadow: 0 22px 50px rgba(15, 45, 29, .12);
-            transform: translateY(-6px);
-        }
-
-        .member-card:hover::before {
-            opacity: 1;
-            transform: scaleX(1);
-        }
-
-        .member-card.is-leader {
-            background:
-                linear-gradient(155deg, rgba(233, 248, 240, .86), rgba(255, 255, 255, 0) 52%),
-                var(--board-surface);
-        }
-
-        html[data-theme="dark"] .member-card.is-leader {
-            background:
-                linear-gradient(155deg, rgba(20, 53, 38, .94), rgba(14, 27, 21, 0) 55%),
-                var(--board-surface);
-        }
-
-        .member-photo {
-            display: grid;
-            width: 5.6rem;
-            height: 5.6rem;
-            flex: 0 0 auto;
-            overflow: hidden;
-            place-items: center;
-            border: 3px solid var(--board-surface);
-            border-radius: 1.35rem;
-            background: linear-gradient(145deg, var(--board-green-soft), var(--board-surface-soft));
-            color: var(--board-green);
-            font-size: 1.25rem;
-            font-weight: 900;
-            box-shadow: 0 0 0 1px var(--board-line), 0 12px 24px rgba(15, 45, 29, .1);
-        }
-
-        .member-status {
-            display: inline-flex;
-            align-items: center;
-            gap: .35rem;
-            border-radius: 999px;
-            background: var(--board-green-soft);
-            padding: .33rem .58rem;
-            color: var(--board-green);
-            font-size: .68rem;
-            font-weight: 900;
-            letter-spacing: .05em;
-            text-transform: uppercase;
-        }
-
-        .member-status::before {
-            width: .4rem;
-            height: .4rem;
-            border-radius: 999px;
-            background: #10b981;
-            content: "";
-        }
-
-        .detail-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: .8rem;
-            width: 100%;
-            border-top: 1px solid var(--board-line);
-            padding-top: .9rem;
-            color: var(--board-green);
-            font-size: .82rem;
-            font-weight: 900;
-        }
-
-        .detail-button i {
-            transition: transform .2s ease;
-        }
-
-        .detail-button:hover i { transform: translateX(4px); }
-
-        .org-canvas {
-            overflow-x: auto;
-            border: 1px solid var(--board-line);
-            border-radius: 1.5rem;
-            background:
-                radial-gradient(var(--board-line) .8px, transparent .8px),
-                var(--board-surface-soft);
-            background-size: 18px 18px;
-            padding: 2rem 1.25rem;
-        }
-
-        .org-root {
-            position: relative;
-            width: min(100%, 22rem);
-            margin: 0 auto 3.2rem;
-        }
-
-        .org-root::after {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            width: 2px;
-            height: 3.2rem;
-            background: var(--board-line);
-            content: "";
-        }
-
-        .org-groups {
-            position: relative;
-            display: grid;
-            min-width: 42rem;
-            grid-template-columns: repeat(var(--org-columns, 2), minmax(16rem, 1fr));
-            gap: 1.2rem;
-        }
-
-        .org-groups::before {
-            position: absolute;
-            top: -1.6rem;
-            right: calc(50% / var(--org-columns, 2));
-            left: calc(50% / var(--org-columns, 2));
-            height: 2px;
-            background: var(--board-line);
-            content: "";
-        }
-
-        .org-group {
-            position: relative;
-            border: 1px solid var(--board-line);
-            border-radius: 1.25rem;
-            background: var(--board-surface);
-            padding: 1rem;
-        }
-
-        .org-group::before {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            width: 2px;
-            height: 1.6rem;
-            background: var(--board-line);
-            content: "";
-        }
-
-        .org-person {
-            display: flex;
-            align-items: center;
-            gap: .8rem;
-            width: 100%;
-            border-radius: .95rem;
-            padding: .72rem;
-            text-align: left;
-            transition: background .2s ease, transform .2s ease;
-        }
-
-        .org-person:hover {
-            background: var(--board-green-soft);
-            transform: translateX(3px);
-        }
-
-        .org-avatar {
-            display: grid;
-            width: 2.7rem;
-            height: 2.7rem;
-            flex: 0 0 auto;
-            overflow: hidden;
-            place-items: center;
-            border-radius: .85rem;
-            background: var(--board-green-soft);
-            color: var(--board-green);
-            font-size: .72rem;
-            font-weight: 900;
-        }
-
-        .org-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .feature-tile {
-            border: 1px solid var(--board-line);
-            border-radius: 1.35rem;
-            background: var(--board-surface);
-            padding: 1.25rem;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .feature-tile:hover {
-            box-shadow: 0 15px 34px rgba(15, 45, 29, .08);
-            transform: translateY(-3px);
-        }
-
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 90;
-            display: grid;
-            place-items: center;
-            overflow-y: auto;
-            background: rgba(2, 15, 9, .72);
-            padding: 1rem;
-            opacity: 0;
-            visibility: hidden;
+            transition: opacity 0.25s ease;
+            background: rgba(2, 15, 9, 0.75);
             backdrop-filter: blur(8px);
-            transition: opacity .22s ease, visibility .22s ease;
         }
 
-        .modal-backdrop.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .profile-modal {
-            position: relative;
-            width: min(100%, 43rem);
-            max-height: calc(100vh - 2rem);
-            overflow-y: auto;
-            border: 1px solid var(--board-line);
-            border-radius: 2rem;
-            background: var(--board-surface);
-            box-shadow: 0 30px 90px rgba(0, 0, 0, .3);
-            transform: translateY(18px) scale(.98);
-            transition: transform .25s ease;
-        }
-
-        .modal-backdrop.open .profile-modal {
-            transform: translateY(0) scale(1);
-        }
-
-        .modal-photo {
-            display: grid;
-            width: 8rem;
-            height: 9.5rem;
-            overflow: hidden;
-            place-items: center;
-            border: 4px solid var(--board-surface);
-            border-radius: 1.5rem;
-            background: linear-gradient(145deg, var(--board-green-soft), var(--board-surface-soft));
-            color: var(--board-green);
-            font-size: 1.8rem;
-            font-weight: 900;
-            box-shadow: 0 0 0 1px var(--board-line), 0 18px 35px rgba(15, 45, 29, .15);
-        }
-
-        .modal-close {
-            display: grid;
-            width: 2.6rem;
-            height: 2.6rem;
-            place-items: center;
-            border: 1px solid var(--board-line);
-            border-radius: 999px;
-            background: var(--board-surface);
-            color: var(--board-body);
-        }
-
-        .modal-close:hover {
-            border-color: var(--board-green);
-            color: var(--board-green);
-        }
-
-        .toast {
-            position: fixed;
-            right: 1rem;
-            bottom: 1rem;
-            z-index: 120;
+        .modal-overlay.active {
             display: flex;
-            align-items: center;
-            gap: .7rem;
-            border: 1px solid var(--board-line);
-            border-radius: 1rem;
-            background: var(--board-surface);
-            padding: .8rem 1rem;
-            color: var(--board-ink);
-            box-shadow: var(--board-shadow);
-            font-size: .82rem;
-            font-weight: 800;
-            opacity: 0;
-            transform: translateY(12px);
-            pointer-events: none;
-            transition: opacity .2s ease, transform .2s ease;
+            opacity: 1;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
+        .modal-content {
+            transform: translateY(18px) scale(0.97);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
         }
 
         .back-to-top {
@@ -591,216 +142,14 @@
             transform: translateY(0);
             visibility: visible;
         }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(18px);
-            transition: opacity .55s ease, transform .55s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: none;
-        }
-
-        .empty-illustration {
-            position: relative;
-            display: grid;
-            width: 5rem;
-            height: 5rem;
-            margin: 0 auto;
-            place-items: center;
-            border-radius: 1.4rem;
-            background: var(--board-green-soft);
-            color: var(--board-green);
-            font-size: 1.6rem;
-        }
-
-        .empty-illustration::after {
-            position: absolute;
-            right: -.35rem;
-            bottom: -.35rem;
-            display: grid;
-            width: 2rem;
-            height: 2rem;
-            place-items: center;
-            border: 3px solid var(--board-surface);
-            border-radius: 999px;
-            background: #f59e0b;
-            color: #fff;
-            content: "?";
-            font-size: .8rem;
-            font-weight: 900;
-        }
-
-        @media (max-width: 767px) {
-            .hero-shell { border-radius: 1.6rem; }
-            .content-surface { border-radius: 1.5rem; }
-            .org-canvas { margin-inline: -.25rem; }
-            .profile-modal { border-radius: 1.5rem; }
-            .toast { right: .75rem; bottom: .75rem; left: .75rem; }
-            .back-to-top { right: .75rem; bottom: .75rem; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                animation-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: .01ms !important;
-            }
-
-            .reveal {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-    /* ===== Shared hero background pattern (from program-kerja.html / sejarah.html) ===== */
-    .bg-pattern {
-        background: linear-gradient(135deg, rgba(0,107,63,0.95) 0%, rgba(0,77,44,0.95) 100%), url('https://www.transparenttextures.com/patterns/cubes.png');
-        background-size: cover, auto;
-        background-attachment: fixed;
-    }
-
-    /* ===== Merged from sejarah.html ===== */
-    .timeline-line {
-        background: linear-gradient(to bottom, #006B3F 0%, #004d2c 100%);
-    }
-    .timeline-card {
-        transition: all 0.3s cubic-bezier(0.2, .9, .2, 1);
-    }
-    .timeline-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 107, 63, 0.1), 0 10px 10px -5px rgba(0, 107, 63, 0.04);
-    }
-
-    /* Modal overlay - hidden by default, shown when .active is added */
-    .modal-overlay {
-        display: none;
-        opacity: 0;
-        transition: opacity 0.25s ease;
-        background: rgba(2, 15, 9, 0.72);
-        backdrop-filter: blur(8px);
-    }
-
-    .modal-overlay.active {
-        display: flex;
-        opacity: 1;
-    }
-
-    .modal-content {
-        transform: translateY(18px) scale(0.97);
-        transition: transform 0.25s ease;
-    }
-
-    .modal-overlay.active .modal-content {
-        transform: translateY(0) scale(1);
-    }
-
-</style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.classList.add('transition-page');
-
-            const savedLang = 'id';
-            const translations = {
-                id: {
-                    nav: { home: 'Beranda', pengurus: 'Pengurus', program: 'Program Kerja', profile: 'Profil', sejarah: 'Sejarah', perpustakaan: 'Perpustakaan', ideology: 'Pustaka Ideologis', berita: 'Berita' },
-                    hero: { badge: '8 Cabang Aktif', title: 'Profil Cabang', titleAccent: 'HMI Badko Kalsel', description: 'Setiap cabang adalah garda terdepan dalam membina kader, mengabdikan diri, dan menebarkan nilai-nilai Islam di tengah masyarakat.', stats: { members: '4.000+ Anggota', branches: '8 Cabang', period: '2024–2026' } },
-                    program: { hero: { badge: 'Prioritas 2026', title: 'Program Kerja', description: 'Rencana kerja taktis, strategis, dan agenda pengabdian HMI Badko Kalsel demi terwujudnya masyarakat adil makmur.', stats: { active: 'Program Tuntas', target: 'Target Peserta', status: 'Pencapaian' } } },
-                    sejarah: { hero: { badge: 'Sejarah Perjuangan', title: 'Menapaki Jejak Juang', titleAccent: 'Hijau Hitam HMI', description: 'Sejarah panjang organisasi mahasiswa Islam tertua dan terbesar di Indonesia. Menjaga komitmen keislaman dan keindonesiaan sejak fajar kemerdekaan.' } },
-                    section: { vision: 'Visi', visionText: 'Menjadikan HMI Badko Kalsel sebagai pusat pembinaan kader yang unggul, berakhlak Islami, dan berkontribusi nyata bagi bangsa.', mission: 'Misi', missionText: 'Menggerakkan kaderisasi, advokasi, dan pengabdian masyarakat yang berbasis pada nilai-nilai keislaman dan keindonesiaan.', commitment: 'Komitmen', commitmentText: 'Sinergi antarcabang, transparansi program, dan pemberdayaan kader secara berkelanjutan.' },
-                    footer: { copyright: '© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan. Seluruh hak dilindungi.', built: 'Prototype by Muhammad Indra Kurniawan' }
-                },
-                en: {
-                    nav: { home: 'Home', pengurus: 'Board', program: 'Programs', profile: 'Profile', sejarah: 'History', perpustakaan: 'Library', ideology: 'Ideology Library', berita: 'News' },
-                    hero: { badge: '8 Active Branches', title: 'Branch Profile', titleAccent: 'HMI Badko South Kalimantan', description: 'Each branch is the frontline in nurturing cadres, dedicating themselves, and spreading Islamic values in the community.', stats: { members: '4,000+ Members', branches: '8 Branches', period: '2024–2026' } },
-                    program: { hero: { badge: '2026 Priorities', title: 'Work Programs', description: 'Tactical and strategic work plans, and community service agendas of HMI Badko South Kalimantan for a just and prosperous society.', stats: { active: 'Completed Programs', target: 'Target Participants', status: 'Achievements' } } },
-                    sejarah: { hero: { badge: 'History of Struggle', title: 'Tracing the Path', titleAccent: 'Green and Black of HMI', description: 'The long history of the oldest and largest Islamic student organization in Indonesia. Maintaining commitment to Islam and Indonesia since the dawn of independence.' } },
-                    section: { vision: 'Vision', visionText: 'Making HMI Badko South Kalimantan a center for developing outstanding cadres with Islamic character and real contributions to the nation.', mission: 'Mission', missionText: 'Driving cadre development, advocacy, and community service based on Islamic and Indonesian values.', commitment: 'Commitment', commitmentText: 'Synergy across branches, program transparency, and sustainable cadre empowerment.' },
-                    footer: { copyright: '© 2026 Islamic Student Association of the South Kalimantan Coordination Board. All rights reserved.', built: 'Prototype by Muhammad Indra Kurniawan' }
-                }
-            };
-
-                // Override dengan data yang disimpan dari dashboard (jika ada)
-                try {
-                    const storedProfile = JSON.parse(localStorage.getItem('hmiProfileData') || 'null');
-                    if (storedProfile && typeof storedProfile === 'object') {
-                        translations.id.hero = translations.id.hero || {};
-                        translations.id.section = translations.id.section || {};
-                        if (storedProfile.hero) {
-                            if (storedProfile.hero.badge) translations.id.hero.badge = storedProfile.hero.badge;
-                            if (storedProfile.hero.title) translations.id.hero.title = storedProfile.hero.title;
-                            if (storedProfile.hero.titleAccent) translations.id.hero.titleAccent = storedProfile.hero.titleAccent;
-                            if (storedProfile.hero.description) translations.id.hero.description = storedProfile.hero.description;
-                        }
-                        if (storedProfile.section) {
-                            if (storedProfile.section.vision) translations.id.section.visionText = storedProfile.section.vision;
-                            if (storedProfile.section.mission) translations.id.section.missionText = storedProfile.section.mission;
-                            if (storedProfile.section.commitment) translations.id.section.commitmentText = storedProfile.section.commitment;
-                        }
-                    }
-                } catch (e) { /* ignore parse errors */ }
-
-            function getTranslationValue(data, path) {
-                return path.split('.').reduce((acc, key) => acc?.[key], data);
-            }
-
-            function applyTranslations(lang) {
-                const data = translations[lang] || translations.id;
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const value = getTranslationValue(data, el.dataset.i18n);
-                    if (value) el.textContent = value;
-                });
-            }
-
-            function setLanguage() {
-                const activeLang = 'id';
-                applyTranslations(activeLang);
-            }
-
-            setLanguage();
-
-            // Mobile menu toggle
-            const mobileBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileBtn && mobileMenu) {
-                mobileBtn.addEventListener('click', () => {
-                    const willOpen = mobileMenu.classList.contains('hidden');
-                    mobileMenu.classList.toggle('hidden');
-                    mobileBtn.setAttribute('aria-expanded', String(willOpen));
-                    mobileBtn.setAttribute('aria-label', willOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi');
-                    const icon = mobileBtn.querySelector('i');
-                    if (icon) {
-                        icon.className = willOpen ? 'fas fa-xmark text-2xl' : 'fas fa-bars text-2xl';
-                    }
-                });
-
-                // Auto-close menu when clicking links (useful for hash links)
-                mobileMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        mobileMenu.classList.add('hidden');
-                        mobileBtn.setAttribute('aria-expanded', 'false');
-                        mobileBtn.setAttribute('aria-label', 'Buka menu navigasi');
-                        const icon = mobileBtn.querySelector('i');
-                        if (icon) {
-                            icon.className = 'fas fa-bars text-2xl';
-                        }
-                    });
-                });
-            }
-        });
-    </script>
+    </style>
     <link rel="stylesheet" href="theme.css?v=20260711">
     <script src="theme-toggle.js?v=20260711"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+<body class="bg-gray-50 text-gray-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
 
-    <!-- NAVBAR (sama seperti index) -->
-    <nav class="glass-nav shadow-sm sticky top-0 z-50 transition-all duration-300 mx-4 mt-4 rounded-full">
+    <!-- NAVBAR -->
+    <nav class="glass-nav shadow-sm sticky top-0 z-50 transition-all duration-300 mx-4 mt-4 rounded-full bg-white/90 backdrop-blur-md border border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <a href="index.html" class="flex items-center group gap-3">
@@ -821,7 +170,7 @@
                             <a href="profil.html#cabang" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Profil Cabang</a>
                             <a href="profil.html#pengurus" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Struktur Pengurus</a>
                             <a href="profil.html#proker" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Program Kerja</a>
-                            <a href="sejarah.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Sejarah</a>
+                            <a href="sejarah.html" class="block px-4 py-2 text-sm text-hmiGreen font-bold bg-green-50">Sejarah</a>
                         </div>
                     </div>
                     <a href="perpustakaan.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.perpustakaan">Perpustakaan</a>
@@ -836,7 +185,7 @@
 
                 <!-- Mobile Menu Button -->
                 <div class="flex items-center lg:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-hmiGreen focus:outline-none p-2">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-hmiGreen focus:outline-none p-2" aria-label="Buka menu navigasi">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
@@ -844,11 +193,11 @@
         </div>
 
         <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full rounded-b-2xl">
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full rounded-b-2xl left-0 top-full">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50" data-i18n="nav.home">Beranda</a>
                 <a href="artikel.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">Artikel</a>
-                <details class="group">
+                <details class="group" open>
                     <summary class="list-none cursor-pointer flex items-center justify-between block px-3 py-2 rounded-md text-base font-bold text-hmiGreen bg-green-50">
                         <span data-i18n="nav.profile">Profil</span>
                         <i class="fas fa-chevron-down text-xs transition-transform duration-200 group-open:rotate-180"></i>
@@ -857,7 +206,7 @@
                         <a href="profil.html#cabang" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Profil Cabang</a>
                         <a href="profil.html#pengurus" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Struktur Pengurus</a>
                         <a href="profil.html#proker" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Program Kerja</a>
-                        <a href="sejarah.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Sejarah</a>
+                        <a href="sejarah.html" class="block px-3 py-1.5 rounded-md text-sm font-bold text-hmiGreen bg-green-50">Sejarah</a>
                     </div>
                 </details>
                 <a href="perpustakaan.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50" data-i18n="nav.perpustakaan">Perpustakaan</a>
@@ -871,131 +220,980 @@
             </div>
         </div>
     </nav>
-    <main class="max-w-7xl mx-auto px-4 py-12">
-        <div class="px-3 sm:px-6 lg:px-8 py-8">
-            <!-- BANNER PENGUMUMAN PEMBARUAN DATA SEJARAH -->
-            <section class="rounded-[2.25rem] bg-gradient-to-br from-emerald-950 via-hmiDark to-[#002b1a] text-white p-8 md:p-14 shadow-2xl relative overflow-hidden text-center my-4">
-                <div class="absolute -right-20 -top-20 w-80 h-80 bg-hmiGreenLight/20 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-emerald-300/10 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div class="relative z-10 max-w-3xl mx-auto py-8">
-                    <div class="w-20 h-20 bg-white/10 backdrop-blur rounded-3xl border border-white/20 flex items-center justify-center mx-auto mb-6 text-emerald-300 text-3xl shadow-inner">
-                        <i class="fas fa-clock-rotate-left"></i>
-                    </div>
-                    
-                    <span class="inline-flex items-center gap-2 rounded-full bg-amber-400/20 border border-amber-300/30 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-amber-200 backdrop-blur mb-6">
-                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> 
-                        Pembaruan Data Sejarah
-                    </span>
-                    
-                    <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-5">
-                        Halaman Sejarah Sedang Dalam Proses Pembaruan Data
-                    </h2>
-                    
-                    <p class="text-emerald-100/90 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-                        Informasi dan dokumentasi rekam jejak perjuangan HMI Badan Koordinasi Kalimantan Selatan sedang diselaraskan dan disempurnakan oleh tim redaksi &amp; keorganisasian.
-                    </p>
 
-                    <div class="inline-flex flex-col sm:flex-row items-center gap-3 bg-white/10 backdrop-blur px-6 py-4 rounded-2xl border border-white/15 text-xs md:text-sm font-semibold text-emerald-100">
-                        <i class="fas fa-circle-info text-emerald-300 text-lg"></i>
-                        <span>Arsip dan data histori lengkap akan segera ditampilkan kembali setelah proses verifikasi selesai.</span>
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- HERO BANNER SEJARAH -->
+        <section class="hero-shell p-8 md:p-14 text-center sm:text-left relative overflow-hidden">
+            <div class="max-w-4xl relative z-10 space-y-6">
+                <span class="hero-kicker">
+                    <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+                    Dokumentasi Histori & Rekam Jejak
+                </span>
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                    Menapaki Jejak Juang <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 via-green-300 to-teal-100">
+                        Hijau Hitam HMI
+                    </span>
+                </h1>
+                <p class="text-emerald-100/90 text-base sm:text-xl font-normal leading-relaxed max-w-3xl">
+                    Sejarah perjalanan Himpunan Mahasiswa Islam sejak 14 Rabiul Awal 1366 H (5 Februari 1947). Menjaga komitmen keislaman dan keindonesiaan secara utuh dari era revolusi fisik hingga era digital modern.
+                </p>
+
+                <!-- Key Stat Indicators -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 text-left">
+                    <div class="bg-white/10 backdrop-blur border border-white/15 p-4 rounded-2xl">
+                        <p class="text-xs uppercase tracking-widest text-emerald-200 font-extrabold">Tanggal Berdiri</p>
+                        <p class="text-xl sm:text-2xl font-black text-white mt-1">5 Feb 1947</p>
+                        <p class="text-[11px] text-emerald-100/80">14 Rabiul Awal 1366 H</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur border border-white/15 p-4 rounded-2xl">
+                        <p class="text-xs uppercase tracking-widest text-emerald-200 font-extrabold">Pemrakarsa Utama</p>
+                        <p class="text-xl sm:text-2xl font-black text-white mt-1">Lafran Pane</p>
+                        <p class="text-[11px] text-emerald-100/80">Pahlawan Nasional RI</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur border border-white/15 p-4 rounded-2xl">
+                        <p class="text-xs uppercase tracking-widest text-emerald-200 font-extrabold">Cabang Nasional</p>
+                        <p class="text-xl sm:text-2xl font-black text-white mt-1">267 Cabang</p>
+                        <p class="text-[11px] text-emerald-100/80">20 Badko & 2 Luar Negeri</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur border border-white/15 p-4 rounded-2xl">
+                        <p class="text-xs uppercase tracking-widest text-emerald-200 font-extrabold">Fase Perjuangan</p>
+                        <p class="text-xl sm:text-2xl font-black text-white mt-1">9 Peristiwa</p>
+                        <p class="text-[11px] text-emerald-100/80">Dari 1946–Sekarang</p>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+
+        <!-- SEILAS IDENTITAS: ASAS, SEMBOYAN, & TUJUAN HMI -->
+        <section class="space-y-6">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <span class="text-xs font-black text-hmiGreen uppercase tracking-widest bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Landasan Perjuangan</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900">Asas, Motto, & Tujuan HMI</h2>
+                <p class="text-gray-600 text-sm sm:text-base">Prinsip fundamental organisasi yang menjadi arah gerak kader HMI di seluruh Indonesia.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Asas -->
+                <div class="bg-white rounded-3xl p-7 border border-gray-200 shadow-sm hover:shadow-md transition-shadow space-y-4">
+                    <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-hmiGreen text-2xl font-black border border-emerald-100">
+                        <i class="fas fa-kaaba"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Asas Organisasi</h3>
+                        <p class="text-xs text-hmiGreen font-bold uppercase tracking-wider mt-0.5">Pasal 3 AD HMI</p>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Himpunan Mahasiswa Islam (HMI) berasaskan <strong class="text-gray-900 font-bold">ISLAM</strong>. Nilai-nilai Ketauhidan menjadi dasar pengabdian kepada umat, bangsa, dan Negara Kesatuan Republik Indonesia.
+                    </p>
+                </div>
+
+                <!-- Semboyan -->
+                <div class="bg-gradient-to-br from-hmiDark to-hmiGreen text-white rounded-3xl p-7 shadow-lg space-y-4 relative overflow-hidden">
+                    <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-emerald-200 text-2xl font-black border border-white/20">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Semboyan Perjuangan</h3>
+                        <p class="text-xs text-emerald-200 font-bold uppercase tracking-wider mt-0.5">Doktrin & Slogan Kader</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-2xl font-black italic tracking-wide text-emerald-200">"YAKUSA"</p>
+                        <p class="text-sm font-semibold text-emerald-100">Yakin Usaha Sampai</p>
+                        <p class="text-xs text-emerald-100/80 pt-2 border-t border-white/15">
+                            Didukung dengan tiga pilar insan akademis: <strong class="text-white">Iman, Ilmu, dan Amal</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tujuan -->
+                <div class="bg-white rounded-3xl p-7 border border-gray-200 shadow-sm hover:shadow-md transition-shadow space-y-4">
+                    <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-hmiGreen text-2xl font-black border border-emerald-100">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Tujuan Organisasi</h3>
+                        <p class="text-xs text-hmiGreen font-bold uppercase tracking-wider mt-0.5">Pasal 4 AD HMI</p>
+                    </div>
+                    <blockquote class="text-gray-700 text-sm leading-relaxed italic bg-emerald-50/50 p-3.5 rounded-2xl border-l-4 border-hmiGreen">
+                        "Terbinanya insan akademis, pencipta, pengabdi yang bernafaskan Islam dan bertanggung jawab atas terwujudnya masyarakat adil makmur yang diridhoi Allah Subhanahu Wa Ta'ala."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- LATAR BELAKANG SOSIOPOLITIK & KRONOLOGI PENDIRIAN (1946 - 1947) -->
+        <section class="bg-white rounded-3xl p-6 sm:p-10 border border-gray-200 shadow-sm space-y-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-gray-100 pb-6">
+                <div>
+                    <span class="text-xs font-extrabold text-hmiGreen uppercase tracking-wider">Historiografi</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-gray-900 mt-1">Latar Belakang & Kronologi Pendirian</h2>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-emerald-50 text-hmiGreen text-xs font-bold px-4 py-2 rounded-full border border-emerald-200">
+                    <i class="fas fa-calendar-check"></i> Yogyakarta, 5 Februari 1947
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                <!-- Kondisi Sosiopolitik 1946 -->
+                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200/80 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-hmiGreen font-extrabold">
+                            <span class="w-8 h-8 rounded-full bg-hmiGreen text-white grid place-items-center text-xs">1</span>
+                            <h3 class="text-lg font-bold text-gray-900">Kondisi Sosiopolitik 1946 di Yogyakarta</h3>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Pasca proklamasi kemerdekaan, Ibu Kota Republik Indonesia dipindahkan ke Yogyakarta. Pada tahun 1946, suasana politik nasional mengalami polarisasi tajam antara pihak Pemerintah (dipelopori Partai Sosialis: Sjahrir & Amir Syarifuddin) dan pihak Oposisi (Masyumi, PNI, dan Persatuan Perjuangan Tan Malaka).
+                        </p>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Organisasi mahasiswa tunggal saat itu, <strong class="text-gray-900 font-semibold">Perserikatan Mahasiswa Yogyakarta (PMY)</strong>, semakin terpengaruh oleh dominasi ideologi sosialis/kiri. Mahasiswa Islam yang menjunjung tinggi ajaran agama merasa aspirasi keagamaan dan intelektual mereka tidak tersalurkan secara bebas.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-200/80 text-xs text-gray-500 italic">
+                        <i class="fas fa-circle-info text-hmiGreen mr-1"></i> Perbedaan mendasar ideologi mahasiswa melahirkan urgensi pembentukan wadah independen berbasis keislaman dan keindonesiaan.
+                    </div>
+                </div>
+
+                <!-- Detik-Detik 5 Februari 1947 -->
+                <div class="bg-emerald-950 text-white rounded-2xl p-6 border border-emerald-900 space-y-4 flex flex-col justify-between relative overflow-hidden">
+                    <div class="space-y-3 relative z-10">
+                        <div class="flex items-center gap-3 text-emerald-300 font-extrabold">
+                            <span class="w-8 h-8 rounded-full bg-emerald-400 text-gray-950 grid place-items-center text-xs font-black">2</span>
+                            <h3 class="text-lg font-bold text-white">Detik-Detik Musyawarah Pendirian HMI</h3>
+                        </div>
+                        <p class="text-emerald-100/90 text-sm leading-relaxed">
+                            Melihat PMY yang semakin terbatas dan terpolarisasi, <strong class="text-white">Lafran Pane</strong> (mahasiswa tingkat I Sekolah Tinggi Islam) melakukan serangkaian diskusi terbatas sejak November 1946 bersama rekan-rekan dari STI, STT, dan BPT Gajah Mada.
+                        </p>
+                        <p class="text-emerald-100/90 text-sm leading-relaxed">
+                            Pada hari Rabu Pon tanggal 14 Rabiul Awal 1366 H (5 Februari 1947), bertempat di ruang kuliah STI Jalan Senopati Yogyakarta, Lafran Pane memanfaatkan jam kuliah Tafsir Husin Yahya secara Spontan untuk memimpin rapat pembentukan HMI. Tanpa rasa ragu, Lafran Pane menyatakan: <em class="text-emerald-200 font-semibold">"Hari ini adalah rapat pembentukan organisasi Mahasiswa Islam, karena semua persiapan yang diperlukan sudah beres!"</em>
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-emerald-800 text-xs text-emerald-200 relative z-10">
+                        <i class="fas fa-quote-left text-emerald-400 mr-1"></i> Terbuka kesepakatan 15 pendiri untuk mengesahkan HMI dan Anggaran Dasarnya.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 15 TOKOH PENDIRI HMI & KEPENGURUSAN PERTAMA -->
+        <section class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <span class="text-xs font-black text-hmiGreen uppercase tracking-widest bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Tokoh Historis</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900">15 Tokoh Pendiri HMI</h2>
+                <p class="text-gray-600 text-sm sm:text-base">Para mahasiswi dan mahasiswa pionir yang menghadiri rapat bersejarah 5 Februari 1947 di Yogyakarta.</p>
+            </div>
+
+            <!-- Grid 15 Pendiri -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <!-- 1. Lafran Pane -->
+                <div class="bg-white p-5 rounded-2xl border-2 border-emerald-500/40 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-hmiGreen text-white font-black text-base grid place-items-center flex-shrink-0">
+                        LP
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-emerald-100 text-hmiGreen text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Ketua / Pemrakarsa</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Prof. Drs. Lafran Pane</h3>
+                        <p class="text-xs text-gray-500">Mahasiswa STI / Pahlawan Nasional RI</p>
+                    </div>
+                </div>
+
+                <!-- 2. Asmin Nasution -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        AN
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Wakil Ketua I</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Asmin Nasution</h3>
+                        <p class="text-xs text-gray-500">Pengurus Perdana HMI 1947</p>
+                    </div>
+                </div>
+
+                <!-- 3. Anton Timoer Djailani -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        AT
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Penulis I</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Anton Timoer Djailani</h3>
+                        <p class="text-xs text-gray-500">Juga Tokoh Pendiri PII</p>
+                    </div>
+                </div>
+
+                <!-- 4. Karnoto Zarkasyi -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        KZ
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Penulis II</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Karnoto Zarkasyi</h3>
+                        <p class="text-xs text-gray-500">Perumus Kesepakatan HMI 1947</p>
+                    </div>
+                </div>
+
+                <!-- 5. Dahlan Husein -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        DH
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Bendahara I</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Dahlan Husein</h3>
+                        <p class="text-xs text-gray-500">Pengurus Perdana HMI 1947</p>
+                    </div>
+                </div>
+
+                <!-- 6. Maisaroh Hilal -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        MH
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-pink-100 text-pink-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Bendahara II</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Maisaroh Hilal</h3>
+                        <p class="text-xs text-gray-500">Cucu Pendiri Muhammadiyah KH. A. Dahlan</p>
+                    </div>
+                </div>
+
+                <!-- 7. Yusdi Ghozali -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        YG
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Yusdi Ghozali</h3>
+                        <p class="text-xs text-gray-500">Pendiri PII & Aktivis Mahasiswa</p>
+                    </div>
+                </div>
+
+                <!-- 8. Siti Zainah -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        SZ
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-pink-100 text-pink-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Siti Zainah</h3>
+                        <p class="text-xs text-gray-500">Pionir Gerakan Mahasiswi Islam</p>
+                    </div>
+                </div>
+
+                <!-- 9. Suwali -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        SW
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Suwali</h3>
+                        <p class="text-xs text-gray-500">Mahasiswa STI Yogyakarta</p>
+                    </div>
+                </div>
+
+                <!-- 10. Mansyur -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        MS
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Mansyur</h3>
+                        <p class="text-xs text-gray-500">Peserta Rapat 5 Feb 1947</p>
+                    </div>
+                </div>
+
+                <!-- 11. Muhammad Anwar -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        MA
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Muhammad Anwar</h3>
+                        <p class="text-xs text-gray-500">Peserta Rapat 5 Feb 1947</p>
+                    </div>
+                </div>
+
+                <!-- 12. Hasan Basri -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        HB
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Hasan Basri</h3>
+                        <p class="text-xs text-gray-500">Peserta Rapat 5 Feb 1947</p>
+                    </div>
+                </div>
+
+                <!-- 13. Zulkarnaen -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        ZK
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Zulkarnaen</h3>
+                        <p class="text-xs text-gray-500">Peserta Rapat 5 Feb 1947</p>
+                    </div>
+                </div>
+
+                <!-- 14. Tayeb Razak -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        TR
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Tayeb Razak</h3>
+                        <p class="text-xs text-gray-500">Peserta Rapat 5 Feb 1947</p>
+                    </div>
+                </div>
+
+                <!-- 15. Toha Mashudi -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-hmiGreen font-black text-base grid place-items-center flex-shrink-0">
+                        TM
+                    </div>
+                    <div class="space-y-1">
+                        <span class="inline-block bg-gray-100 text-gray-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Anggota Pendiri</span>
+                        <h3 class="font-bold text-gray-900 text-base leading-tight">Toha Mashudi</h3>
+                        <p class="text-xs text-gray-500">Peserta Rapat 5 Feb 1947</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 9 FASE PERJUANGAN HMI (INTERACTIVE TIMELINE) -->
+        <section class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <span class="text-xs font-black text-hmiGreen uppercase tracking-widest bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Garis Waktu Perjuangan</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900">9 Fase Perjuangan HMI</h2>
+                <p class="text-gray-600 text-sm sm:text-base">Klik setiap fase untuk membaca dokumentasi sejarah dan dinamika pergerakan HMI dari masa ke masa.</p>
+            </div>
+
+            <!-- Timeline Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Era 1 -->
+                <div onclick="openTimelineModal('era1')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">Nov 1946 – Feb 1947</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 1 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">1. Fase Konsolidasi Spiritual</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Penguatan fondasi ideologis dan keislaman oleh Lafran Pane bersama mahasiswa Sekolah Tinggi Islam Yogyakarta sebelum rapat resmi 5 Februari 1947.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 2 -->
+                <div onclick="openTimelineModal('era2')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">Feb 1947 – Nov 1947</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 2 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">2. Fase Pengokohan Organisasi</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Penyempurnaan Anggaran Rumah Tangga, pembentukan cabang-cabang awal di Jawa, dan konsolidasi kepengurusan perdana HMI di Yogyakarta.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 3 -->
+                <div onclick="openTimelineModal('era3')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">Nov 1947 – Des 1949</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 3 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">3. Fase Perjuangan Fisik</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Kader HMI membentuk Korps Mahasiswa Spesialis (CMS) masuk ke garis depan perang gerilya melawan Agresi Militer Belanda I & II bersama TNI.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 4 -->
+                <div onclick="openTimelineModal('era4')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">1950 – 1963</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 4 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">4. Pembinaan & Konsolidasi</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Ekspansi cabang HMI ke seluruh perguruan tinggi di Indonesia, formalisasi atribut organisasi, dan penguatan kurikulum latihan kader.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 5 -->
+                <div onclick="openTimelineModal('era5')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">1964 – 1965</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 5 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">5. Tantangan & Penghianatan PKI</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            HMI diserang CGMI/PKI yang mendesak pembubaran. Bung Karno menegaskan: "Go Ahead HMI, selamatkan negara!", didukung Jenderal Soedirman.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 6 -->
+                <div onclick="openTimelineModal('era6')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">1966 – 1968</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 6 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">6. HMI Pelopor Angkatan '66</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            HMI memelopori lahirnya KAMI (Kesatuan Aksi Mahasiswa Indonesia), menyuarakan TRITURA, dan mengawal penumpasan paham komunisme.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 7 -->
+                <div onclick="openTimelineModal('era7')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">1969 – 1970</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 7 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">7. Partisipasi Pembangunan</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Kontribusi cendekiawan HMI dalam pembangunan nasional dan perumusan naskah Nilai-Nilai Dasar Perjuangan (NDP) oleh Nurcholish Madjid.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 8 -->
+                <div onclick="openTimelineModal('era8')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">1970 – 1997</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 8 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">8. Fase Pergolakan Pemikiran</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Dinamika modernisasi Islam, isu Asas Tunggal Pancasila era Orde Baru yang melahirkan dinamika internal HMI Dipo dan HMI MPO.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Era 9 -->
+                <div onclick="openTimelineModal('era9')" class="timeline-card bg-white p-6 rounded-3xl border border-gray-200 shadow-sm cursor-pointer hover:border-emerald-500/50 space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-hmiGreen text-xs font-black px-3 py-1 rounded-full border border-emerald-200">Mei 1998 – Sekarang</span>
+                            <span class="text-xs font-bold text-gray-400 group-hover:text-hmiGreen transition-colors">Fase 9 <i class="fas fa-arrow-right ml-1"></i></span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-gray-900 group-hover:text-hmiGreen transition-colors">9. Reformasi & Era Modern</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                            Aksi 1998 menduduki Gedung DPR/MPR RI, pengawalan demokrasi, serta transformasi digitalisasi kader HMI Badko Kalsel hari ini.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-hmiGreen font-bold">
+                        <span>Lihat Detail Kebangsaan</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BADAN KHUSUS & LEMBAGA PENGEMBANGAN PROFESI (LPP) -->
+        <section class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <span class="text-xs font-black text-hmiGreen uppercase tracking-widest bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Struktur Otonom</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900">Badan Khusus & Lembaga Profesi (LPP)</h2>
+                <p class="text-gray-600 text-sm sm:text-base">Wadah pengembangan bakat, keahlian akademik, dan pengabdian spesifik kader HMI.</p>
+            </div>
+
+            <!-- Badan Khusus -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center text-xl font-black border border-pink-100">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">KOHATI (Korps HMI Wati)</h3>
+                    <p class="text-gray-600 text-xs leading-relaxed">
+                        Badan khusus pembinaan kader putri HMI yang berfokus pada advokasi keperempuanan, kepemimpinan mahasiswi, dan isu-isu keluarga Islami.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-hmiGreen flex items-center justify-center text-xl font-black border border-emerald-100">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">BPL (Badan Pengelola Latihan)</h3>
+                    <p class="text-gray-600 text-xs leading-relaxed">
+                        Badan pengelola sistem dan mutu instruktur perkaderan formal HMI (Latihan Kader I, LK II, LK III, dan Senior Course).
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-black border border-blue-100">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900">BALITBANG HMI</h3>
+                    <p class="text-gray-600 text-xs leading-relaxed">
+                        Badan penelitian dan pengembangan kebijakan strategis organisasi serta pengajian isu-isu kebangsaan dan keumatan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Lembaga Pengembangan Profesi (LPP) Grid -->
+            <div class="bg-gray-50 p-6 sm:p-8 rounded-3xl border border-gray-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-200 pb-4">
+                    <h3 class="text-xl font-bold text-gray-900">11 Lembaga Pengembangan Profesi (LPP)</h3>
+                    <span class="text-xs font-bold text-hmiGreen bg-emerald-100 px-3 py-1 rounded-full">Keahlian Akademik</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LDMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Dakwah Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Pencetus terbentuknya LDK di Indonesia</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LAPMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Pers Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Jurnalistik dan publikasi opini</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LEMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Ekonomi Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Kewirausahaan & ekonomi syariah</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LKMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Kesehatan Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Pengabdian medis dan kesehatan</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LKBHMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Konsultasi Bantuan Hukum</p>
+                        <p class="text-[11px] text-gray-500">Advokasi dan bantuan hukum</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LAPENMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Pendidikan Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Pengembangan sains & literasi</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LSMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Seni Budaya Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Kesenian & kebudayaan Nusantara</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LPMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Pertanian Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Ketahanan pangan & agribisnis</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LEPPAMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Pariwisata & Pecinta Alam</p>
+                        <p class="text-[11px] text-gray-500">Konservasi alam & pariwisata</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LBMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Bahasa Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Penguasaan bahasa asing & diplomasi</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LTMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Teknologi Mahasiswa Islam</p>
+                        <p class="text-[11px] text-gray-500">Inovasi teknologi digital & rekayasa</p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-1">
+                        <span class="font-bold text-hmiGreen">LISMI</span>
+                        <p class="text-gray-900 font-semibold">Lembaga Islam Sains Mahasiswa</p>
+                        <p class="text-[11px] text-gray-500">Riset integrasi sains dan Islam</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOKOH UTAMA & QUOTE CAROUSEL -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+            
+            <!-- Tokoh Cards -->
+            <div class="lg:col-span-1 space-y-4">
+                <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-gray-900">Tokoh Utama Pemikir HMI</h3>
+                    
+                    <div onclick="openFigureModal('lafran')" class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 cursor-pointer hover:bg-emerald-100/70 transition-colors flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-hmiGreen text-white font-black text-sm grid place-items-center flex-shrink-0">
+                            LP
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-sm">Prof. Drs. Lafran Pane</h4>
+                            <p class="text-xs text-hmiGreen font-bold">Pemrakarsa Utama HMI</p>
+                        </div>
+                    </div>
+
+                    <div onclick="openFigureModal('caknur')" class="p-4 bg-gray-50 rounded-2xl border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-700 text-white font-black text-sm grid place-items-center flex-shrink-0">
+                            CN
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-sm">Dr. Nurcholish Madjid</h4>
+                            <p class="text-xs text-emerald-700 font-bold">Formulator NDP HMI</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quote Carousel -->
+            <div class="lg:col-span-2 bg-gradient-to-br from-hmiDark via-hmiGreen to-emerald-900 text-white p-8 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+                <div class="space-y-4 relative z-10">
+                    <span class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-emerald-200 bg-white/10 px-3 py-1 rounded-full border border-white/20">
+                        <i class="fas fa-quote-left text-emerald-300"></i> Mutiara Hikmah Perjuangan
+                    </span>
+
+                    <div id="quoteContainer" class="min-h-[120px] flex flex-col justify-center space-y-3 transition-opacity duration-300">
+                        <p id="quoteText" class="text-lg sm:text-2xl font-extrabold italic leading-relaxed text-emerald-50">
+                            "Bahagia HMI, Jayalah Kohati. Yakin Usaha Sampai."
+                        </p>
+                        <p id="quoteAuthor" class="text-xs sm:text-sm font-bold text-emerald-200 tracking-wider">
+                            — Semboyan Perjuangan HMI
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-6 border-t border-white/15 relative z-10">
+                    <span class="text-xs text-emerald-100/80 font-medium">Otomatis berganti setiap 6 detik</span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="prevQuote()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 grid place-items-center text-white transition-colors" aria-label="Kutipan sebelumnya">
+                            <i class="fas fa-chevron-left text-xs"></i>
+                        </button>
+                        <button type="button" onclick="nextQuote()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 grid place-items-center text-white transition-colors" aria-label="Kutipan berikutnya">
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KUIS INTERAKTIF TRIVIA SEJARAH HMI -->
+        <section class="bg-white rounded-3xl p-6 sm:p-10 border border-gray-200 shadow-sm space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="text-xs font-black text-hmiGreen uppercase tracking-widest bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">Uji Wawasan</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Kuis Trivia Sejarah HMI</h2>
+                <p class="text-gray-600 text-sm">Uji sejauh mana pemahaman Anda tentang peristiwa bersejarah dan tokoh pendiri HMI.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto bg-gray-50 p-6 sm:p-8 rounded-2xl border border-gray-200">
+
+                <!-- Start Screen -->
+                <div id="quizStartScreen" class="text-center space-y-6">
+                    <div class="w-20 h-20 bg-emerald-100 text-hmiGreen rounded-full flex items-center justify-center text-3xl font-black mx-auto border-4 border-white shadow">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-bold text-gray-900">Siap Menguji Pemahaman Sejarah HMI?</h3>
+                        <p class="text-xs sm:text-sm text-gray-600">Terdapat 5 soal trivia interaktif seputar pendirian, semboyan, dan perumus ideologis HMI.</p>
+                    </div>
+                    <button type="button" onclick="startQuiz()" class="inline-flex items-center gap-2 bg-hmiGreen hover:bg-hmiDark text-white font-bold px-7 py-3.5 rounded-full shadow-lg transition-all text-sm">
+                        <i class="fas fa-play"></i> Mulai Kuis Sekarang
+                    </button>
+                </div>
+
+                <!-- Question Screen -->
+                <div id="quizQuestionScreen" class="hidden space-y-6">
+                    <!-- Progress bar -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs font-bold text-gray-600">
+                            <span id="quizProgressLabel">Soal 1 dari 5</span>
+                            <span id="quizScoreTracker" class="text-hmiGreen">Benar: 0</span>
+                        </div>
+                        <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="quizProgressBar" class="h-full bg-hmiGreen transition-all duration-300" style="width: 20%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question text -->
+                    <h3 id="quizQuestionText" class="text-base sm:text-lg font-bold text-gray-900 leading-snug">
+                        Pertanyaan kuis akan tampil di sini
+                    </h3>
+
+                    <!-- Options list -->
+                    <div id="quizOptionsContainer" class="space-y-3">
+                        <!-- Options injected dynamically by JS -->
+                    </div>
+
+                    <!-- Explanation Panel -->
+                    <div id="quizExplanationPanel" class="hidden p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm space-y-1">
+                        <p class="font-bold text-hmiGreen flex items-center gap-1.5">
+                            <i class="fas fa-circle-info"></i> Penjelasan Histori:
+                        </p>
+                        <p id="quizExplanationText" class="text-gray-700 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Next button -->
+                    <div class="flex justify-end pt-2">
+                        <button id="quizNextBtn" type="button" onclick="nextQuestion()" disabled class="px-6 py-2.5 rounded-full text-white font-bold text-xs sm:text-sm bg-gray-400 cursor-not-allowed transition-all">
+                            Soal Berikutnya <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Screen -->
+                <div id="quizResultScreen" class="hidden text-center space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs uppercase font-extrabold tracking-widest text-gray-500">Hasil Kuis Anda</span>
+                        <div class="text-5xl font-black text-hmiGreen">
+                            <span id="quizFinalScore">100</span><span class="text-2xl text-gray-400">/100</span>
+                        </div>
+                        <div id="quizBadge" class="inline-block px-4 py-1.5 bg-green-100 text-green-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-green-200">
+                            Kader Utama
+                        </div>
+                    </div>
+
+                    <p id="quizResultEval" class="text-sm text-gray-700 leading-relaxed max-w-md mx-auto">
+                        Evaluasi hasil kuis akan muncul di sini.
+                    </p>
+
+                    <button type="button" onclick="restartQuiz()" class="inline-flex items-center gap-2 bg-hmiGreen hover:bg-hmiDark text-white font-bold px-6 py-3 rounded-full shadow transition-all text-xs sm:text-sm">
+                        <i class="fas fa-rotate-right"></i> Coba Kuis Lagi
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
-    
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white pt-10 pb-6 mt-16 border-t-4 border-hmiGreen">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400">
+            <p data-i18n="footer.copyright">© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan. Seluruh hak dilindungi.</p>
+            <p class="mt-1 text-xs text-gray-500" data-i18n="footer.built">Prototype by Muhammad Indra Kurniawan</p>
+        </div>
+    </footer>
+
+    <!-- MODAL TIMELINE MODAL -->
+    <div id="timelineModal" class="modal-overlay fixed inset-0 z-50 items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative space-y-6 border border-gray-100">
+            <button type="button" onclick="closeTimelineModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 w-9 h-9 rounded-full bg-gray-100 grid place-items-center transition-colors" aria-label="Tutup modal">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <div id="timelineModalBody">
+                <!-- Content injected dynamically -->
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button type="button" onclick="closeTimelineModal()" class="px-5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TOKOH MODAL -->
+    <div id="figureModal" class="modal-overlay fixed inset-0 z-50 items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative space-y-6 border border-gray-100">
+            <button type="button" onclick="closeFigureModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 w-9 h-9 rounded-full bg-gray-100 grid place-items-center transition-colors" aria-label="Tutup modal">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <div id="figureModalBody">
+                <!-- Content injected dynamically -->
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button type="button" onclick="closeFigureModal()" class="px-5 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACK TO TOP BUTTON -->
     <button id="back-to-top" type="button" class="back-to-top" aria-label="Kembali ke atas">
         <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
-    
-    <!-- FOOTER -->
-    <footer class="bg-gray-900 text-white pt-10 pb-6 mt-12 border-t-4 border-hmiGreen">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-400">
-            <p data-i18n="footer.copyright">© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan. Seluruh hak dilindungi.</p>
-            <p class="mt-1" data-i18n="footer.built">Prototype by Muhammad Indra Kurniawan</p>
-        </div>
-    </footer>
-    
+
+    <!-- SCRIPTS -->
     <script>
-(function () {
-    'use strict';
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Mobile menu toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    const willOpen = mobileMenu.classList.contains('hidden');
+                    mobileMenu.classList.toggle('hidden');
+                    mobileBtn.setAttribute('aria-expanded', String(willOpen));
+                    const icon = mobileBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = willOpen ? 'fas fa-xmark text-2xl' : 'fas fa-bars text-2xl';
+                    }
+                });
+            }
+
+            // Desktop Dropdown
+            document.querySelectorAll('.nav-dropdown').forEach(wrapper => {
+                const btn = wrapper.querySelector('.nav-dropdown-btn');
+                const menu = wrapper.querySelector('.nav-dropdown-menu');
+                if (!btn || !menu) return;
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = !menu.classList.contains('hidden');
+                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
+                    if (!isOpen) menu.classList.remove('hidden');
+                });
+            });
+
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
+            });
+        });
+
+        // ====== DATA 9 FASE PERJUANGAN HMI ======
         const timelineData = {
             era1: {
-                year: '1947',
-                title: 'Fajar Pendirian HMI',
-                subtitle: 'Gagasan Menyatukan Keislaman dan Keindonesiaan',
-                content: `Himpunan Mahasiswa Islam (HMI) resmi didirikan pada hari Rabu tanggal 14 Rabiul Awal 1366 H, bertepatan dengan tanggal 5 Februari 1947. Pendirian ini dipelopori oleh Lafran Pane, seorang mahasiswa Sekolah Tinggi Islam (STI) Yogyakarta (sekarang UII), bersama dengan 14 mahasiswa lainnya.<br><br>
-                <strong>Tujuan Pendirian Awal HMI:</strong><br>
-                1. Mempertahankan Negara Republik Indonesia dan mempertinggi derajat Rakyat Indonesia.<br>
-                2. Menegakkan dan mengembangkan ajaran agama Islam.<br><br>
-                Kondisi sosiopolitik saat itu sangat kritis, di mana Indonesia baru merdeka dan menghadapi ancaman kembalinya Belanda, sementara mahasiswa Islam terpecah-pecah dan kurang memiliki wadah representasi intelektual yang bercorak keislaman serta kebangsaan secara integral.`,
-                quote: '"Hari ini saya tidak akan menghadiri kuliah. Saya ingin mengumpulkan kawan-kawan mahasiswa Islam untuk mendirikan organisasi perjuangan." — Lafran Pane, 5 Februari 1947.'
+                year: 'Nov 1946 – 5 Feb 1947',
+                title: 'Fase Konsolidasi Spiritual',
+                subtitle: 'Penggagasan Keislaman & Keindonesiaan',
+                content: `Berawal dari dinamika sosiopolitik pasca-proklamasi kemerdekaan di Ibu Kota Yogyakarta. Mahasiswa Islam meragukan independensi Perserikatan Mahasiswa Yogyakarta (PMY) yang semakin terpengaruh ideologi sosialis/kiri.<br><br>
+                Lafran Pane (mahasiswa Sekolah Tinggi Islam) memprakarsai serangkaian perbincangan mendalam untuk mendirikan wadah mahasiswa Islam yang independen, progresif, dan berkomitmen teguh pada cita-cita kebangsaan.`,
+                quote: '"Hari ini saya tidak akan menghadiri kuliah. Saya ingin mengumpulkan kawan-kawan mahasiswa Islam untuk mendirikan organisasi perjuangan." — Prof. Lafran Pane'
             },
             era2: {
-                year: '1947 - 1949',
-                title: 'Perjuangan Fisik Kemerdekaan',
-                subtitle: 'Pena dan Senjata di Garis Depan Revolusi',
-                content: `Hanya beberapa bulan setelah berdiri, eksistensi HMI diuji oleh Agresi Militer Belanda. HMI memutuskan untuk meliburkan kegiatan perkuliahan secara massal dan menginstruksikan kadernya untuk memegang senjata masuk hutan melakukan perang gerilya bersama Tentara Rakyat.<br><br>
-                Kader-kader HMI mendirikan Korps Mahasiswa (CMS) yang terintegrasi dengan TNI. HMI di bawah kepemimpinan Dahlan Ranuwihardjo menunjukkan komitmen nasionalisme yang tak terbantahkan, mematahkan tuduhan kelompok kiri yang saat itu meragukan rasa cinta tanah air mahasiswa Islam.`,
-                quote: '"Bila Republik hancur, HMI juga ikut punah. Maka mempertahankan Republik adalah kewajiban mutlak HMI." — Dahlan Ranuwihardjo'
+                year: '5 Feb 1947 – 30 Nov 1947',
+                title: 'Fase Pengokohan Organisasi',
+                subtitle: 'Peletakan Fondasi Perdana HMI',
+                content: `Pasca musyawarah 5 Februari 1947 di STI Yogyakarta, kepengurusan pertama dibentuk di bawah kepemimpinan Lafran Pane. Anggaran Dasar pertama disahkan dengan 2 tujuan utama: mempertahankan Negara Republik Indonesia dan menegakkan ajaran agama Islam.<br><br>
+                HMI mulai memperluas jejaring ke kampus-kampus di Surakarta, Malang, Surabaya, dan Jakarta.`,
+                quote: '"Tujuan HMI menyatukan dua komitmen yang tak terpisahkan: Keislaman dan Keindonesiaan."'
             },
             era3: {
-                year: '1950 - 1966',
-                title: 'Menentang Komunisme & Rongrongan PKI',
-                subtitle: 'Eksistensi Hijau Hitam di Pusaran Politik Nasional',
-                content: `Periode ini merupakan salah satu masa tersulit bagi HMI. Partai Komunis Indonesia (PKI) beserta organisasi mahasiswanya (CGMI) menjadikan HMI sebagai musuh politik utama. Mereka melancarkan kampanye hitam besar-besaran untuk mendesak Presiden Soekarno membubarkan HMI.<br><br>
-                Dalam sebuah kongres CGMI, gembong PKI D.N. Aidit berpidato: <em>"Kalau tidak bisa membubarkan HMI, lebih baik pengurus CGMI memakai sarung saja!"</em>. Namun dengan perjuangan diplomasi tokoh HMI serta dukungan organisasi Islam lainnya, Bung Karno akhirnya menyatakan: <strong>"Go Ahead HMI, selamatkan negara!"</strong>. Pasca G30S/PKI, HMI memimpin Kesatuan Aksi Mahasiswa Indonesia (KAMI) menuntut Tritura dan membubarkan PKI.`,
-                quote: '"HMI adalah organisasi yang berwawasan nasional dan tidak bertentangan dengan revolusi Indonesia. HMI tidak akan pernah dibubarkan." — Jenderal Soedirman'
+                year: '30 Nov 1947 – 27 Des 1949',
+                title: 'Fase Perjuangan Fisik Kemerdekaan',
+                subtitle: 'Korps Mahasiswa Spesialis (CMS) & Perang Gerilya',
+                content: `Saat Agresi Militer Belanda melanda Republik, HMI menginstruksikan kadernya untuk meliburkan kuliah dan mengangkat senjata. HMI membentuk Korps Mahasiswa Spesialis (CMS) yang berjuang bersama Tentara Nasional Indonesia (TNI) di garis gerilya.<br><br>
+                Komitmen nasionalisme HMI mendapat pujian luas dari Panglima Besar Jenderal Soedirman.`,
+                quote: '"Bila Republik hancur, HMI juga ikut punah. Maka mempertahankan Republik adalah kewajiban mutlak HMI." — Dahlan Ranuwihardjo, S.H.'
             },
             era4: {
-                year: '1970 - 1980',
-                title: 'Perumusan NDP & Krisis Asas Tunggal',
-                subtitle: 'Perumusan Intelektual dan Tekanan Ideologis Orde Baru',
-                content: `Pada awal 1970-an, Nurcholish Madjid (Cak Nur) merumuskan dokumen filosofis monumental bernama <strong>Nilai-Nilai Dasar Perjuangan (NDP)</strong>. Dokumen ini menjadi rujukan teologis, ideologis, dan sosiologis kader HMI yang menyelaraskan nilai Tauhid ke dalam aksi kemanusiaan dan kebangsaan secara rasional.<br><br>
-                Di era 1980-an, rezim Orde Baru memaksakan kebijakan "Asas Tunggal Pancasila" untuk semua organisasi. HMI mengalami perpecahan internal yang mendalam antara kelompok yang menerima Pancasila sebagai asas (HMI DIPO) demi menyelamatkan legalitas organisasi, dan kelompok yang menolak tegas demi menjaga kemurnian asas Islam (HMI MPO).`,
-                quote: '"NDP membebaskan manusia dari belenggu takhayul dan syirik, menuntun mereka pada kebebasan intelektual yang bertanggung jawab." — Nurcholish Madjid'
+                year: '1950 – 1963',
+                title: 'Pembinaan & Konsolidasi Organisasi',
+                subtitle: 'Ekspansi Perguruan Tinggi Nasional',
+                content: `Setelah pengakuan kedaulatan RI, HMI memfokuskan diri pada pengembangan organisasi kader di seluruh perguruan tinggi Indonesia. Formulasi kurikulum Latihan Kader (Basic Training, Intermediate, Advance) dimantapkan.<br><br>
+                HMI melahirkan berbagai badan khusus seperti Korps HMI Wati (KOHATI) dan Lembaga Pengembangan Profesi untuk menampung bakat intelektual kader.`,
+                quote: '"HMI hadir melatih insan akademis yang cakap, berakhlak mulia, dan siap memimpin bangsa."'
             },
             era5: {
-                year: '1998',
-                title: 'Gerakan Reformasi',
-                subtitle: 'Mengawal Transisi Menuju Demokrasi Indonesia',
-                content: `Saat krisis moneter 1997-1998 memuncak, gerakan mahasiswa menuntut turunnya Presiden Soeharto menggema di seluruh Indonesia. Kader-kader HMI bersama berbagai elemen mahasiswa menduduki gedung DPR/MPR RI.<br><br>
-                Alumni-alumni HMI yang berada di birokrasi, hukum, dan kampus turut menyokong agenda reformasi. Peristiwa ini membuktikan komitmen HMI sebagai organisasi pengabdi yang selalu berpihak pada keadilan rakyat, bukan pada kekuasaan politik sesaat.`,
-                quote: '"Rakyat menuntut perubahan. Peran HMI adalah memastikan transisi kekuasaan berjalan damai demi keutuhan bangsa." — Kader HMI 1998'
+                year: '1964 – 1965',
+                title: 'Fase Tantangan & Penghianatan PKI',
+                subtitle: 'Eksistensi Hijau Hitam Melawan Fitnah CGMI/PKI',
+                content: `Partai Komunis Indonesia (PKI) melalui CGMI melancarkan aksi masif mendesak Presiden Soekarno membubarkan HMI. Pimpinan PKI D.N. Aidit sesumbar mengancam CGMI jika tidak mampu membubarkan HMI.<br><br>
+                Namun dengan keteguhan kader dan dukungan umat Islam, Bung Karno menegaskan di Istana Negara: <strong>"Go Ahead HMI, selamatkan negara!"</strong>. Jenderal Soedirman juga pernah menegaskan HMI adalah Harapan Masyarakat Indonesia.`,
+                quote: '"HMI adalah organisasi yang berwawasan nasional dan tidak bertentangan dengan revolusi Indonesia." — Jenderal Soedirman'
             },
             era6: {
-                year: 'Era Modern',
-                title: 'HMI Badko Kalsel Hari Ini',
-                subtitle: 'Digitalisasi Organisasi dan Penguatan Intelektual Lokal',
-                content: `Memasuki abad ke-21, HMI Badan Koordinasi Kalimantan Selatan mengoordinasikan 8 cabang aktif: Banjarmasin, Banjarbaru, Kandangan, Barabai, Amuntai, Tanjung, Rantau, dan Tanah Laut.<br><br>
-                HMI Badko Kalsel berfokus pada penguatan kurikulum Latihan Kader terintegrasi teknologi, advokasi isu lingkungan (penyelamatan hutan Kalimantan), ekonomi kreatif kader, serta digitalisasi publikasi organisasi seperti yang ditunjukkan oleh peluncuran portal informasi resmi ini.`,
-                quote: '"Kader HMI Kalsel harus menjadi insan akademis yang menguasai teknologi dan tetap membumi menjaga nilai ketauhidan."'
+                year: '1966 – 1968',
+                title: 'Pelopor Angkatan 66 & Orde Baru',
+                subtitle: 'Penggerak Reformasi Kebangsaan & TRITURA',
+                content: `Pasca peristiwa G30S/PKI, HMI bersama organisasi mahasiswa lain memelopori pembentukan Kesatuan Aksi Mahasiswa Indonesia (KAMI). HMI memimpin demonstrasi massa menyuarakan Tiga Tuntutan Rakyat (TRITURA).<br><br>
+                Peran HMI sangat krusial dalam menuntaskan pembubaran PKI dan mengawal transisi menuju era Orde Baru.`,
+                quote: '"Kader HMI berdiri tegak di garis depan menyuarakan kebenaran dan keadilan rakyat."'
+            },
+            era7: {
+                year: '1969 – 1970',
+                title: 'Partisipasi Pembangunan & NDP',
+                subtitle: 'Perumusan Nilai-Nilai Dasar Perjuangan (NDP)',
+                content: `Pada Kongres IX HMI di Malang tahun 1969, draf naskah <strong>Nilai-Nilai Dasar Perjuangan (NDP)</strong> yang dirumuskan oleh Nurcholish Madjid (Cak Nur) disahkan sebagai dokumen ideologis resmi HMI.<br><br>
+                NDP menjadi kerangka berpikir rasional dan teologis yang menyatukan Tauhid, kemanusiaan, kemasyarakatan, dan keadilan sosial.`,
+                quote: '"NDP membebaskan manusia dari belenggu takhayul dan syirik menuju kemerdekaan intelektual." — Dr. Nurcholish Madjid'
+            },
+            era8: {
+                year: '1970 – 1997',
+                title: 'Fase Pergolakan Pemikiran & Asas Tunggal',
+                subtitle: 'Pembaruan Islam & Dinamika Ideologis',
+                content: `Periode pembaruan pemikiran Islam Indonesia yang dipelopori para alumni dan kader HMI. Di era 1980-an, ketika pemerintah menetapkan kebijakan Asas Tunggal Pancasila, HMI mengalami dinamika internal yang melahirkan HMI Dipo (menerima asas Pancasila demi legalitas) dan HMI MPO.<br><br>
+                Meski demikian, integritas pembinaan kader HMI tetap berjalan produktif di seluruh kampus.`,
+                quote: '"Pemikiran Islam di Indonesia harus membumi dan memberikan solusi atas krisis kemanusiaan."'
+            },
+            era9: {
+                year: 'Mei 1998 – Sekarang',
+                title: 'Fase Reformasi & Era Modern',
+                subtitle: 'Pengawalan Demokrasi & Digitalisasi Badko Kalsel',
+                content: `Pada Mei 1998, ribuan kader HMI ikut menduduki Gedung DPR/MPR RI menuntut pengunduran diri Soeharto dan terwujudnya Reformasi Demokrasi.<br><br>
+                Di era modern abad ke-21, HMI Badko Kalsel mengoordinasikan 8 cabang aktif, mendorong digitalisasi organisasi, tata kelola kaderisasi berkelanjutan, serta pelestarian lingkungan Kalimantan Selatan.`,
+                quote: '"Kader HMI masa kini wajib menguasai teknologi modern tanpa melepaskan akar nilai Ketauhidan."'
             }
         };
 
-        // ====== figures DATA ======
+        // ====== DATA TOKOH UTAMA ======
         const figuresData = {
             lafran: {
                 name: 'Prof. Drs. Lafran Pane',
                 role: 'Pemrakarsa Utama HMI / Pahlawan Nasional RI',
-                period: '1922 — 2011',
-                bio: `Lahir di Sipirok, Tapanuli Selatan. Beliau merupakan tokoh intelektual yang memiliki visi jauh melampaui zamannya. Lafran menyadari pentingnya mahasiswa Islam bersatu dalam satu wadah independen yang tidak berafiliasi ke partai politik mana pun.<br><br>
-                Dikenal sebagai pribadi yang sangat sederhana, jujur, dan berintegritas tinggi. Beliau menolak segala macam kemewahan fasilitas negara selama menjabat sebagai guru besar di IKIP Yogyakarta (UNY) dan UIN Sunan Kalijaga. Pada tahun 2017, Presiden Joko Widodo menganugerahi gelar Pahlawan Nasional kepada Lafran Pane atas jasa besarnya mendirikan HMI yang telah melahirkan jutaan pemimpin bangsa.`,
-                quote: '"HMI itu organisasi kader, bukan organisasi massa. Kualitas kader adalah kunci keberlangsungan perjuangan kita."'
+                period: '1922 — 1991',
+                bio: `Lahir di Sipirok, Tapanuli Selatan. Beliau merupakan tokoh akademisi bermoral tinggi yang mendirikan HMI pada usia 25 tahun saat menjadi mahasiswa Sekolah Tinggi Islam Yogyakarta.<br><br>
+                Visi besarnya adalah menyatukan komitmen keislaman dan keindonesiaan dalam satu wadah mahasiswa independen. Atas jasa-jasa besarnya bagi bangsa dan negara, Presiden RI menganugerahi gelar Pahlawan Nasional kepada Prof. Lafran Pane pada tahun 2017.`,
+                quote: '"HMI itu organisasi kader, bukan organisasi massa. Kualitas karakter dan intelektual kader adalah kunci keberlangsungan perjuangan kita."'
             },
             caknur: {
                 name: 'Dr. H. Nurcholish Madjid (Cak Nur)',
-                role: 'Formulator NDP HMI / Ketua Umum PB HMI 1966-1971',
+                role: 'Formulator NDP HMI / Ketua Umum PB HMI (1966-1971)',
                 period: '1939 — 2005',
-                bio: `Dikenal sebagai "Lokomotif Pembaruan Islam Indonesia". Cak Nur merupakan satu-satunya tokoh yang memimpin PB HMI selama dua periode berturut-turut. Karya terbesarnya bagi HMI adalah merumuskan Nilai-Nilai Dasar Perjuangan (NDP) setelah kepulangannya melakukan perjalanan intelektual di berbagai negara Timur Tengah.<br><br>
-                Gagasan Cak Nur mengenai sekularisasi (dalam arti desakralisasi hal-hal profan), pluralisme, dan integrasi keislaman-keindonesiaan sangat memengaruhi corak berpikir kader HMI lintas generasi hingga hari ini. Beliau mendirikan Universitas Paramadina dan menjadi cendekiawan yang dihormati di tingkat global.`,
-                quote: '"Islam yes, Partai Islam no? Nilai-nilai Islam harus menyerap ke dalam kebangsaan tanpa harus terjebak pada formalisme politik simbolis."'
+                bio: `Dikenal sebagai "Lokomotif Pembaruan Islam Indonesia". Cak Nur merupakan Ketua Umum PB HMI dua periode berturut-turut. Beliau merumuskan Nilai-Nilai Dasar Perjuangan (NDP) HMI yang menjadi pijakan teologis rasional bagi seluruh kader.<br><br>
+                Gagasan-gagasannya tentang pluralisme, kebangsaan, dan sekularisasi profan memberikan pengaruh mendalam bagi perjalanan intelektual bangsa Indonesia.`,
+                quote: '"Keislaman dan keindonesiaan adalah dua dimensi integral yang mengokohkan bangunan NKRI."'
             }
         };
 
-        // Modal triggers
+        // Modals Functions
         function openTimelineModal(eraKey) {
             const data = timelineData[eraKey];
             if (!data) return;
@@ -1004,18 +1202,20 @@
             const body = document.getElementById('timelineModalBody');
             
             body.innerHTML = `
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-emerald-100 text-hmiGreen px-4 py-1.5 rounded-full text-sm font-black border border-emerald-200">${data.year}</span>
-                    <h3 class="text-2xl font-extrabold text-gray-900">${data.title}</h3>
-                </div>
-                <h4 class="text-sm font-semibold text-hmiGreenLight mb-6 uppercase tracking-wider">${data.subtitle}</h4>
-                <div class="text-gray-700 leading-relaxed text-sm md:text-base space-y-4 max-h-[50vh] overflow-y-auto pr-2">
-                    <p>${data.content}</p>
-                </div>
-                <div class="mt-6 pt-5 border-t border-gray-200 bg-gray-50 -mx-8 -mb-8 p-6 md:px-8">
-                    <p class="italic text-gray-800 text-xs md:text-sm font-semibold text-center leading-relaxed">
-                        ${data.quote}
-                    </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <span class="bg-emerald-100 text-hmiGreen px-3.5 py-1 rounded-full text-xs font-black border border-emerald-200">${data.year}</span>
+                        <h3 class="text-xl sm:text-2xl font-black text-gray-900">${data.title}</h3>
+                    </div>
+                    <h4 class="text-xs font-bold text-hmiGreen uppercase tracking-wider">${data.subtitle}</h4>
+                    <div class="text-gray-700 leading-relaxed text-sm space-y-3 pt-2">
+                        <p>${data.content}</p>
+                    </div>
+                    <div class="mt-4 p-4 rounded-2xl bg-emerald-50 border-l-4 border-hmiGreen">
+                        <p class="italic text-gray-800 text-xs sm:text-sm font-semibold">
+                            ${data.quote}
+                        </p>
+                    </div>
                 </div>
             `;
             modal.classList.add('active');
@@ -1032,32 +1232,24 @@
             const modal = document.getElementById('figureModal');
             const body = document.getElementById('figureModalBody');
 
-            // Generate initials — skip common honorifics/titles
-            const TITLES = /^(prof|drs?|dr|h|hj|mr|mrs|ms|ir|st|sh|se|skom|sip|ssos|m\.si|m\.pd|m\.ag|m\.hum|ph\.d)\.?$/i;
-            const nameInitials = data.name
-                .split(/\s+/)
-                .filter(w => !TITLES.test(w))
-                .slice(0, 2)
-                .map(w => w.charAt(0).toUpperCase())
-                .join('');
-
             body.innerHTML = `
-                <div class="text-center mb-6 pt-2">
-                    <div class="w-24 h-24 bg-gradient-to-br from-hmiGreen to-hmiDark text-white rounded-full flex items-center justify-center text-3xl font-black mx-auto shadow-lg mb-4 ring-4 ring-emerald-100">
-                        ${nameInitials || '?'}
+                <div class="space-y-4 text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-hmiGreen to-hmiDark text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto shadow-lg ring-4 ring-emerald-100">
+                        ${figureKey === 'lafran' ? 'LP' : 'CN'}
                     </div>
-                    <h3 class="text-xl md:text-2xl font-extrabold text-gray-900 leading-tight">${data.name}</h3>
-                    <p class="text-xs text-hmiGreen font-bold tracking-wider uppercase mt-2">${data.role}</p>
-                    <span class="inline-block bg-gray-100 text-gray-500 text-xs px-4 py-1.5 rounded-full mt-3 font-semibold">${data.period}</span>
-                </div>
-                <div class="text-gray-700 leading-relaxed text-sm md:text-base max-h-[38vh] overflow-y-auto pr-1 space-y-3">
-                    <p>${data.bio}</p>
-                </div>
-                <div class="mt-6 rounded-2xl bg-emerald-50 border-l-4 border-hmiGreen p-4 md:p-5">
-                    <i class="fas fa-quote-left text-hmiGreen/30 text-2xl mb-2 block"></i>
-                    <p class="italic text-gray-700 text-xs md:text-sm font-semibold leading-relaxed text-center">
-                        ${data.quote}
-                    </p>
+                    <div>
+                        <h3 class="text-xl font-black text-gray-900">${data.name}</h3>
+                        <p class="text-xs text-hmiGreen font-bold uppercase tracking-wider mt-1">${data.role}</p>
+                        <span class="inline-block bg-gray-100 text-gray-500 text-xs px-3 py-1 rounded-full mt-2 font-semibold">${data.period}</span>
+                    </div>
+                    <div class="text-gray-700 leading-relaxed text-sm text-left pt-2 space-y-2">
+                        <p>${data.bio}</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-50 border-l-4 border-hmiGreen text-left">
+                        <p class="italic text-gray-800 text-xs font-semibold">
+                            ${data.quote}
+                        </p>
+                    </div>
                 </div>
             `;
             modal.classList.add('active');
@@ -1067,20 +1259,26 @@
             document.getElementById('figureModal').classList.remove('active');
         }
 
-        // Close modal when clicking outside content area
+        // Close overlay when clicking backdrop
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
+                if (e.target === this) this.classList.remove('active');
             });
         });
 
+        // ESC key listener
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+            }
+        });
+
+        // ====== QUOTE CAROUSEL ======
         const quotes = [
             { text: '"Bahagia HMI, Jayalah Kohati. Yakin Usaha Sampai."', author: 'Semboyan Perjuangan HMI' },
-            { text: '"Hari ini saya tidak akan menghadiri kuliah. Saya ingin mengumpulkan kawan-kawan mahasiswa Islam untuk mendirikan organisasi perjuangan."', author: 'Prof. Lafran Pane' },
-            { text: '"Keislaman dan keindonesiaan adalah dua sisi dari satu mata uang yang sama. Mengabdi pada tanah air adalah bagian dari ketauhidan."', author: 'Nurcholish Madjid (Cak Nur)' },
-            { text: '"HMI itu organisasi kader, bukan organisasi massa. Kualitas kader adalah kunci keberlangsungan perjuangan kita."', author: 'Prof. Lafran Pane' },
+            { text: '"Hari ini saya tidak akan menghadiri kuliah. Saya ingin mengumpulkan kawan-kawan mahasiswa Islam untuk mendirikan organisasi perjuangan."', author: 'Prof. Drs. Lafran Pane (5 Feb 1947)' },
+            { text: '"Keislaman dan keindonesiaan adalah dua sisi dari satu mata uang yang sama. Mengabdi pada tanah air adalah bagian dari ketauhidan."', author: 'Dr. Nurcholish Madjid (Cak Nur)' },
+            { text: '"HMI itu organisasi kader, bukan organisasi massa. Kualitas karakter dan pemikiran kader adalah kunci utama perjuangan kita."', author: 'Prof. Drs. Lafran Pane' },
             { text: '"Bila Republik hancur, HMI juga ikut punah. Maka mempertahankan Republik adalah kewajiban mutlak HMI."', author: 'Dahlan Ranuwihardjo, S.H.' }
         ];
         let currentQuoteIndex = 0;
@@ -1090,11 +1288,13 @@
             const textEl = document.getElementById('quoteText');
             const authorEl = document.getElementById('quoteAuthor');
 
-            container.style.opacity = 0;
+            if (!container || !textEl || !authorEl) return;
+
+            container.style.opacity = '0';
             setTimeout(() => {
                 textEl.textContent = quotes[currentQuoteIndex].text;
                 authorEl.textContent = '— ' + quotes[currentQuoteIndex].author;
-                container.style.opacity = 1;
+                container.style.opacity = '1';
             }, 200);
         }
 
@@ -1108,53 +1308,51 @@
             updateQuote();
         }
 
-        // Auto play quotes
         setInterval(nextQuote, 6000);
 
-        // ====== KUIS INTERAKTIF TRIVIA SEJARAH HMI ======
+        // ====== KUIS TRIVIA SEJARAH HMI ======
         const quizQuestions = [
             {
-                question: 'Di kota mana Himpunan Mahasiswa Islam (HMI) didirikan?',
+                question: 'Di kota manakah Himpunan Mahasiswa Islam (HMI) resmi didirikan pada tanggal 5 Februari 1947?',
                 options: ['Jakarta', 'Yogyakarta', 'Bandung', 'Surabaya'],
                 correct: 1,
-                explanation: 'HMI didirikan di Yogyakarta, tepatnya di salah satu ruang kuliah Sekolah Tinggi Islam (STI) pada tanggal 5 Februari 1947.'
+                explanation: 'HMI didirikan di Yogyakarta, tepatnya di salah satu ruang kuliah Sekolah Tinggi Islam (STI) pada tanggal 5 Februari 1947 (14 Rabiul Awal 1366 H).'
             },
             {
-                question: 'Siapa pemrakarsa utama berdirinya HMI yang kini bergelar Pahlawan Nasional?',
-                options: ['Nurcholish Madjid', 'Dahlan Ranuwihardjo', 'Lafran Pane', 'Kartono Suryowinoto'],
+                question: 'Siapakah pemrakarsa utama pendirian HMI yang dianugerahi gelar Pahlawan Nasional RI?',
+                options: ['Nurcholish Madjid', 'Dahlan Ranuwihardjo', 'Prof. Drs. Lafran Pane', 'Kasman Singodimedjo'],
                 correct: 2,
-                explanation: 'Prof. Drs. Lafran Pane merupakan penggagas utama rapat pendirian HMI pada tanggal 5 Februari 1947, didukung oleh 14 orang rekannya.'
+                explanation: 'Prof. Drs. Lafran Pane merupakan penggagas utama rapat pembentukan HMI pada 5 Februari 1947 bersama 14 mahasiswa STI dan kampus lainnya.'
             },
             {
-                question: 'Apa kepanjangan dari semboyan populer HMI "YAKUSA"?',
+                question: 'Apakah kepanjangan dari semboyan populer kader HMI "YAKUSA"?',
                 options: ['Yakin Karsa Usaha', 'Yakin Usaha Sampai', 'Yakin Usaha Sukses', 'Yakin Kuasa Sama'],
                 correct: 1,
-                explanation: '"Yakin Usaha Sampai" (YAKUSA) menggambarkan sikap optimisme, kerja keras, dan kepasrahan kepada takdir Allah SWT setelah melakukan ikhtiar.'
+                explanation: '"Yakin Usaha Sampai" (YAKUSA) mencerminkan ikhtiar optimis, kerja keras, dan penyerahan hasil akhir kepada Allah SWT.'
             },
             {
-                question: 'Siapakah perumus utama naskah ideologis HMI "Nilai-Nilai Dasar Perjuangan" (NDP)?',
-                options: ['Prof. Lafran Pane', 'Dr. Nurcholish Madjid', 'Ahmad Wahib', 'M. Dawam Rahardjo'],
+                question: 'Siapakah perumus utama dokumen filosofis HMI "Nilai-Nilai Dasar Perjuangan" (NDP)?',
+                options: ['Prof. Lafran Pane', 'Dr. Nurcholish Madjid (Cak Nur)', 'Ahmad Wahib', 'Dawam Rahardjo'],
                 correct: 1,
-                explanation: 'Nurcholish Madjid (Cak Nur) merumuskan draf awal NDP HMI yang disahkan pada Kongres HMI IX di Malang tahun 1969.'
+                explanation: 'Dr. Nurcholish Madjid (Cak Nur) merumuskan draf NDP HMI yang disahkan pada Kongres HMI IX di Malang tahun 1969.'
             },
             {
-                question: 'HMI didirikan pada tanggal 5 Februari 1947, yang bertepatan dengan tanggal Islam...',
+                question: 'Tanggal pendirian HMI (5 Februari 1947 Masehi) bertepatan dengan tanggal Hijriah...',
                 options: ['17 Ramadhan 1365 H', '12 Rabiul Awal 1366 H', '14 Rabiul Awal 1366 H', '1 Syawal 1366 H'],
                 correct: 2,
-                explanation: 'HMI didirikan pada hari Rabu Pon, tanggal 14 Rabiul Awal 1366 H di salah satu kelas Sekolah Tinggi Islam (STI).'
+                explanation: 'HMI didirikan pada hari Rabu Pon tanggal 14 Rabiul Awal 1366 H di kampus Sekolah Tinggi Islam Yogyakarta.'
             }
         ];
 
         let quizCurrentIndex = 0;
         let quizScore = 0;
-        let quizAnswersSelected = [];
 
         function startQuiz() {
             document.getElementById('quizStartScreen').classList.add('hidden');
             document.getElementById('quizQuestionScreen').classList.remove('hidden');
+            document.getElementById('quizResultScreen').classList.add('hidden');
             quizCurrentIndex = 0;
             quizScore = 0;
-            quizAnswersSelected = [];
             showQuestion();
         }
 
@@ -1163,7 +1361,6 @@
             document.getElementById('quizProgressLabel').textContent = `Soal ${quizCurrentIndex + 1} dari ${quizQuestions.length}`;
             document.getElementById('quizScoreTracker').textContent = `Benar: ${quizScore}`;
             
-            // Progress bar width
             const percent = ((quizCurrentIndex + 1) / quizQuestions.length) * 100;
             document.getElementById('quizProgressBar').style.width = percent + '%';
 
@@ -1176,12 +1373,12 @@
             
             const nextBtn = document.getElementById('quizNextBtn');
             nextBtn.disabled = true;
-            nextBtn.classList.add('cursor-not-allowed', 'bg-gray-400');
-            nextBtn.classList.remove('bg-hmiGreen', 'hover:bg-hmiDark');
+            nextBtn.className = "px-6 py-2.5 rounded-full text-white font-bold text-xs sm:text-sm bg-gray-400 cursor-not-allowed transition-all";
 
             q.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-emerald-50/50 hover:border-emerald-250 transition-all font-medium text-sm flex items-center justify-between group";
+                btn.type = 'button';
+                btn.className = "w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:bg-emerald-50/70 hover:border-emerald-300 transition-all font-medium text-xs sm:text-sm flex items-center justify-between group";
                 btn.innerHTML = `<span>${opt}</span><i class="far fa-circle text-gray-300 group-hover:text-hmiGreen transition"></i>`;
                 btn.onclick = () => selectOption(idx, btn);
                 optionsContainer.appendChild(btn);
@@ -1192,37 +1389,31 @@
             const q = quizQuestions[quizCurrentIndex];
             const buttons = document.getElementById('quizOptionsContainer').children;
             
-            // Disable all buttons to prevent multiple clicks
             for (let btn of buttons) {
                 btn.disabled = true;
                 btn.onclick = null;
             }
 
-            // Verify correctness
             const isCorrect = (selectedIdx === q.correct);
             if (isCorrect) {
                 quizScore++;
-                clickedBtn.className = "w-full text-left p-4 rounded-xl border-2 border-green-500 bg-green-50 text-green-900 font-bold text-sm flex items-center justify-between";
+                clickedBtn.className = "w-full text-left p-4 rounded-xl border-2 border-green-500 bg-green-50 text-green-900 font-bold text-xs sm:text-sm flex items-center justify-between";
                 clickedBtn.innerHTML = `<span>${q.options[selectedIdx]}</span><i class="fas fa-check-circle text-green-600"></i>`;
             } else {
-                clickedBtn.className = "w-full text-left p-4 rounded-xl border-2 border-red-500 bg-red-50 text-red-900 font-bold text-sm flex items-center justify-between";
+                clickedBtn.className = "w-full text-left p-4 rounded-xl border-2 border-red-500 bg-red-50 text-red-900 font-bold text-xs sm:text-sm flex items-center justify-between";
                 clickedBtn.innerHTML = `<span>${q.options[selectedIdx]}</span><i class="fas fa-times-circle text-red-600"></i>`;
                 
-                // Highlight correct one
                 const correctBtn = buttons[q.correct];
-                correctBtn.className = "w-full text-left p-4 rounded-xl border-2 border-green-500 bg-green-50 text-green-900 font-bold text-sm flex items-center justify-between";
+                correctBtn.className = "w-full text-left p-4 rounded-xl border-2 border-green-500 bg-green-50 text-green-900 font-bold text-xs sm:text-sm flex items-center justify-between";
                 correctBtn.innerHTML = `<span>${q.options[q.correct]}</span><i class="fas fa-check-circle text-green-600"></i>`;
             }
 
-            // Show explanation
             document.getElementById('quizExplanationText').textContent = q.explanation;
             document.getElementById('quizExplanationPanel').classList.remove('hidden');
 
-            // Enable next button
             const nextBtn = document.getElementById('quizNextBtn');
             nextBtn.disabled = false;
-            nextBtn.classList.remove('cursor-not-allowed', 'bg-gray-400');
-            nextBtn.classList.add('bg-hmiGreen', 'hover:bg-hmiDark');
+            nextBtn.className = "px-6 py-2.5 rounded-full text-white font-bold text-xs sm:text-sm bg-hmiGreen hover:bg-hmiDark transition-all shadow-md cursor-pointer";
         }
 
         function nextQuestion() {
@@ -1246,29 +1437,28 @@
 
             if (finalScoreVal === 100) {
                 badgeEl.textContent = 'Kader Utama Paripurna 🟢⚫';
-                badgeEl.className = 'mt-3 px-4 py-1.5 bg-green-100 text-green-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-green-200';
-                evalEl.textContent = 'Sempurna! Anda memiliki wawasan sejarah perjuangan HMI yang luar biasa matang. Jiwa akademis, pencipta, pengabdi mengalir penuh dalam diri Anda.';
+                badgeEl.className = 'inline-block px-4 py-1.5 bg-green-100 text-green-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-green-200';
+                evalEl.textContent = 'Sempurna! Anda memiliki wawasan sejarah perjuangan HMI yang sangat matang. Pemahaman nilai insan akademis, pencipta, dan pengabdi mengalir utuh dalam diri Anda.';
             } else if (finalScoreVal >= 80) {
                 badgeEl.textContent = 'Kader Militan';
-                badgeEl.className = 'mt-3 px-4 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-emerald-200';
-                evalEl.textContent = 'Luar biasa! Pemahaman sejarah HMI Anda sangat kuat. Anda siap menjadi motor penggerak organisasi.';
+                badgeEl.className = 'inline-block px-4 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-emerald-200';
+                evalEl.textContent = 'Luar biasa! Pemahaman Anda tentang sejarah HMI sangat kuat. Siap menjadi penggerak kaderisasi organisasi.';
             } else if (finalScoreVal >= 60) {
                 badgeEl.textContent = 'Kader Akademis';
-                badgeEl.className = 'mt-3 px-4 py-1.5 bg-yellow-100 text-yellow-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-yellow-200';
-                evalEl.textContent = 'Bagus! Wawasan Anda sudah cukup baik, namun tetaplah rajin membaca literatur dan berdiskusi agar pemahaman semakin mendalam.';
+                badgeEl.className = 'inline-block px-4 py-1.5 bg-yellow-100 text-yellow-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-yellow-200';
+                evalEl.textContent = 'Bagus! Wawasan Anda sudah cukup baik, mari tingkatkan membaca literatur sejarah dan diskusi keorganisasian.';
             } else {
-                badgeEl.textContent = 'Kader Pemula (LK-1 Lagi)';
-                badgeEl.className = 'mt-3 px-4 py-1.5 bg-red-100 text-red-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-red-200';
-                evalEl.textContent = 'Waduh! Sepertinya Anda perlu membuka kembali buku modul sejarah HMI dan mengikuti Latihan Kader I (Basic Training) ulang.';
+                badgeEl.textContent = 'Kader Muda';
+                badgeEl.className = 'inline-block px-4 py-1.5 bg-orange-100 text-orange-800 text-xs font-extrabold rounded-full tracking-wider uppercase border border-orange-200';
+                evalEl.textContent = 'Tetap semangat! Buka kembali modul Sejarah Perjuangan HMI (Basic Training / LK-I) untuk memperdalam wawasan ke-HMI-an Anda.';
             }
         }
 
         function restartQuiz() {
-            document.getElementById('quizResultScreen').classList.add('hidden');
             startQuiz();
         }
 
-        // ===== BACK-TO-TOP BUTTON =====
+        // Back to top button visibility
         const backToTop = document.getElementById('back-to-top');
         if (backToTop) {
             window.addEventListener('scroll', function () {
@@ -1278,56 +1468,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
-
-        // ===== ESCAPE KEY TO CLOSE MODALS =====
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-overlay.active').forEach(function (m) {
-                    m.classList.remove('active');
-                });
-            }
-        });
-
-        // ===== FIX QUOTE TRANSITION =====
-        const quoteContainer = document.getElementById('quoteContainer');
-        if (quoteContainer) {
-            quoteContainer.style.transition = 'opacity 0.2s ease';
-        }
-
-    window.openTimelineModal = openTimelineModal;
-    window.closeTimelineModal = closeTimelineModal;
-    window.openFigureModal = openFigureModal;
-    window.closeFigureModal = closeFigureModal;
-    window.prevQuote = prevQuote;
-    window.nextQuote = nextQuote;
-    window.startQuiz = startQuiz;
-    window.nextQuestion = nextQuestion;
-    window.restartQuiz = restartQuiz;
-})();
-    </script>
-    <script>
-        // ======= NAV "Profil" DROPDOWN (desktop) =======
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.nav-dropdown').forEach(wrapper => {
-                const btn = wrapper.querySelector('.nav-dropdown-btn');
-                const menu = wrapper.querySelector('.nav-dropdown-menu');
-                if (!btn || !menu) return;
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isOpen = !menu.classList.contains('hidden');
-                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
-                    document.querySelectorAll('.nav-dropdown-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-                    if (!isOpen) {
-                        menu.classList.remove('hidden');
-                        btn.setAttribute('aria-expanded', 'true');
-                    }
-                });
-            });
-            document.addEventListener('click', () => {
-                document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
-                document.querySelectorAll('.nav-dropdown-btn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-            });
-        });
     </script>
 </body>
 </html>
