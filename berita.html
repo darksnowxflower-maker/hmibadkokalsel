@@ -3,57 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="cache-version" content="2026.07.27.1408" />
-  <!-- FORCE REBUILD & CACHE PURGE: 2026-07-27T14:08:00+08:00 -->
-  <meta name="description" content="Berita terbaru HMI Badko Kalimantan Selatan — informasi, kegiatan, pengumuman, dan agenda organisasi.">
-      <!-- Favicon Resmi HMI -->
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" href="favicon.png" />
-    <title>Berita Terbaru — HMI Badko Kalimantan Selatan</title>
+  <meta name="cache-version" content="2026.07.28.v3" />
+  <meta name="description" content="Portal Berita Resmi HMI Badko Kalimantan Selatan — informasi terkini, agenda organisasi, pengumuman resmi, dan kajian kader se-Kalimantan Selatan.">
+  <!-- Favicon Resmi HMI -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <title>Portal Berita Resmi — HMI Badko Kalimantan Selatan</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{hmiGreen:'#006B3F',hmiGreenLight:'#008c52',hmiDark:'#004d2c'}}}}</script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            hmiGreen: '#006B3F',
+            hmiGreenLight: '#008c52',
+            hmiDark: '#004d2c'
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    .glass-nav{background:rgba(255,255,255,.9);backdrop-filter:blur(10px)}
-    .bg-pattern{background:linear-gradient(135deg,rgba(0,107,63,.96),rgba(0,77,44,.96))}
+    .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); }
+    .dark .glass-nav { background: rgba(15, 23, 42, 0.9); }
+    .bg-pattern { background: linear-gradient(135deg, rgba(0,107,63,0.96), rgba(0,77,44,0.96)); }
+    .filter-btn.active {
+      background-color: #006B3F;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .dark .filter-btn.active {
+      background-color: #10b981;
+      color: #0f172a;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: inline-flex;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
   </style>
-  <link rel="stylesheet" href="theme.css?v=20260727_v2">
-  <script src="theme-toggle.js?v=20260727_v2"></script>
+  <link rel="stylesheet" href="theme.css?v=20260728_v3">
+  <script src="theme-toggle.js?v=20260728_v3"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans selection:bg-hmiGreen selection:text-white">
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-100 font-sans selection:bg-hmiGreen selection:text-white transition-colors duration-300">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-[120] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- Breaking News Ticker Bar -->
+  <div class="bg-gray-900 text-white text-xs py-2 px-4 border-b border-gray-800 overflow-hidden relative">
+    <div class="max-w-7xl mx-auto flex items-center gap-3">
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-hmiGreen text-white font-extrabold uppercase tracking-wider text-[10px] shrink-0">
+        <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+        FLASH NEWS
+      </span>
+      <div class="overflow-hidden relative w-full flex-1">
+        <div id="newsTickerContent" class="animate-marquee text-gray-300 font-medium">
+          <!-- Populated by JS ticker items -->
+          <span>Selamat Datang di Portal Berita Resmi HMI Badko Kalimantan Selatan • Memuat informasi terkini...</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Navigation Bar -->
-  <nav class="glass-nav shadow-sm sticky top-0 z-50 transition-all duration-300 mx-4 mt-4 rounded-full" id="navbar">
+  <nav class="glass-nav shadow-sm sticky top-0 z-50 transition-all duration-300 mx-4 mt-3 rounded-full" id="navbar">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center h-20">
               <a href="index.html" class="flex items-center group gap-3">
                   <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto mr-1 drop-shadow-md group-hover:scale-105 transition-transform duration-300">
                   <div>
-                      <h1 class="font-extrabold text-lg leading-none text-hmiGreen group-hover:text-hmiGreenLight transition-colors whitespace-nowrap">HMI Badko Kalimantan Selatan</h1>
-                      <p class="hidden sm:block text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold mt-1.5">Badan Koordinasi</p>
+                      <h1 class="font-extrabold text-lg leading-none text-hmiGreen dark:text-emerald-400 group-hover:text-hmiGreenLight transition-colors whitespace-nowrap">HMI Badko Kalimantan Selatan</h1>
+                      <p class="hidden sm:block text-[10px] uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400 font-bold mt-1.5">Badan Koordinasi</p>
                   </div>
               </a>
               
               <!-- Desktop Menu -->
               <div class="hidden lg:flex items-center space-x-1">
-                  <a href="index.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.home">Beranda</a>
-                  <a href="artikel.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.artikel">Artikel</a>
+                  <a href="index.html" class="nav-item text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-800 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.home">Beranda</a>
+                  <a href="artikel.html" class="nav-item text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-800 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.artikel">Artikel</a>
                   <div class="relative nav-dropdown">
-                      <button type="button" class="nav-dropdown-btn nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap inline-flex items-center gap-1.5" data-i18n="nav.profile" aria-haspopup="true" aria-expanded="false">
+                      <button type="button" class="nav-dropdown-btn nav-item text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-800 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap inline-flex items-center gap-1.5" data-i18n="nav.profile" aria-haspopup="true" aria-expanded="false">
                           Profil <i class="fas fa-chevron-down text-[10px] transition-transform duration-200"></i>
                       </button>
-                      <div class="nav-dropdown-menu hidden absolute left-0 top-full mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                          <a href="profil.html#cabang" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Profil Cabang</a>
-                          <a href="profil.html#pengurus" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Struktur Pengurus</a>
-                          <a href="profil.html#proker" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Program Kerja</a>
-                          <a href="sejarah.html" class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-hmiGreen transition-colors">Sejarah</a>
+                      <div class="nav-dropdown-menu hidden absolute left-0 top-full mt-1 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50">
+                          <a href="profil.html#cabang" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-slate-700 hover:text-hmiGreen transition-colors">Profil Cabang</a>
+                          <a href="profil.html#pengurus" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-slate-700 hover:text-hmiGreen transition-colors">Struktur Pengurus</a>
+                          <a href="profil.html#proker" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-slate-700 hover:text-hmiGreen transition-colors">Program Kerja</a>
+                          <a href="sejarah.html" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-slate-700 hover:text-hmiGreen transition-colors">Sejarah</a>
                       </div>
                   </div>
-                  <a href="perpustakaan.html" class="nav-item text-gray-600 hover:text-hmiGreen hover:bg-green-50 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.perpustakaan">Perpustakaan</a>
-                  <a href="berita.html" class="nav-item active text-hmiGreen font-bold border-b-2 border-hmiGreen px-3 py-7 whitespace-nowrap" data-i18n="nav.berita">Berita</a>
+                  <a href="perpustakaan.html" class="nav-item text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-800 px-3 py-7 rounded-t-md font-medium transition-colors whitespace-nowrap" data-i18n="nav.perpustakaan">Perpustakaan</a>
+                  <a href="berita.html" class="nav-item active text-hmiGreen dark:text-emerald-400 font-bold border-b-2 border-hmiGreen px-3 py-7 whitespace-nowrap" data-i18n="nav.berita">Berita</a>
                   <div class="flex items-center gap-2 ml-2">
-                      <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-sm font-semibold text-gray-600 transition-all hover:border-hmiGreen hover:text-hmiGreen" aria-label="Ubah mode gelap/terang">
+                      <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 transition-all hover:border-hmiGreen hover:text-hmiGreen" aria-label="Ubah mode gelap/terang">
                           <i class="fas fa-moon"></i>
                           <span>Gelap</span>
                       </button>
@@ -62,7 +116,7 @@
 
               <!-- Mobile Menu Button -->
               <div class="flex items-center lg:hidden">
-                  <button id="mobile-menu-btn" class="text-gray-600 hover:text-hmiGreen focus:outline-none p-2">
+                  <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300 hover:text-hmiGreen focus:outline-none p-2">
                       <i class="fas fa-bars text-2xl"></i>
                   </button>
               </div>
@@ -70,26 +124,26 @@
       </div>
 
       <!-- Mobile Menu Panel -->
-      <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full rounded-b-2xl">
+      <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-gray-700 shadow-lg absolute w-full rounded-b-2xl">
           <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50" data-i18n="nav.home">Beranda</a>
-              <a href="artikel.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50" data-i18n="nav.artikel">Artikel</a>
+              <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700" data-i18n="nav.home">Beranda</a>
+              <a href="artikel.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700" data-i18n="nav.artikel">Artikel</a>
               <details class="group">
-                  <summary class="list-none cursor-pointer flex items-center justify-between block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50">
+                  <summary class="list-none cursor-pointer flex items-center justify-between block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700">
                       <span data-i18n="nav.profile">Profil</span>
                       <i class="fas fa-chevron-down text-xs transition-transform duration-200 group-open:rotate-180"></i>
                   </summary>
                   <div class="pl-4 mt-1 space-y-1">
-                      <a href="profil.html#cabang" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Profil Cabang</a>
-                      <a href="profil.html#pengurus" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Struktur Pengurus</a>
-                      <a href="profil.html#proker" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Program Kerja</a>
-                      <a href="sejarah.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 hover:text-hmiGreen hover:bg-green-50">Sejarah</a>
+                      <a href="profil.html#cabang" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700">Profil Cabang</a>
+                      <a href="profil.html#pengurus" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700">Struktur Pengurus</a>
+                      <a href="profil.html#proker" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700">Program Kerja</a>
+                      <a href="sejarah.html" class="block px-3 py-1.5 rounded-md text-sm text-gray-600 dark:text-gray-300 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700">Sejarah</a>
                   </div>
               </details>
-              <a href="perpustakaan.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-hmiGreen hover:bg-green-50" data-i18n="nav.perpustakaan">Perpustakaan</a>
-              <a href="berita.html" class="block px-3 py-2 rounded-md text-base font-bold text-hmiGreen bg-green-50" data-i18n="nav.berita">Berita</a>
+              <a href="perpustakaan.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700" data-i18n="nav.perpustakaan">Perpustakaan</a>
+              <a href="berita.html" class="block px-3 py-2 rounded-md text-base font-bold text-hmiGreen dark:text-emerald-400 bg-green-50 dark:bg-slate-700" data-i18n="nav.berita">Berita</a>
               <div class="flex items-center justify-end gap-2 px-3 pt-1">
-                  <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-sm font-semibold text-gray-600 transition-all" aria-label="Toggle dark mode">
+                  <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3 py-1 text-sm font-semibold text-gray-600 dark:text-gray-300 transition-all" aria-label="Toggle dark mode">
                       <i class="fas fa-moon"></i>
                       <span>Gelap</span>
                   </button>
@@ -98,120 +152,191 @@
       </div>
   </nav>
 
-  <main class="max-w-7xl mx-auto px-4 py-12">
-    <!-- Hero Banner -->
-    <section class="rounded-[2rem] bg-pattern text-white p-8 md:p-12 shadow-2xl mb-10 relative overflow-hidden">
-      <div class="absolute -right-20 -top-20 w-72 h-72 bg-white/5 rounded-full"></div>
-      <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-        <div class="max-w-2xl">
-          <span class="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-sm font-semibold mb-3">
-            <i class="fas fa-newspaper mr-2"></i>Berita & Pengumuman
-          </span>
-          <h1 class="text-3xl md:text-4xl font-extrabold mt-2">Berita Resmi HMI Badko Kalsel</h1>
-          <p class="mt-3 text-emerald-100 text-base md:text-lg">Informasi terkini, agenda strategis, pengumuman resmi, dan kegiatan kader se-Kalimantan Selatan.</p>
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-10">
+    
+    <!-- Hero Spotlight Section (Berita Utama & Trending Sidebar) -->
+    <section class="grid lg:grid-cols-12 gap-8 items-stretch">
+      <!-- Left Column: Featured Main Headline Card (8 cols) -->
+      <div id="heroHeadlineCard" class="lg:col-span-8 bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-xl flex flex-col justify-between group transition">
+        <!-- Rendered dynamically by JS -->
+        <div class="p-8 animate-pulse text-gray-400">Memuat Berita Utama...</div>
+      </div>
+
+      <!-- Right Column: Trending / Latest Headlines Sidebar (4 cols) -->
+      <div class="lg:col-span-4 bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 mb-4">
+            <h2 class="text-sm font-black uppercase tracking-wider text-hmiGreen dark:text-emerald-400 flex items-center gap-2">
+              <i class="fas fa-bolt text-amber-500"></i> Trending Redaksi
+            </h2>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-hmiGreen dark:bg-emerald-950 dark:text-emerald-300">LIVE</span>
+          </div>
+
+          <div id="heroTrendingList" class="space-y-4">
+            <!-- Rendered dynamically by JS -->
+          </div>
         </div>
-        <div class="flex gap-6 bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10 shrink-0">
-          <div>
-            <p class="text-xs text-emerald-200 font-semibold uppercase tracking-wider">Berita Terbit</p>
-            <p id="statTotalNews" class="text-3xl font-extrabold mt-1">0</p>
-          </div>
-          <div class="border-l border-white/20 pl-6">
-            <p class="text-xs text-emerald-200 font-semibold uppercase tracking-wider">Update Terbaru</p>
-            <p id="statLastUpdate" class="text-lg font-bold mt-1 text-emerald-100">-</p>
-          </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 text-center">
+          <a href="manage-berita.html" class="inline-flex items-center gap-2 text-xs font-extrabold text-hmiGreen dark:text-emerald-400 hover:underline">
+            <i class="fas fa-lock text-[10px]"></i> Portal Redaksi & Moderasi
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Search & Filter Bar -->
-    <section class="mb-8 flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-sm">
-      <div class="relative w-full md:w-80">
-        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400 text-sm"></i>
-        <input id="searchInput" type="text" placeholder="Cari judul berita..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-hmiGreen text-sm">
+    <!-- Search, Category Tabs & Sort Toolbar -->
+    <section class="bg-white dark:bg-slate-800 p-5 md:p-6 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Search Input -->
+        <div class="relative w-full md:w-80">
+          <i class="fas fa-search absolute left-4 top-3 text-gray-400 text-sm"></i>
+          <input id="searchInput" type="text" placeholder="Cari kata kunci berita..." class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 focus:outline-none focus:border-hmiGreen dark:focus:border-emerald-500 text-xs font-semibold">
+        </div>
+
+        <!-- Sort Select -->
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-xs font-bold text-gray-400 dark:text-gray-400">Urutkan:</span>
+          <select id="sortSelect" class="px-3.5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 text-xs font-bold text-gray-700 dark:text-gray-200 focus:outline-none focus:border-hmiGreen">
+            <option value="terbaru">Terbaru</option>
+            <option value="terlama">Terlama</option>
+          </select>
+        </div>
       </div>
-      <div class="flex flex-wrap gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0" id="categoryFilters">
-        <button class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold bg-hmiGreen text-white transition" data-category="Semua">Semua</button>
-        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-category="Informasi">Informasi</button>
-        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-category="Agenda">Agenda</button>
-        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-category="Pengumuman">Pengumuman</button>
+
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 border-t border-gray-100 dark:border-gray-700/60 pt-4" id="categoryFilters">
+        <button class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 transition shrink-0" data-category="Semua">Semua Berita</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition shrink-0" data-category="Informasi">Informasi</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition shrink-0" data-category="Agenda">Agenda</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition shrink-0" data-category="Pengumuman">Pengumuman</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition shrink-0" data-category="Opini">Opini & Kajian</button>
+        <button class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition shrink-0" data-category="Konsolidasi">Konsolidasi</button>
       </div>
     </section>
 
-    <!-- News Grid Container -->
-    <section id="newsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[250px]">
+    <!-- News Cards Grid Container -->
+    <section id="newsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[300px]">
       <!-- News cards rendered by JavaScript -->
     </section>
+
   </main>
 
-  <!-- News Detail Modal -->
-  <div id="newsModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 px-4 py-8 backdrop-blur-sm">
-    <div class="w-full max-w-2xl rounded-[2rem] bg-white p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto relative">
-      <button id="closeNewsModal" type="button" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center transition" aria-label="Tutup modal">
-        <i class="fas fa-times text-lg"></i>
-      </button>
-      <span id="modalCategory" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-hmiGreen uppercase tracking-wider mb-4">Informasi</span>
-      <h2 id="modalTitle" class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">Judul Berita</h2>
-      <div id="modalMeta" class="flex items-center gap-4 text-xs text-gray-500 mt-3 pb-4 border-b border-gray-100">
-        <span><i class="far fa-calendar mr-1.5"></i><span id="modalDate">-</span></span>
-        <span><i class="far fa-user mr-1.5"></i>HMI Badko Kalsel</span>
-      </div>
-      <div id="modalImageContainer" class="my-6 hidden rounded-2xl overflow-hidden shadow-sm">
-        <img id="modalImage" src="" alt="Gambar Berita" class="w-full h-auto max-h-80 object-cover">
-      </div>
-      <div id="modalContent" class="prose prose-emerald max-w-none text-gray-700 leading-relaxed text-sm md:text-base space-y-4">
-        <!-- Content inserted via JS -->
-      </div>
-      <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end">
-        <button id="closeNewsModalBottom" type="button" class="rounded-full bg-hmiGreen hover:bg-hmiDark text-white px-6 py-2.5 font-bold text-sm shadow transition">
-          Tutup
+  <!-- News Full Reader Modal & Detail Experience -->
+  <div id="newsModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-md">
+    <div class="w-full max-w-4xl rounded-[2.5rem] bg-white dark:bg-slate-800 p-6 md:p-10 shadow-2xl max-h-[92vh] overflow-y-auto relative border border-gray-200 dark:border-gray-700">
+      
+      <!-- Sticky Top Modal Bar with Share & Close -->
+      <div class="sticky top-0 z-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md -mx-6 -mt-6 px-6 pt-4 pb-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between mb-6">
+        <!-- Interactive Reader Options: Font Size & Share -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-gray-400 dark:text-gray-400 mr-1 hidden sm:inline">Ukuran Teks:</span>
+          <button type="button" id="btnFontDec" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 hover:bg-hmiGreen hover:text-white transition font-black text-xs" title="Kecilkan Teks">A-</button>
+          <button type="button" id="btnFontInc" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 hover:bg-hmiGreen hover:text-white transition font-black text-xs" title="Besarkan Teks">A+</button>
+          
+          <div class="h-4 w-px bg-gray-200 dark:bg-slate-700 mx-1"></div>
+
+          <!-- Share Tools -->
+          <button type="button" id="btnCopyLink" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 hover:bg-hmiGreen hover:text-white transition text-xs" title="Salin Tautan"><i class="fas fa-link"></i></button>
+          <button type="button" id="btnShareWA" class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-600 hover:text-white transition text-xs" title="Bagikan ke WhatsApp"><i class="fab fa-whatsapp"></i></button>
+          <button type="button" id="btnShareFB" class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 hover:bg-blue-600 hover:text-white transition text-xs" title="Bagikan ke Facebook"><i class="fab fa-facebook-f"></i></button>
+          <button type="button" id="btnShareX" class="w-8 h-8 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 hover:bg-black hover:text-white transition text-xs" title="Bagikan ke X"><i class="fab fa-x-twitter"></i></button>
+        </div>
+
+        <button id="closeNewsModal" type="button" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600 flex items-center justify-center transition" aria-label="Tutup modal">
+          <i class="fas fa-times"></i>
         </button>
       </div>
+
+      <!-- Article Header Meta -->
+      <div class="space-y-3">
+        <div class="flex flex-wrap items-center gap-3">
+          <span id="modalCategory" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-green-100 dark:bg-emerald-950 text-hmiGreen dark:text-emerald-300 uppercase tracking-wider">Informasi</span>
+          <span id="modalReadTime" class="inline-flex items-center gap-1 text-xs text-gray-400 dark:text-gray-400 font-semibold"><i class="far fa-clock"></i> 3 min baca</span>
+        </div>
+
+        <h1 id="modalTitle" class="text-2xl md:text-4xl font-black text-gray-900 dark:text-white leading-tight">Judul Berita Resmi</h1>
+        
+        <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 pt-2 pb-4 border-b border-gray-100 dark:border-gray-700">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full bg-hmiGreen text-white flex items-center justify-center font-bold text-xs">HMI</span>
+            <div>
+              <p class="font-extrabold text-gray-800 dark:text-gray-200">Redaksi HMI Badko Kalsel</p>
+              <p class="text-[10px] text-gray-400">Kanal Publikasi Resmi Organisasi</p>
+            </div>
+          </div>
+          <span id="modalDate" class="font-bold"><i class="far fa-calendar mr-1"></i> -</span>
+        </div>
+      </div>
+
+      <!-- Article Header Image -->
+      <div id="modalImageContainer" class="my-6 hidden rounded-3xl overflow-hidden shadow-md">
+        <img id="modalImage" src="" alt="Gambar Berita" class="w-full h-auto max-h-96 object-cover">
+      </div>
+
+      <!-- Article Body Content -->
+      <div id="modalContent" class="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200 leading-relaxed text-base space-y-4 my-6">
+        <!-- Content inserted via JS -->
+      </div>
+
+      <!-- Recommended Related Articles Section -->
+      <div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-700 space-y-4">
+        <h3 class="text-sm font-black uppercase tracking-wider text-hmiGreen dark:text-emerald-400 flex items-center gap-2">
+          <i class="fas fa-newspaper"></i> Berita Terkait Lainnya
+        </h3>
+        <div id="relatedNewsContainer" class="grid sm:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Bottom Close Button -->
+      <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+        <button id="closeNewsModalBottom" type="button" class="rounded-2xl bg-hmiGreen hover:bg-hmiDark text-white px-7 py-3 font-bold text-xs shadow-md transition">
+          Tutup Pembaca
+        </button>
+      </div>
+
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-white pt-12 pb-6 border-t-4 border-hmiGreen mt-10 mx-4 mb-4 rounded-t-[2rem]">
+  <footer class="bg-gray-900 text-white pt-12 pb-6 border-t-4 border-hmiGreen mt-16 mx-4 mb-4 rounded-t-[2.5rem]">
       <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
               <div class="flex items-center mb-4">
                   <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI Badko Kalsel" loading="lazy" class="h-10 w-auto mr-3">
-                  <h3 class="font-bold text-lg" data-i18n="events.footerTitle">HMI Badan Koordinasi Kalimantan Selatan</h3>
+                  <h3 class="font-bold text-lg">HMI Badan Koordinasi Kalimantan Selatan</h3>
               </div>
-              <p class="text-gray-400 text-sm mb-4" data-i18n="events.footerDesc">Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan — informasi organisasi, program kerja, profil cabang, dan berita resmi kader.</p>
-              <div class="text-gray-400 text-sm space-y-2">
-                  <p data-i18n="events.contactInfo">Informasi kontak resmi organisasi dapat diakses melalui kanal resmi HMI Badko Kalsel.</p>
-              </div>
+              <p class="text-gray-400 text-sm mb-4">Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan — informasi organisasi, program kerja, profil cabang, dan berita resmi kader.</p>
           </div>
           
           <div>
-              <h3 class="inline-flex items-center gap-2 bg-hmiGreen/10 text-hmiGreen px-4 py-2 rounded-full font-bold mb-4" data-i18n="events.portal">Portal</h3>
+              <h3 class="inline-flex items-center gap-2 bg-hmiGreen/20 text-emerald-400 px-4 py-2 rounded-full font-bold mb-4">Portal Navigasi</h3>
               <ul class="text-gray-400 text-sm space-y-2">
                   <li><a href="index.html" class="hover:text-hmiGreen transition">Beranda</a></li>
-                  <li><a href="artikel.html" class="hover:text-hmiGreen transition">Artikel</a></li>
+                  <li><a href="artikel.html" class="hover:text-hmiGreen transition">Artikel Kader</a></li>
                   <li><a href="profil.html#cabang" class="hover:text-hmiGreen transition">Profil Cabang</a></li>
-                  <li><a href="profil.html#pengurus" class="hover:text-hmiGreen transition">Struktur Pengurus</a></li>
-                  <li><a href="profil.html#proker" class="hover:text-hmiGreen transition">Program Kerja</a></li>
-                  <li><a href="sejarah.html" class="hover:text-hmiGreen transition">Sejarah</a></li>
-                  <li><a href="perpustakaan.html" class="hover:text-hmiGreen transition">Perpustakaan</a></li>
-                  <li><a href="berita.html" class="hover:text-hmiGreen transition">Berita</a></li>
+                  <li><a href="sejarah.html" class="hover:text-hmiGreen transition">Sejarah HMI</a></li>
+                  <li><a href="perpustakaan.html" class="hover:text-hmiGreen transition">Perpustakaan Digital</a></li>
+                  <li><a href="berita.html" class="hover:text-hmiGreen transition font-bold text-white">Berita Resmi</a></li>
               </ul>
           </div>
           
           <div>
-              <h3 class="font-bold text-lg mb-4 border-b border-gray-700 pb-2 inline-block" data-i18n="events.access">Akses</h3>
+              <h3 class="font-bold text-lg mb-4 border-b border-gray-700 pb-2 inline-block">Akses Redaksi</h3>
               <ul class="text-gray-400 text-sm space-y-2">
-                  <li><a href="login.html" class="hover:text-hmiGreen transition">Login Admin & Pengurus</a></li>
-                  <li><a href="admin-artikel.html" class="hover:text-hmiGreen transition">Moderasi Artikel</a></li>
+                  <li><a href="login.html" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i class="fas fa-lock text-xs"></i> Login Pengurus & Redaksi</a></li>
+                  <li><a href="manage-berita.html" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i class="fas fa-sliders text-xs"></i> Portal CMS Berita</a></li>
               </ul>
           </div>
       </div>
       
       <div class="border-t border-gray-800 text-center pt-6 text-gray-500 text-xs">
-          <p data-i18n="events.copyright">© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan. Seluruh hak dilindungi.</p>
-          <p class="mt-1" data-i18n="events.prototype">Prototype by Muhammad Indra Kurniawan</p>
+          <p>© 2026 Himpunan Mahasiswa Islam Badan Koordinasi Kalimantan Selatan. Seluruh hak dilindungi.</p>
       </div>
   </footer>
 
+  <!-- Script Engine Portal Berita Live -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Mobile Menu Toggle
@@ -248,26 +373,19 @@
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
         });
 
+        // Server Endpoint Config
         const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
 
-        // Helper to detect and filter out legacy dummy news items
+        // Helper filter dummy
         function isDummyNews(item) {
             if (!item) return true;
             const dummyIds = [1, 2, 3, '1', '2', '3'];
             if (dummyIds.includes(item.id)) return true;
             const title = String(item.title || '').toLowerCase();
-            if (
-                title.includes('persiapan rapat kerja') || 
-                title.includes('latihan kader ii') || 
-                title.includes('peluncuran website') ||
-                title.includes('intermediate training') ||
-                title.includes('portal digital hmi badko')
-            ) {
-                return true;
-            }
-            return false;
+            return title.includes('persiapan rapat kerja') || title.includes('latihan kader ii') || title.includes('peluncuran website');
         }
 
+        // Default News Fallback
         const defaultNews = [
             {
                 "id": "b-1722000001",
@@ -296,11 +414,36 @@
         let publishedNews = [];
         let activeCategory = 'Semua';
         let searchQuery = '';
+        let currentFontSize = 16; // default 16px font size in reader modal
 
-        const statTotal = document.getElementById('statTotalNews');
-        const statLastUpdate = document.getElementById('statLastUpdate');
+        // Elements
+        const newsTickerContent = document.getElementById('newsTickerContent');
+        const heroHeadlineCard = document.getElementById('heroHeadlineCard');
+        const heroTrendingList = document.getElementById('heroTrendingList');
         const newsGrid = document.getElementById('newsGrid');
         const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const toastContainer = document.getElementById('toastContainer');
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'flex items-center gap-2 px-4 py-3 rounded-2xl shadow-xl bg-gray-900 text-white text-xs font-bold border border-gray-700 transition-all transform translate-y-4 opacity-0 pointer-events-auto';
+            toast.innerHTML = `<i class="fas fa-circle-check text-emerald-400 text-base"></i><span>${msg}</span>`;
+            toastContainer.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            });
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function calculateReadTime(text) {
+            const words = (text || '').trim().split(/\s+/).length;
+            const mins = Math.max(1, Math.ceil(words / 180));
+            return `${mins} min baca`;
+        }
 
         async function loadNewsData() {
             try {
@@ -320,23 +463,10 @@
                     }
                 }
             } catch (err) {
-                console.warn('News backend API warning:', err);
+                console.warn('News API fetch fallback:', err);
             }
 
-            // Fallback: Check local server / news endpoint if running locally
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                try {
-                    const res = await fetch(`/news?t=${Date.now()}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (Array.isArray(data) && data.length > 0) {
-                            return data.filter(item => item && !isDummyNews(item) && item.status !== 'Draft');
-                        }
-                    }
-                } catch (e) {}
-            }
-
-            // Fallback: LocalStorage
+            // Fallback LocalStorage
             let rawNews = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
             if (Array.isArray(rawNews)) {
                 rawNews = rawNews.filter(item => item && !isDummyNews(item) && item.status !== 'Draft');
@@ -346,58 +476,95 @@
             return defaultNews;
         }
 
-        function updateStats() {
-            if (statTotal) statTotal.textContent = publishedNews.length;
-            if (statLastUpdate) {
-                if (publishedNews.length > 0) {
-                    const latestDate = publishedNews[0].date || '-';
-                    statLastUpdate.textContent = latestDate;
-                } else {
-                    statLastUpdate.textContent = '-';
-                }
+        function renderTicker() {
+            if (!publishedNews.length) return;
+            const itemsHtml = publishedNews.map(n => `<span class="mx-6 cursor-pointer hover:text-emerald-400 transition read-btn" data-id="${n.id}">🔥 <strong class="text-white">${n.category || 'Berita'}:</strong> ${n.title}</span>`).join('');
+            newsTickerContent.innerHTML = itemsHtml + itemsHtml; // duplicate for smooth continuous loop
+            
+            // Attach ticker click listeners
+            newsTickerContent.querySelectorAll('.read-btn').forEach(btn => {
+                btn.addEventListener('click', () => openNewsModal(btn.getAttribute('data-id')));
+            });
+        }
+
+        function renderSpotlightHero() {
+            if (!publishedNews.length) return;
+
+            const mainHead = publishedNews[0];
+            const hasImg = mainHead.image && mainHead.image.trim().length > 0;
+
+            const imgHtml = hasImg
+                ? `<div class="w-full h-64 md:h-80 overflow-hidden"><img src="${mainHead.image}" alt="${mainHead.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"></div>`
+                : `<div class="w-full h-64 md:h-80 bg-gradient-to-br from-hmiDark to-hmiGreen flex items-center justify-center text-white/30 text-6xl group-hover:scale-105 transition duration-500"><i class="fas fa-newspaper"></i></div>`;
+
+            heroHeadlineCard.innerHTML = `
+                <div>
+                    ${imgHtml}
+                    <div class="p-6 md:p-8">
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-black bg-green-100 text-hmiGreen dark:bg-emerald-950 dark:text-emerald-300 uppercase tracking-wider">${mainHead.category || 'Berita Utama'}</span>
+                            <span class="text-xs text-gray-400 dark:text-gray-400 font-semibold"><i class="far fa-clock mr-1"></i>${calculateReadTime(mainHead.content || mainHead.summary)} • ${mainHead.date || '-'}</span>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white leading-tight hover:text-hmiGreen transition cursor-pointer read-btn" data-id="${mainHead.id}">${mainHead.title}</h2>
+                        <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">${mainHead.summary || mainHead.content || ''}</p>
+                    </div>
+                </div>
+                <div class="px-6 md:px-8 pb-6 pt-3 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-gray-400"><i class="fas fa-shield-halved text-hmiGreen mr-1.5"></i>Redaksi HMI Badko Kalsel</span>
+                    <button type="button" class="read-btn px-5 py-2.5 rounded-xl bg-hmiGreen hover:bg-hmiDark text-white text-xs font-bold shadow transition flex items-center gap-1.5" data-id="${mainHead.id}">
+                        Baca Berita Utama <i class="fas fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+            `;
+
+            // Render Trending Sidebar (items index 1 to 4)
+            heroTrendingList.innerHTML = '';
+            const trendingItems = publishedNews.slice(1, 5);
+            if (!trendingItems.length) {
+                heroTrendingList.innerHTML = '<p class="text-xs text-gray-400 py-4">Belum ada berita lainnya.</p>';
+            } else {
+                trendingItems.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-start gap-3 cursor-pointer group/trend read-btn';
+                    row.setAttribute('data-id', item.id);
+                    row.innerHTML = `
+                        <span class="w-6 h-6 rounded-lg bg-gray-100 dark:bg-slate-700 text-hmiGreen dark:text-emerald-400 font-black text-xs flex items-center justify-center shrink-0">${idx + 1}</span>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-gray-800 dark:text-gray-200 line-clamp-2 group-hover/trend:text-hmiGreen transition">${item.title}</h4>
+                            <p class="text-[10px] text-gray-400 mt-1">${item.date || '-'} • ${item.category || 'Berita'}</p>
+                        </div>
+                    `;
+                    heroTrendingList.appendChild(row);
+                });
             }
+
+            // Attach event listeners
+            heroHeadlineCard.querySelectorAll('.read-btn').forEach(btn => btn.addEventListener('click', () => openNewsModal(btn.getAttribute('data-id'))));
+            heroTrendingList.querySelectorAll('.read-btn').forEach(btn => btn.addEventListener('click', () => openNewsModal(btn.getAttribute('data-id'))));
         }
 
         function renderGrid() {
             newsGrid.innerHTML = '';
 
-            const filtered = publishedNews.filter(item => {
+            const sortVal = sortSelect?.value || 'terbaru';
+            let filtered = publishedNews.filter(item => {
                 const matchCat = (activeCategory === 'Semua') || (item.category && item.category.toLowerCase() === activeCategory.toLowerCase());
                 const matchSearch = !searchQuery || (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) || (item.summary && item.summary.toLowerCase().includes(searchQuery.toLowerCase()));
                 return matchCat && matchSearch;
             });
 
+            if (sortVal === 'terlama') {
+                filtered.sort((a,b) => new Date(a.date || 0) - new Date(b.date || 0));
+            } else {
+                filtered.sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
+            }
+
             if (filtered.length === 0) {
                 newsGrid.innerHTML = `
-                    <div class="col-span-full rounded-3xl bg-white border border-gray-200 p-8 md:p-12 shadow-xl text-center relative overflow-hidden transition-all duration-300">
-                        <div class="absolute -top-20 -right-20 w-56 h-56 bg-emerald-100/60 rounded-full blur-3xl pointer-events-none"></div>
-                        <div class="absolute -bottom-20 -left-20 w-56 h-56 bg-green-100/60 rounded-full blur-3xl pointer-events-none"></div>
-                        
-                        <div class="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-                            <div class="relative mb-6">
-                                <div class="w-20 h-20 rounded-2xl bg-hmiGreen text-white flex items-center justify-center text-3xl shadow-lg shadow-hmiGreen/20">
-                                    <i class="fas fa-newspaper"></i>
-                                </div>
-                            </div>
-
-                            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 text-hmiGreen border border-emerald-300 mb-5 shadow-sm">
-                                Informasi
-                            </span>
-
-                            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
-                                Tidak ada berita yang ditemukan.
-                            </h2>
-
-                            <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-8 max-w-xl">
-                                Belum ada publikasi berita yang sesuai dengan kata kunci atau kategori yang Anda pilih saat ini.
-                            </p>
-
-                            <div class="flex flex-wrap items-center justify-center gap-3">
-                                <a href="berita.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-hmiGreen hover:bg-hmiDark text-white font-bold text-sm shadow-md transition-all hover:scale-[1.02]">
-                                    <i class="fas fa-sync-alt"></i> Tampilkan Semua Berita
-                                </a>
-                            </div>
-                        </div>
+                    <div class="col-span-full rounded-3xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-800 p-8 md:p-12 text-center shadow-sm">
+                        <i class="fas fa-newspaper text-4xl text-gray-300 dark:text-gray-600 mb-3"></i>
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">Tidak ada berita yang cocok.</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Coba sesuaikan kata kunci pencarian atau kategori filter Anda.</p>
                     </div>
                 `;
                 return;
@@ -405,8 +572,8 @@
 
             filtered.forEach(item => {
                 const card = document.createElement('article');
-                card.className = 'bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group';
-                
+                card.className = 'bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl transition duration-300 overflow-hidden flex flex-col justify-between group';
+
                 const hasImg = item.image && item.image.trim().length > 0;
                 const imgMarkup = hasImg 
                     ? `<div class="w-full h-48 overflow-hidden"><img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></div>`
@@ -417,16 +584,16 @@
                         ${imgMarkup}
                         <div class="p-6">
                             <div class="flex items-center justify-between gap-2 mb-3">
-                                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-green-50 text-hmiGreen uppercase tracking-wider">${item.category || 'Berita'}</span>
-                                <span class="text-xs text-gray-400"><i class="far fa-calendar mr-1"></i>${item.date || '-'}</span>
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black bg-green-50 text-hmiGreen dark:bg-emerald-950 dark:text-emerald-300 uppercase tracking-wider">${item.category || 'Berita'}</span>
+                                <span class="text-[11px] text-gray-400 dark:text-gray-400 font-semibold"><i class="far fa-clock mr-1"></i>${calculateReadTime(item.content || item.summary)}</span>
                             </div>
-                            <h2 class="text-lg font-extrabold text-gray-900 line-clamp-2 group-hover:text-hmiGreen transition cursor-pointer read-btn" data-id="${item.id}">${item.title}</h2>
-                            <p class="mt-2 text-sm text-gray-600 line-clamp-3 leading-relaxed">${item.summary || item.content || ''}</p>
+                            <h2 class="text-base font-black text-gray-900 dark:text-white line-clamp-2 group-hover:text-hmiGreen dark:group-hover:text-emerald-400 transition cursor-pointer read-btn" data-id="${item.id}">${item.title}</h2>
+                            <p class="mt-2 text-xs text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">${item.summary || item.content || ''}</p>
                         </div>
                     </div>
-                    <div class="px-6 pb-6 pt-2 border-t border-gray-50 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-gray-400"><i class="fas fa-shield-halved text-hmiGreen mr-1"></i>HMI Badko Kalsel</span>
-                        <button type="button" class="read-btn text-xs font-extrabold text-hmiGreen hover:text-hmiDark inline-flex items-center gap-1 transition" data-id="${item.id}">
+                    <div class="px-6 pb-6 pt-2 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
+                        <span class="text-[11px] font-bold text-gray-400"><i class="far fa-calendar mr-1"></i>${item.date || '-'}</span>
+                        <button type="button" class="read-btn text-xs font-extrabold text-hmiGreen dark:text-emerald-400 hover:underline inline-flex items-center gap-1 transition" data-id="${item.id}">
                             Baca Selengkapnya <i class="fas fa-arrow-right text-[10px]"></i>
                         </button>
                     </div>
@@ -434,35 +601,49 @@
                 newsGrid.appendChild(card);
             });
 
-            // Attach event listener for reading news
+            // Attach event listeners for read-btn
             document.querySelectorAll('.read-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', () => {
                     const id = btn.getAttribute('data-id');
                     openNewsModal(id);
                 });
             });
         }
 
-        // Modal Handler
+        // Reader Modal Handler
         const newsModal = document.getElementById('newsModal');
         const modalCategory = document.getElementById('modalCategory');
         const modalTitle = document.getElementById('modalTitle');
         const modalDate = document.getElementById('modalDate');
+        const modalReadTime = document.getElementById('modalReadTime');
         const modalContent = document.getElementById('modalContent');
         const modalImageContainer = document.getElementById('modalImageContainer');
         const modalImage = document.getElementById('modalImage');
+        const relatedNewsContainer = document.getElementById('relatedNewsContainer');
+
+        let currentActiveNewsId = null;
 
         function openNewsModal(id) {
             const item = publishedNews.find(n => String(n.id) === String(id));
             if (!item) return;
 
-            if (modalCategory) modalCategory.textContent = item.category || 'Informasi';
+            currentActiveNewsId = item.id;
+
+            if (modalCategory) modalCategory.textContent = (item.category || 'Informasi').toUpperCase();
             if (modalTitle) modalTitle.textContent = item.title;
             if (modalDate) modalDate.textContent = item.date || '-';
+            if (modalReadTime) modalReadTime.innerHTML = `<i class="far fa-clock"></i> ${calculateReadTime(item.content || item.summary)}`;
             
             if (modalContent) {
+                modalContent.style.fontSize = `${currentFontSize}px`;
                 const paragraphs = (item.content || item.summary || '').split(/\n{2,}/);
-                modalContent.innerHTML = paragraphs.map(p => `<p class="leading-relaxed mb-4">${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+                modalContent.innerHTML = paragraphs.map(p => {
+                    const trimmed = p.trim();
+                    if (trimmed.startsWith('## ')) return `<h2 class="text-xl font-black text-gray-900 dark:text-white mt-6 mb-3">${trimmed.replace(/^##\s+/, '')}</h2>`;
+                    if (trimmed.startsWith('### ')) return `<h3 class="text-lg font-bold text-gray-900 dark:text-white mt-4 mb-2">${trimmed.replace(/^###\s+/, '')}</h3>`;
+                    if (trimmed.startsWith('> ')) return `<blockquote class="border-l-4 border-hmiGreen pl-4 py-2 italic text-gray-700 dark:text-gray-300 bg-green-50/50 dark:bg-slate-900/50 rounded-r-xl my-4">${trimmed.replace(/^>\s+/, '')}</blockquote>`;
+                    return `<p class="leading-relaxed mb-4">${trimmed.replace(/\n/g, '<br>')}</p>`;
+                }).join('');
             }
 
             if (item.image && item.image.trim()) {
@@ -472,9 +653,47 @@
                 modalImageContainer.classList.add('hidden');
             }
 
+            // Render Related Articles (exclude current item)
+            renderRelatedArticles(item.id);
+
             newsModal.classList.remove('hidden');
             newsModal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+        }
+
+        function renderRelatedArticles(currentId) {
+            relatedNewsContainer.innerHTML = '';
+            const related = publishedNews.filter(n => String(n.id) !== String(currentId)).slice(0, 2);
+
+            if (!related.length) {
+                relatedNewsContainer.innerHTML = '<p class="text-xs text-gray-400 col-span-full">Belum ada berita terkait lainnya.</p>';
+                return;
+            }
+
+            related.forEach(rel => {
+                const relCard = document.createElement('div');
+                relCard.className = 'p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-700 transition cursor-pointer flex gap-3 items-center read-rel-btn';
+                relCard.setAttribute('data-id', rel.id);
+
+                const hasImg = rel.image && rel.image.trim().length > 0;
+                const thumb = hasImg 
+                    ? `<img src="${rel.image}" alt="Thumb" class="w-14 h-14 rounded-xl object-cover shrink-0">`
+                    : `<div class="w-14 h-14 rounded-xl bg-hmiGreen text-white/40 flex items-center justify-center shrink-0"><i class="fas fa-newspaper text-xl"></i></div>`;
+
+                relCard.innerHTML = `
+                    ${thumb}
+                    <div class="flex-1">
+                        <span class="text-[10px] font-bold text-hmiGreen dark:text-emerald-400 uppercase">${rel.category || 'Berita'}</span>
+                        <h4 class="text-xs font-bold text-gray-900 dark:text-white line-clamp-2 leading-snug">${rel.title}</h4>
+                        <p class="text-[10px] text-gray-400 mt-1">${rel.date || '-'}</p>
+                    </div>
+                `;
+                relatedNewsContainer.appendChild(relCard);
+            });
+
+            relatedNewsContainer.querySelectorAll('.read-rel-btn').forEach(btn => {
+                btn.addEventListener('click', () => openNewsModal(btn.getAttribute('data-id')));
+            });
         }
 
         function closeNewsModalFunc() {
@@ -488,38 +707,69 @@
         document.getElementById('closeNewsModalBottom')?.addEventListener('click', closeNewsModalFunc);
         newsModal?.addEventListener('click', (e) => { if (e.target === newsModal) closeNewsModalFunc(); });
 
+        // Reader Interactive Tool Handlers (Font Size & Sharing)
+        document.getElementById('btnFontInc')?.addEventListener('click', () => {
+            currentFontSize = Math.min(24, currentFontSize + 2);
+            if (modalContent) modalContent.style.fontSize = `${currentFontSize}px`;
+        });
+
+        document.getElementById('btnFontDec')?.addEventListener('click', () => {
+            currentFontSize = Math.max(13, currentFontSize - 2);
+            if (modalContent) modalContent.style.fontSize = `${currentFontSize}px`;
+        });
+
+        document.getElementById('btnCopyLink')?.addEventListener('click', () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${currentActiveNewsId}`;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showToast('Tautan berita berhasil disalin ke clipboard! 📋');
+            });
+        });
+
+        document.getElementById('btnShareWA')?.addEventListener('click', () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${currentActiveNewsId}`;
+            const item = publishedNews.find(n => String(n.id) === String(currentActiveNewsId));
+            const text = encodeURIComponent(`*${item?.title || 'Berita HMI'}*\n\nBaca berita selengkapnya di HMI Badko Kalsel:\n${shareUrl}`);
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        });
+
+        document.getElementById('btnShareFB')?.addEventListener('click', () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${currentActiveNewsId}`;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+        });
+
+        document.getElementById('btnShareX')?.addEventListener('click', () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?id=${currentActiveNewsId}`;
+            const item = publishedNews.find(n => String(n.id) === String(currentActiveNewsId));
+            const text = encodeURIComponent(`${item?.title || 'Berita HMI'} - HMI Badko Kalsel: ${shareUrl}`);
+            window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+        });
+
         // Category Filter Click Handler
         const filterBtns = document.querySelectorAll('.filter-btn');
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                filterBtns.forEach(b => {
-                    b.classList.remove('active', 'bg-hmiGreen', 'text-white');
-                    b.classList.add('bg-gray-100', 'text-gray-600');
-                });
-                btn.classList.add('active', 'bg-hmiGreen', 'text-white');
-                btn.classList.remove('bg-gray-100', 'text-gray-600');
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
                 activeCategory = btn.getAttribute('data-category');
                 renderGrid();
             });
         });
 
-        // Search Input Handler
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                searchQuery = e.target.value.trim();
-                renderGrid();
-            });
-        }
+        // Search Input & Sort Handler
+        if (searchInput) searchInput.addEventListener('input', (e) => { searchQuery = e.target.value.trim(); renderGrid(); });
+        if (sortSelect) sortSelect.addEventListener('change', renderGrid);
 
         async function initPage() {
             newsGrid.innerHTML = `
                 <div class="col-span-full py-16 text-center text-gray-500 flex flex-col items-center justify-center gap-3">
                     <i class="fas fa-circle-notch fa-spin text-3xl text-hmiGreen"></i>
-                    <p class="text-sm font-semibold">Memuat berita resmi terkini...</p>
+                    <p class="text-xs font-semibold">Memuat portal berita resmi...</p>
                 </div>
             `;
             publishedNews = await loadNewsData();
-            updateStats();
+            
+            renderTicker();
+            renderSpotlightHero();
             renderGrid();
 
             // Auto open modal if URL has ?id=...
