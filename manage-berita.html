@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- Favicon Resmi HMI -->
+    <!-- Favicon Resmi HMI -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" href="favicon.png" />
-    <title>Kelola Berita — Dashboard HMI</title>
+    <title>CMS Redaksi Berita — HMI Badko Kalimantan Selatan</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         hmiGreen: '#006B3F',
+                        hmiGreenLight: '#008c52',
                         hmiDark: '#004d2c'
                     }
                 }
@@ -22,335 +25,785 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="theme.css?v=20260711">
-    <script src="theme-toggle.js?v=20260711"></script>
+    <link rel="stylesheet" href="theme.css?v=20260728_v2">
+    <script src="theme-toggle.js?v=20260728_v2"></script>
+    <style>
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+        .dark .glass-nav { background: rgba(15, 23, 42, 0.85); }
+        .bg-pattern { background: linear-gradient(135deg, rgba(0,107,63,0.96), rgba(0,77,44,0.96)); }
+        .tab-btn.active {
+            color: #006B3F;
+            border-bottom-color: #006B3F;
+            font-weight: 700;
+        }
+        .dark .tab-btn.active {
+            color: #10b981;
+            border-bottom-color: #10b981;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-gray-800">
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center gap-3">
-                    <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-12 w-auto" />
-                    <div>
-                        <p class="text-sm font-semibold text-hmiGreen uppercase tracking-[0.2em]">Kelola Publikasi</p>
-                        <h1 class="text-3xl font-bold">Manajemen Berita</h1>
-                    </div>
-                </a>
-            </div>
-            <a href="dashboard.html" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 transition">Kembali ke Dashboard</a>
-        </div>
+<body class="min-h-screen bg-slate-50 dark:bg-slate-900 text-gray-800 dark:text-gray-100 font-sans selection:bg-hmiGreen selection:text-white transition-colors duration-300">
 
-        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
-            <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-xl font-bold">Daftar Berita</h2>
-                        <p class="text-sm text-gray-500">Tambah, edit, atau hapus berita yang akan tampil di halaman publik.</p>
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-[120] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <header class="glass-nav sticky top-0 z-40 border-b border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Title -->
+                <div class="flex items-center gap-4">
+                    <a href="dashboard.html" class="flex items-center gap-3 group">
+                        <img src="LOGO HMI HD PNG (1).png" alt="Logo HMI" class="h-11 w-auto group-hover:scale-105 transition-transform duration-300 drop-shadow">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-green-100 text-hmiGreen dark:bg-emerald-900/50 dark:text-emerald-300">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                CMS Redaksi
+                            </span>
+                            <h1 class="text-xl font-black text-gray-900 dark:text-white leading-tight">Manajemen Berita</h1>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Right Quick Tools -->
+                <div class="flex items-center gap-3">
+                    <span id="serverStatusBadge" class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        <i class="fas fa-server text-[11px]"></i> Live Server Ready
+                    </span>
+
+                    <button type="button" class="theme-toggle inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-hmiGreen transition shadow-sm">
+                        <i class="fas fa-moon"></i>
+                        <span class="hidden md:inline">Mode</span>
+                    </button>
+
+                    <a href="dashboard.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:text-hmiGreen font-bold text-xs shadow-sm transition">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="hidden sm:inline">Dashboard</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- Stats Analytics Bar -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">Total Publikasi</span>
+                    <div class="w-9 h-9 rounded-xl bg-green-50 dark:bg-emerald-950/60 text-hmiGreen dark:text-emerald-400 flex items-center justify-center text-base">
+                        <i class="fas fa-newspaper"></i>
                     </div>
-                    <button id="showFormBtn" class="rounded-xl bg-hmiGreen px-4 py-2 text-sm font-semibold text-white hover:bg-hmiDark transition">
-                        <i class="fas fa-plus mr-2"></i>Tambah Berita
+                </div>
+                <p id="statTotal" class="text-3xl font-black text-gray-900 dark:text-white mt-2">0</p>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Berita di arsip redaksi</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">Status Terbit</span>
+                    <div class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base">
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+                </div>
+                <p id="statPublished" class="text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-2">0</p>
+                <p class="text-[11px] text-emerald-600/80 dark:text-emerald-400/80 mt-1">Aktif & dibaca umum</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">Status Draf</span>
+                    <div class="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base">
+                        <i class="fas fa-file-pen"></i>
+                    </div>
+                </div>
+                <p id="statDraft" class="text-3xl font-black text-amber-600 dark:text-amber-400 mt-2">0</p>
+                <p class="text-[11px] text-amber-600/80 dark:text-amber-400/80 mt-1">Menunggu penyuntingan</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-gray-400 dark:text-gray-400 uppercase tracking-wider">Update Terakhir</span>
+                    <div class="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-base">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+                <p id="statLastUpdate" class="text-base font-extrabold text-gray-900 dark:text-white mt-3 truncate">-</p>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">Sinkronisasi Cloudflare Live</p>
+            </div>
+        </section>
+
+        <!-- Main CMS Workspace Header Tabs & Action Button -->
+        <section class="bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-gray-700/60 pb-4">
+                <!-- Navigation Tabs -->
+                <div class="flex items-center gap-6 border-b sm:border-b-0 border-gray-200 dark:border-gray-700">
+                    <button type="button" id="tabListView" class="tab-btn active pb-3 text-sm font-bold border-b-2 border-transparent transition-all flex items-center gap-2">
+                        <i class="fas fa-list-ul"></i> Daftar Berita Redaksi
+                    </button>
+                    <button type="button" id="tabEditorView" class="tab-btn pb-3 text-sm font-bold border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-hmiGreen transition-all flex items-center gap-2">
+                        <i class="fas fa-pen-nib"></i> Editor & Tulis Berita
                     </button>
                 </div>
 
-                <div id="newsList" class="space-y-3"></div>
+                <!-- Primary Create Button -->
+                <button type="button" id="btnCreateNew" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-hmiGreen hover:bg-hmiDark text-white font-bold text-xs shadow-md transition-all hover:scale-[1.02] shrink-0">
+                    <i class="fas fa-plus"></i> Tulis Berita Baru
+                </button>
             </div>
 
-            <div class="bg-white rounded-[2rem] border border-gray-200 shadow-sm p-6 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 id="formTitle" class="text-xl font-bold">Tambah Berita Baru</h2>
-                        <p class="text-sm text-gray-500">Isi data berita secara lengkap.</p>
+            <!-- TAB 1: LIST & SEARCH VIEW -->
+            <div id="listViewContent" class="space-y-6">
+                <!-- Filters & Search Toolbar -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                    <!-- Search Input -->
+                    <div class="md:col-span-5 relative">
+                        <i class="fas fa-search absolute left-4 top-3.5 text-gray-400 text-sm"></i>
+                        <input type="text" id="searchInput" placeholder="Cari berita (Judul, Ringkasan, ID)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 focus:outline-none focus:border-hmiGreen dark:focus:border-emerald-500 text-xs font-semibold">
                     </div>
-                    <button id="cancelEditBtn" class="hidden rounded-xl border border-gray-300 px-3 py-2 text-sm font-medium hover:bg-gray-50 transition">Batal</button>
+
+                    <!-- Category Filter -->
+                    <div class="md:col-span-3">
+                        <select id="filterCategory" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 focus:outline-none focus:border-hmiGreen dark:focus:border-emerald-500 text-xs font-semibold text-gray-700 dark:text-gray-200">
+                            <option value="Semua">Semua Kategori</option>
+                            <option value="Informasi">Informasi</option>
+                            <option value="Agenda">Agenda</option>
+                            <option value="Pengumuman">Pengumuman</option>
+                            <option value="Opini">Opini & Kajian</option>
+                            <option value="Konsolidasi">Konsolidasi</option>
+                        </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="md:col-span-2">
+                        <select id="filterStatus" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 focus:outline-none focus:border-hmiGreen dark:focus:border-emerald-500 text-xs font-semibold text-gray-700 dark:text-gray-200">
+                            <option value="Semua">Semua Status</option>
+                            <option value="Terbit">Terbit (Live)</option>
+                            <option value="Draft">Draft</option>
+                        </select>
+                    </div>
+
+                    <!-- Sorting -->
+                    <div class="md:col-span-2">
+                        <select id="filterSort" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 focus:outline-none focus:border-hmiGreen dark:focus:border-emerald-500 text-xs font-semibold text-gray-700 dark:text-gray-200">
+                            <option value="terbaru">Terbaru</option>
+                            <option value="terlama">Terlama</option>
+                        </select>
+                    </div>
                 </div>
 
-                <form id="newsForm" class="space-y-4">
+                <!-- Table Container -->
+                <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-700">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-slate-900/80 text-[11px] font-black text-gray-400 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">
+                                <th class="py-3.5 px-4">Artikel / Headline</th>
+                                <th class="py-3.5 px-4 hidden md:table-cell">Kategori</th>
+                                <th class="py-3.5 px-4 hidden sm:table-cell">Tanggal</th>
+                                <th class="py-3.5 px-4">Status</th>
+                                <th class="py-3.5 px-4 text-right">Aksi Redaksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="newsTableBody" class="divide-y divide-gray-100 dark:divide-gray-800 text-xs font-medium">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: EDITOR FORM VIEW (HIDDEN BY DEFAULT UNTIL SWITCHED) -->
+            <div id="editorViewContent" class="hidden space-y-6">
+                <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-4">
+                    <div>
+                        <h2 id="editorTitle" class="text-xl font-extrabold text-gray-900 dark:text-white">Tulis Berita Baru</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Lengkapi formulir redaksi berita untuk dipublikasikan ke server live.</p>
+                    </div>
+                    <button type="button" id="btnCancelEditor" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-300 font-bold text-xs transition">
+                        Batal & Kembali
+                    </button>
+                </div>
+
+                <form id="newsEditorForm" class="grid lg:grid-cols-12 gap-8">
                     <input type="hidden" id="newsId" />
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Judul</label>
-                        <input id="title" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori</label>
-                        <input id="category" type="text" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="Contoh: Informasi, Kegiatan" />
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-4">
+
+                    <!-- Left Main Form Column (8 cols) -->
+                    <div class="lg:col-span-8 space-y-5">
+                        <!-- Headline Title -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tanggal</label>
-                            <input id="date" type="date" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" />
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-xs font-extrabold uppercase tracking-wider text-gray-700 dark:text-gray-300">Judul Berita / Headline *</label>
+                                <span class="text-[11px] text-gray-400 font-semibold"><span id="titleCounter">0</span> Karakter</span>
+                            </div>
+                            <input id="inputTitle" type="text" required placeholder="Masukkan judul berita yang menarik dan informatif..." class="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 px-4 py-3 text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-hmiGreen focus:ring-2 focus:ring-hmiGreen/20 transition">
                         </div>
+
+                        <!-- Summary Lead Paragraph -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                            <select id="status" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen">
-                                <option value="Terbit">Terbit</option>
-                                <option value="Draft">Draft</option>
-                            </select>
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">Ringkasan Berita (Lead Paragraph)</label>
+                            <textarea id="inputSummary" rows="3" placeholder="Tuliskan 1-2 kalimat ringkasan inti berita..." class="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 px-4 py-3 text-xs font-semibold text-gray-800 dark:text-gray-200 focus:outline-none focus:border-hmiGreen focus:ring-2 focus:ring-hmiGreen/20 transition"></textarea>
+                        </div>
+
+                        <!-- Content Textarea with Format Helper Buttons -->
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <label class="block text-xs font-extrabold uppercase tracking-wider text-gray-700 dark:text-gray-300">Isi Berita Lengkap *</label>
+                                <div class="flex items-center gap-1.5 bg-gray-100 dark:bg-slate-900 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
+                                    <button type="button" class="format-btn px-2 py-1 rounded hover:bg-white dark:hover:bg-slate-800 text-xs font-bold text-gray-700 dark:text-gray-300" data-format="h2" title="Sub-Judul (H2)">H2</button>
+                                    <button type="button" class="format-btn px-2 py-1 rounded hover:bg-white dark:hover:bg-slate-800 text-xs font-bold text-gray-700 dark:text-gray-300" data-format="h3" title="Sub-Judul (H3)">H3</button>
+                                    <button type="button" class="format-btn px-2 py-1 rounded hover:bg-white dark:hover:bg-slate-800 text-xs font-extrabold text-gray-700 dark:text-gray-300" data-format="bold" title="Cetak Tebal">B</button>
+                                    <button type="button" class="format-btn px-2 py-1 rounded hover:bg-white dark:hover:bg-slate-800 text-xs italic font-bold text-gray-700 dark:text-gray-300" data-format="italic" title="Cetak Miring">I</button>
+                                    <button type="button" class="format-btn px-2 py-1 rounded hover:bg-white dark:hover:bg-slate-800 text-xs font-bold text-gray-700 dark:text-gray-300" data-format="quote" title="Kutipan"><i class="fas fa-quote-left"></i></button>
+                                    <button type="button" class="format-btn px-2 py-1 rounded hover:bg-white dark:hover:bg-slate-800 text-xs font-bold text-gray-700 dark:text-gray-300" data-format="list" title="Daftar List"><i class="fas fa-list-ol"></i></button>
+                                </div>
+                            </div>
+                            <textarea id="inputContent" rows="12" required placeholder="Tuliskan isi berita secara lengkap di sini. Gunakan baris baru ganda untuk memisahkan antar paragraf..." class="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900 px-4 py-3 text-sm leading-relaxed text-gray-800 dark:text-gray-200 focus:outline-none focus:border-hmiGreen focus:ring-2 focus:ring-hmiGreen/20 transition"></textarea>
+                            <div class="flex justify-between items-center mt-2 text-[11px] text-gray-400 font-semibold">
+                                <span><i class="fas fa-circle-info text-hmiGreen mr-1"></i>Dukungan format paragraf otomatis</span>
+                                <span id="contentWordCounter">0 Kata</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Ringkasan</label>
-                        <textarea id="summary" rows="3" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Isi Berita</label>
-                        <textarea id="content" rows="7" required class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Gambar/URL</label>
-                        <input id="image" type="text" class="w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-hmiGreen" placeholder="https://... atau nama file" />
-                    </div>
-                    <div class="w-full flex flex-wrap items-start justify-start gap-3 mt-4 pt-2 pl-0 border-t border-gray-100">
-                        <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-gray-800 hover:bg-gray-50 active:bg-emerald-600 active:text-white active:border-emerald-600 transition shadow-sm border border-gray-300 min-w-[100px] z-10 tracking-wide">Simpan</button>
-                        <button type="button" id="doneFormBtn" class="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 active:bg-emerald-600 active:text-white active:border-emerald-600 transition min-w-[100px] shadow-sm">Selesai</button>
-                        <button type="button" id="clearFormBtn" class="inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-50 active:bg-emerald-600 active:text-white active:border-emerald-600 transition min-w-[100px] shadow-sm">Reset</button>
+
+                    <!-- Right Sidebar Metadata Column (4 cols) -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <!-- Publishing Settings Box -->
+                        <div class="bg-gray-50 dark:bg-slate-900/70 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
+                            <h3 class="text-xs font-black uppercase tracking-wider text-hmiGreen dark:text-emerald-400 border-b border-gray-200 dark:border-gray-800 pb-2 flex items-center gap-2">
+                                <i class="fas fa-sliders"></i> Pengaturan Publikasi
+                            </h3>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Kategori Berita</label>
+                                <select id="inputCategory" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-xs font-bold text-gray-800 dark:text-white focus:outline-none focus:border-hmiGreen">
+                                    <option value="Informasi">Informasi</option>
+                                    <option value="Agenda">Agenda</option>
+                                    <option value="Pengumuman">Pengumuman</option>
+                                    <option value="Opini">Opini & Kajian</option>
+                                    <option value="Konsolidasi">Konsolidasi</option>
+                                </select>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Tanggal</label>
+                                    <input id="inputDate" type="date" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-bold text-gray-800 dark:text-white focus:outline-none focus:border-hmiGreen">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
+                                    <select id="inputStatus" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-bold text-gray-800 dark:text-white focus:outline-none focus:border-hmiGreen">
+                                        <option value="Terbit">Terbit (Live)</option>
+                                        <option value="Draft">Draft</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">URL Gambar Header</label>
+                                <input id="inputImage" type="text" placeholder="https://... atau nama file" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-gray-800 dark:text-white focus:outline-none focus:border-hmiGreen">
+                            </div>
+                        </div>
+
+                        <!-- Live Card Preview Widget -->
+                        <div class="bg-gray-50 dark:bg-slate-900/70 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-3">
+                            <h3 class="text-xs font-black uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                <i class="fas fa-eye"></i> Simulasi Tampilan Kartu Pembaca
+                            </h3>
+                            <div id="livePreviewCard" class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden p-4">
+                                <span id="prevCat" class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-hmiGreen uppercase tracking-wider mb-2">INFORMASI</span>
+                                <h4 id="prevTitle" class="text-sm font-extrabold text-gray-900 dark:text-white line-clamp-2 leading-snug">Judul berita akan tampil di sini...</h4>
+                                <p id="prevSummary" class="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2 leading-relaxed">Ringkasan tulisan berita...</p>
+                                <div class="mt-3 pt-2 border-t border-gray-100 dark:border-gray-700 flex justify-between text-[10px] text-gray-400 font-semibold">
+                                    <span>HMI Badko Kalsel</span>
+                                    <span id="prevDate">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Buttons Toolbar -->
+                        <div class="flex flex-col gap-2 pt-2">
+                            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-hmiGreen hover:bg-hmiDark text-white font-bold text-xs shadow-md transition-all hover:scale-[1.01]">
+                                <i class="fas fa-paper-plane"></i> Simpan & Terbitkan Live
+                            </button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" id="btnResetForm" class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-bold text-xs hover:bg-gray-100 transition">
+                                    <i class="fas fa-rotate-left mr-1"></i> Reset
+                                </button>
+                                <button type="button" id="btnCancelForm" class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-bold text-xs hover:bg-gray-100 transition">
+                                    <i class="fas fa-times mr-1"></i> Batal
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Modal Pratinjau Pembaca (Reader Preview Modal) -->
+    <div id="previewModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 px-4 py-8 backdrop-blur-sm">
+        <div class="w-full max-w-2xl rounded-3xl bg-white dark:bg-slate-800 p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto relative border border-gray-200 dark:border-gray-700">
+            <button id="closePreviewModal" type="button" class="absolute top-6 right-6 w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 flex items-center justify-center transition">
+                <i class="fas fa-times"></i>
+            </button>
+            <span id="modalPreviewCat" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-hmiGreen uppercase tracking-wider mb-4">Informasi</span>
+            <h2 id="modalPreviewTitle" class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white leading-tight">Judul Berita</h2>
+            <div class="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-400 mt-3 pb-4 border-b border-gray-100 dark:border-gray-700">
+                <span><i class="far fa-calendar mr-1.5"></i><span id="modalPreviewDate">-</span></span>
+                <span><i class="fas fa-shield-halved text-hmiGreen mr-1.5"></i>HMI Badko Kalsel</span>
+            </div>
+            <div id="modalPreviewImgContainer" class="my-6 hidden rounded-2xl overflow-hidden shadow-sm">
+                <img id="modalPreviewImg" src="" alt="Header" class="w-full h-auto max-h-80 object-cover">
+            </div>
+            <div id="modalPreviewContent" class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-200 leading-relaxed text-sm md:text-base space-y-4">
+                <!-- Inserted dynamically -->
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                <button type="button" onclick="document.getElementById('previewModal').classList.add('hidden')" class="rounded-xl bg-hmiGreen text-white px-6 py-2.5 font-bold text-xs shadow transition">
+                    Tutup Pratinjau
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- JavaScript CMS Editorial Engine -->
     <script>
-        const auth = JSON.parse(localStorage.getItem('hmiDashboardAuth') || 'null');
-        if (!auth) {
-            window.location.href = 'login.html';
-        }
-
-        const newsForm = document.getElementById('newsForm');
-        const newsList = document.getElementById('newsList');
-        const formTitle = document.getElementById('formTitle');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-        const showFormBtn = document.getElementById('showFormBtn');
-        const clearFormBtn = document.getElementById('clearFormBtn');
-        const doneFormBtn = document.getElementById('doneFormBtn');
-
-        const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
-        const localServerBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '' : '';
-
-        function isDummyNews(item) {
-            if (!item) return true;
-            const dummyIds = [1, 2, 3, '1', '2', '3'];
-            if (dummyIds.includes(item.id)) return true;
-            const title = String(item.title || '').toLowerCase();
-            if (
-                title.includes('persiapan rapat kerja') || 
-                title.includes('latihan kader ii') || 
-                title.includes('peluncuran website') ||
-                title.includes('intermediate training') ||
-                title.includes('portal digital hmi badko')
-            ) {
-                return true;
+        document.addEventListener('DOMContentLoaded', function () {
+            // Auth Check
+            const auth = JSON.parse(localStorage.getItem('hmiDashboardAuth') || 'null');
+            if (!auth) {
+                window.location.href = 'login.html';
             }
-            return false;
-        }
 
-        let newsData = [];
-        let editingId = null;
+            // Server Endpoints
+            const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
 
-        async function fetchServerNews() {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
-                const res = await fetch(`${serverApiBase}/news?t=${Date.now()}`, {
-                    cache: 'no-store',
-                    signal: controller.signal
+            // Element References
+            const listViewContent = document.getElementById('listViewContent');
+            const editorViewContent = document.getElementById('editorViewContent');
+            const tabListView = document.getElementById('tabListView');
+            const tabEditorView = document.getElementById('tabEditorView');
+            const btnCreateNew = document.getElementById('btnCreateNew');
+            const btnCancelEditor = document.getElementById('btnCancelEditor');
+            const newsEditorForm = document.getElementById('newsEditorForm');
+            const newsTableBody = document.getElementById('newsTableBody');
+            const toastContainer = document.getElementById('toastContainer');
+
+            // Filters & Inputs
+            const searchInput = document.getElementById('searchInput');
+            const filterCategory = document.getElementById('filterCategory');
+            const filterStatus = document.getElementById('filterStatus');
+            const filterSort = document.getElementById('filterSort');
+
+            // Editor Inputs
+            const newsIdInput = document.getElementById('newsId');
+            const inputTitle = document.getElementById('inputTitle');
+            const inputSummary = document.getElementById('inputSummary');
+            const inputContent = document.getElementById('inputContent');
+            const inputCategory = document.getElementById('inputCategory');
+            const inputDate = document.getElementById('inputDate');
+            const inputStatus = document.getElementById('inputStatus');
+            const inputImage = document.getElementById('inputImage');
+            const editorTitle = document.getElementById('editorTitle');
+
+            // Live Preview Elements
+            const prevCat = document.getElementById('prevCat');
+            const prevTitle = document.getElementById('prevTitle');
+            const prevSummary = document.getElementById('prevSummary');
+            const prevDate = document.getElementById('prevDate');
+
+            // Stats
+            const statTotal = document.getElementById('statTotal');
+            const statPublished = document.getElementById('statPublished');
+            const statDraft = document.getElementById('statDraft');
+            const statLastUpdate = document.getElementById('statLastUpdate');
+
+            let newsData = [];
+            let editingId = null;
+
+            // Toast Helper
+            function showToast(msg, type = 'success') {
+                const toast = document.createElement('div');
+                const isSuccess = type === 'success';
+                toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl text-xs font-bold transition-all transform translate-y-4 opacity-0 pointer-events-auto border ${
+                    isSuccess 
+                        ? 'bg-emerald-900 text-white border-emerald-700' 
+                        : 'bg-red-900 text-white border-red-700'
+                }`;
+                toast.innerHTML = `
+                    <i class="fas ${isSuccess ? 'fa-circle-check text-emerald-400 text-base' : 'fa-circle-exclamation text-red-400 text-base'}"></i>
+                    <span>${msg}</span>
+                `;
+                toastContainer.appendChild(toast);
+                requestAnimationFrame(() => {
+                    toast.classList.remove('translate-y-4', 'opacity-0');
                 });
-                clearTimeout(timeoutId);
-                if (res.ok) {
-                    const data = await res.json();
-                    if (Array.isArray(data) && data.length > 0) {
-                        const clean = data.filter(item => !isDummyNews(item));
-                        localStorage.setItem('hmiNewsData', JSON.stringify(clean));
-                        return clean;
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-4');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3500);
+            }
+
+            // Tab Switcher Handler
+            function switchTab(target) {
+                if (target === 'editor') {
+                    listViewContent.classList.add('hidden');
+                    editorViewContent.classList.remove('hidden');
+                    tabListView.classList.remove('active');
+                    tabEditorView.classList.add('active');
+                } else {
+                    editorViewContent.classList.add('hidden');
+                    listViewContent.classList.remove('hidden');
+                    tabEditorView.classList.remove('active');
+                    tabListView.classList.add('active');
+                }
+            }
+
+            tabListView.addEventListener('click', () => switchTab('list'));
+            tabEditorView.addEventListener('click', () => switchTab('editor'));
+            btnCreateNew.addEventListener('click', () => { resetForm(); switchTab('editor'); });
+            btnCancelEditor.addEventListener('click', () => switchTab('list'));
+            document.getElementById('btnCancelForm')?.addEventListener('click', () => switchTab('list'));
+
+            // Dummy filter guard
+            function isDummyNews(item) {
+                if (!item) return true;
+                const dummyIds = [1, 2, 3, '1', '2', '3'];
+                if (dummyIds.includes(item.id)) return true;
+                const title = String(item.title || '').toLowerCase();
+                return title.includes('persiapan rapat kerja') || title.includes('latihan kader ii') || title.includes('peluncuran website');
+            }
+
+            // Fetch News Data from Backend Server
+            async function fetchServerNews() {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 8000);
+                    const res = await fetch(`${serverApiBase}/news?t=${Date.now()}`, {
+                        cache: 'no-store',
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            const clean = data.filter(item => !isDummyNews(item));
+                            localStorage.setItem('hmiNewsData', JSON.stringify(clean));
+                            return clean;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Backend fetch fallback:', e);
+                }
+
+                // Fallback LocalStorage
+                let rawNewsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
+                if (Array.isArray(rawNewsData)) {
+                    return rawNewsData.filter(item => !isDummyNews(item));
+                }
+                return [];
+            }
+
+            async function initCMS() {
+                newsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-gray-400">
+                            <i class="fas fa-circle-notch fa-spin text-xl text-hmiGreen mb-2"></i>
+                            <p class="text-xs">Memuat data redaksi berita...</p>
+                        </td>
+                    </tr>
+                `;
+                newsData = await fetchServerNews();
+                updateStats();
+                renderTable();
+            }
+
+            function updateStats() {
+                if (statTotal) statTotal.textContent = newsData.length;
+                const pubCount = newsData.filter(n => n.status !== 'Draft').length;
+                const draftCount = newsData.filter(n => n.status === 'Draft').length;
+                if (statPublished) statPublished.textContent = pubCount;
+                if (statDraft) statDraft.textContent = draftCount;
+                if (statLastUpdate) {
+                    statLastUpdate.textContent = newsData.length > 0 ? (newsData[0].date || '-') : '-';
+                }
+            }
+
+            function renderTable() {
+                newsTableBody.innerHTML = '';
+
+                const q = (searchInput?.value || '').toLowerCase().trim();
+                const cat = filterCategory?.value || 'Semua';
+                const stat = filterStatus?.value || 'Semua';
+                const sort = filterSort?.value || 'terbaru';
+
+                let filtered = newsData.filter(item => {
+                    const matchQ = !q || (item.title && item.title.toLowerCase().includes(q)) || (item.summary && item.summary.toLowerCase().includes(q)) || String(item.id).toLowerCase().includes(q);
+                    const matchCat = (cat === 'Semua') || (item.category && item.category.toLowerCase() === cat.toLowerCase());
+                    const matchStat = (stat === 'Semua') || (item.status === stat);
+                    return matchQ && matchCat && matchStat;
+                });
+
+                if (sort === 'terlama') {
+                    filtered.sort((a,b) => new Date(a.date || 0) - new Date(b.date || 0));
+                } else {
+                    filtered.sort((a,b) => new Date(b.date || 0) - new Date(a.date || 0));
+                }
+
+                if (filtered.length === 0) {
+                    newsTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="py-12 text-center text-gray-400">
+                                <i class="fas fa-newspaper text-3xl mb-2 text-gray-300 dark:text-gray-600"></i>
+                                <p class="text-xs font-bold text-gray-600 dark:text-gray-300">Tidak ada berita yang sesuai filter.</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-gray-50/80 dark:hover:bg-slate-800/60 transition';
+
+                    const hasImg = item.image && item.image.trim().length > 0;
+                    const imgThumb = hasImg
+                        ? `<img src="${item.image}" alt="Thumb" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-gray-200 dark:border-gray-700">`
+                        : `<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-hmiGreen to-hmiDark text-white/40 flex items-center justify-center text-sm shrink-0"><i class="fas fa-newspaper"></i></div>`;
+
+                    const isPub = item.status !== 'Draft';
+                    const statusBadge = isPub 
+                        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Terbit</span>`
+                        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Draft</span>`;
+
+                    tr.innerHTML = `
+                        <td class="py-3.5 px-4">
+                            <div class="flex items-center gap-3">
+                                ${imgThumb}
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white line-clamp-1 hover:text-hmiGreen transition cursor-pointer btn-action-edit" data-id="${item.id}">${item.title}</h4>
+                                    <p class="text-[11px] text-gray-400 line-clamp-1">${item.summary || item.content || ''}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-4 hidden md:table-cell">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-hmiGreen dark:bg-emerald-950 dark:text-emerald-300 uppercase tracking-wider">${item.category || 'Berita'}</span>
+                        </td>
+                        <td class="py-3.5 px-4 text-gray-500 dark:text-gray-400 text-[11px] hidden sm:table-cell">${item.date || '-'}</td>
+                        <td class="py-3.5 px-4">${statusBadge}</td>
+                        <td class="py-3.5 px-4 text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button type="button" data-id="${item.id}" class="btn-action-preview p-2 rounded-lg text-gray-400 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700 transition" title="Pratinjau Berita">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                                <a href="berita.html?id=${item.id}" target="_blank" class="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-700 transition" title="Buka Halaman Live">
+                                    <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+                                </a>
+                                <button type="button" data-id="${item.id}" class="btn-action-edit p-2 rounded-lg text-gray-400 hover:text-hmiGreen hover:bg-green-50 dark:hover:bg-slate-700 transition" title="Edit Berita">
+                                    <i class="fas fa-pen-to-square text-xs"></i>
+                                </button>
+                                <button type="button" data-id="${item.id}" class="btn-action-delete p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-slate-700 transition" title="Hapus Berita">
+                                    <i class="fas fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    newsTableBody.appendChild(tr);
+                });
+            }
+
+            // Real-time Search and Filter Event Listeners
+            [searchInput, filterCategory, filterStatus, filterSort].forEach(el => {
+                el?.addEventListener('input', renderTable);
+                el?.addEventListener('change', renderTable);
+            });
+
+            // Action Buttons Event Delegation
+            newsTableBody.addEventListener('click', async (e) => {
+                const btnEdit = e.target.closest('.btn-action-edit');
+                const btnPreview = e.target.closest('.btn-action-preview');
+                const btnDelete = e.target.closest('.btn-action-delete');
+
+                if (btnEdit) {
+                    const id = btnEdit.getAttribute('data-id');
+                    const item = newsData.find(n => String(n.id) === String(id));
+                    if (item) fillEditor(item);
+                } else if (btnPreview) {
+                    const id = btnPreview.getAttribute('data-id');
+                    openPreviewModal(id);
+                } else if (btnDelete) {
+                    const id = btnDelete.getAttribute('data-id');
+                    if (confirm('Apakah Anda yakin ingin menghapus berita ini secara permanen dari server live?')) {
+                        // Delete request to server
+                        try {
+                            await fetch(`${serverApiBase}/news?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+                        } catch (err) {}
+
+                        newsData = newsData.filter(n => String(n.id) !== String(id));
+                        localStorage.setItem('hmiNewsData', JSON.stringify(newsData));
+                        updateStats();
+                        renderTable();
+                        showToast('Berita berhasil dihapus dari server.', 'success');
                     }
                 }
-            } catch (e) {
-                console.warn('Backend fetch fallback:', e);
-            }
-
-            // Fallback LocalStorage
-            let rawNewsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
-            if (Array.isArray(rawNewsData)) {
-                rawNewsData = rawNewsData.filter(item => !isDummyNews(item));
-                return rawNewsData;
-            }
-            return [];
-        }
-
-        async function initNews() {
-            newsList.innerHTML = '<div class="text-sm text-gray-500 py-4 flex items-center gap-2"><i class="fas fa-spinner fa-spin text-hmiGreen"></i> Memuat data berita...</div>';
-            newsData = await fetchServerNews();
-            renderNews();
-        }
-
-        function renderNews() {
-            newsList.innerHTML = '';
-            if (!newsData.length) {
-                newsList.innerHTML = '<div class="text-sm text-gray-500 py-6 text-center border border-dashed border-gray-200 rounded-2xl">Belum ada berita terbit. Silakan tambah berita baru.</div>';
-                return;
-            }
-
-            newsData.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'rounded-2xl border border-gray-200 p-5 bg-gray-50/70 hover:bg-white transition-all shadow-sm';
-                card.innerHTML = `
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="rounded-full bg-emerald-100 text-hmiGreen px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">${item.category || 'Berita'}</span>
-                                <span class="text-xs text-gray-400"><i class="far fa-calendar mr-1"></i>${item.date || '-'}</span>
-                            </div>
-                            <h3 class="font-extrabold text-gray-900 text-base leading-snug">${item.title}</h3>
-                            <p class="text-xs text-gray-600 mt-2 line-clamp-2">${item.summary || item.content || ''}</p>
-                        </div>
-                        <span class="rounded-full ${item.status === 'Terbit' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} px-3 py-1 text-xs font-semibold shrink-0">${item.status || 'Terbit'}</span>
-                    </div>
-                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
-                        <span class="text-[11px] text-gray-400">ID: ${item.id}</span>
-                        <div class="flex gap-3">
-                            <button type="button" data-action="edit" data-id="${item.id}" class="text-xs text-hmiGreen hover:text-hmiDark font-extrabold flex items-center gap-1">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button type="button" data-action="delete" data-id="${item.id}" class="text-xs text-red-600 hover:text-red-800 font-extrabold flex items-center gap-1">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                `;
-                newsList.appendChild(card);
             });
-        }
 
-        function resetForm() {
-            newsForm.reset();
-            document.getElementById('newsId').value = '';
-            editingId = null;
-            formTitle.textContent = 'Tambah Berita Baru';
-            cancelEditBtn.classList.add('hidden');
-        }
-
-        function fillForm(item) {
-            document.getElementById('newsId').value = item.id;
-            document.getElementById('title').value = item.title;
-            document.getElementById('category').value = item.category;
-            document.getElementById('date').value = item.date;
-            document.getElementById('status').value = item.status || 'Terbit';
-            document.getElementById('summary').value = item.summary || '';
-            document.getElementById('content').value = item.content || '';
-            document.getElementById('image').value = item.image || '';
-            formTitle.textContent = 'Edit Berita';
-            cancelEditBtn.classList.remove('hidden');
-            editingId = item.id;
-            window.scrollTo({ top: newsForm.offsetTop - 100, behavior: 'smooth' });
-        }
-
-        newsForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const submitBtn = newsForm.querySelector('button[type="submit"]');
-            const origText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
-
-            const newsItem = {
-                id: editingId || `b-${Date.now()}`,
-                title: document.getElementById('title').value.trim(),
-                category: document.getElementById('category').value.trim() || 'Informasi',
-                date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
-                status: document.getElementById('status').value || 'Terbit',
-                summary: document.getElementById('summary').value.trim(),
-                content: document.getElementById('content').value.trim(),
-                image: document.getElementById('image').value.trim(),
-                publishedAt: new Date().toISOString()
-            };
-
-            if (!newsItem.title || !newsItem.category || !newsItem.date || !newsItem.content) {
-                alert('Judul, kategori, tanggal, dan isi berita wajib diisi.');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = origText;
-                return;
+            // Fill Form for Editing
+            function fillEditor(item) {
+                editingId = item.id;
+                newsIdInput.value = item.id;
+                inputTitle.value = item.title || '';
+                inputSummary.value = item.summary || '';
+                inputContent.value = item.content || '';
+                inputCategory.value = item.category || 'Informasi';
+                inputDate.value = item.date || new Date().toISOString().split('T')[0];
+                inputStatus.value = item.status || 'Terbit';
+                inputImage.value = item.image || '';
+                
+                editorTitle.textContent = `Edit Berita (ID: ${item.id})`;
+                updateLiveCardPreview();
+                switchTab('editor');
             }
 
-            let savedToServer = false;
+            function resetForm() {
+                editingId = null;
+                newsEditorForm.reset();
+                newsIdInput.value = '';
+                inputDate.value = new Date().toISOString().split('T')[0];
+                editorTitle.textContent = 'Tulis Berita Baru';
+                updateLiveCardPreview();
+            }
 
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000);
-                const res = await fetch(`${serverApiBase}/news`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newsItem),
-                    signal: controller.signal
+            document.getElementById('btnResetForm')?.addEventListener('click', resetForm);
+
+            // Live Card Preview Updater
+            function updateLiveCardPreview() {
+                const t = inputTitle.value.trim() || 'Judul berita akan tampil di sini...';
+                const s = inputSummary.value.trim() || 'Ringkasan tulisan berita...';
+                const c = inputCategory.value || 'INFORMASI';
+                const d = inputDate.value || '-';
+
+                if (prevTitle) prevTitle.textContent = t;
+                if (prevSummary) prevSummary.textContent = s;
+                if (prevCat) prevCat.textContent = c.toUpperCase();
+                if (prevDate) prevDate.textContent = d;
+
+                document.getElementById('titleCounter').textContent = inputTitle.value.length;
+                const words = inputContent.value.trim() ? inputContent.value.trim().split(/\s+/).length : 0;
+                document.getElementById('contentWordCounter').textContent = `${words} Kata`;
+            }
+
+            [inputTitle, inputSummary, inputContent, inputCategory, inputDate].forEach(el => {
+                el?.addEventListener('input', updateLiveCardPreview);
+            });
+
+            // Text Format Helper Buttons
+            document.querySelectorAll('.format-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const fmt = btn.getAttribute('data-format');
+                    const start = inputContent.selectionStart;
+                    const end = inputContent.selectionEnd;
+                    const selected = inputContent.value.substring(start, end);
+
+                    let replacement = '';
+                    if (fmt === 'h2') replacement = `\n\n## ${selected || 'Sub-Judul'}\n\n`;
+                    else if (fmt === 'h3') replacement = `\n\n### ${selected || 'Sub-Judul'}\n\n`;
+                    else if (fmt === 'bold') replacement = `**${selected || 'Teks Tebal'}**`;
+                    else if (fmt === 'italic') replacement = `*${selected || 'Teks Miring'}*`;
+                    else if (fmt === 'quote') replacement = `\n\n> ${selected || 'Kutipan berita...'}\n\n`;
+                    else if (fmt === 'list') replacement = `\n- ${selected || 'Poin 1'}\n- Poin 2\n`;
+
+                    inputContent.value = inputContent.value.substring(0, start) + replacement + inputContent.value.substring(end);
+                    inputContent.focus();
+                    updateLiveCardPreview();
                 });
-                clearTimeout(timeoutId);
-                if (res.ok) savedToServer = true;
-            } catch (err) {
-                console.warn('Server push warning:', err);
-            }
+            });
 
-            // Sync ke local server jika jalan di localhost
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            // Form Submission (Save & Publish to Server)
+            newsEditorForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = newsEditorForm.querySelector('button[type="submit"]');
+                const origBtn = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan ke Server...';
+
+                const newsItem = {
+                    id: editingId || `b-${Date.now()}`,
+                    title: inputTitle.value.trim(),
+                    category: inputCategory.value || 'Informasi',
+                    date: inputDate.value || new Date().toISOString().split('T')[0],
+                    status: inputStatus.value || 'Terbit',
+                    summary: inputSummary.value.trim(),
+                    content: inputContent.value.trim(),
+                    image: inputImage.value.trim(),
+                    publishedAt: new Date().toISOString()
+                };
+
+                let savedLive = false;
                 try {
-                    await fetch('/news', {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000);
+                    const res = await fetch(`${serverApiBase}/news`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(newsItem)
+                        body: JSON.stringify(newsItem),
+                        signal: controller.signal
                     });
-                } catch (e) {}
-            }
+                    clearTimeout(timeoutId);
+                    if (res.ok) savedLive = true;
+                } catch (err) {}
 
-            // Update Local Data
-            const index = newsData.findIndex(item => String(item.id) === String(newsItem.id));
-            if (index >= 0) {
-                newsData[index] = newsItem;
-            } else {
-                newsData.unshift(newsItem);
-            }
+                // Sync to local data array
+                const index = newsData.findIndex(n => String(n.id) === String(newsItem.id));
+                if (index >= 0) newsData[index] = newsItem;
+                else newsData.unshift(newsItem);
 
-            localStorage.setItem('hmiNewsData', JSON.stringify(newsData));
-            renderNews();
-            resetForm();
+                localStorage.setItem('hmiNewsData', JSON.stringify(newsData));
+                updateStats();
+                renderTable();
+                resetForm();
 
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = origText;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = origBtn;
 
-            alert(savedToServer ? 'Berita berhasil disimpan dan diterbitkan secara LIVE ke Server Server-Side! 🎉' : 'Berita berhasil disimpan ke memori lokal.');
-        });
+                switchTab('list');
+                showToast(savedLive ? 'Berita berhasil diterbitkan secara LIVE ke Server Server-side! 🎉' : 'Berita tersimpan ke draf lokal.');
+            });
 
-        newsList.addEventListener('click', async function (e) {
-            const button = e.target.closest('button');
-            if (!button) return;
-            const action = button.getAttribute('data-action');
-            const id = button.getAttribute('data-id');
+            // Modal Reader Preview
+            const previewModal = document.getElementById('previewModal');
+            function openPreviewModal(id) {
+                const item = newsData.find(n => String(n.id) === String(id));
+                if (!item) return;
 
-            if (action === 'edit') {
-                const item = newsData.find(entry => String(entry.id) === String(id));
-                if (item) fillForm(item);
-            } else if (action === 'delete') {
-                if (confirm('Apakah Anda yakin ingin menghapus berita ini secara permanen dari server?')) {
-                    // Send delete request to backend server
-                    try {
-                        await fetch(`${serverApiBase}/news?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
-                    } catch (err) {
-                        console.warn('Delete server error:', err);
-                    }
-                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                        try { await fetch(`/news?id=${encodeURIComponent(id)}`, { method: 'DELETE' }); } catch (e) {}
-                    }
+                document.getElementById('modalPreviewCat').textContent = (item.category || 'Informasi').toUpperCase();
+                document.getElementById('modalPreviewTitle').textContent = item.title;
+                document.getElementById('modalPreviewDate').textContent = item.date || '-';
 
-                    newsData = newsData.filter(entry => String(entry.id) !== String(id));
-                    localStorage.setItem('hmiNewsData', JSON.stringify(newsData));
-                    renderNews();
-                    if (editingId && String(editingId) === String(id)) resetForm();
+                const paragraphs = (item.content || item.summary || '').split(/\n{2,}/);
+                document.getElementById('modalPreviewContent').innerHTML = paragraphs.map(p => `<p class="leading-relaxed mb-3">${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+
+                const imgContainer = document.getElementById('modalPreviewImgContainer');
+                const imgEl = document.getElementById('modalPreviewImg');
+                if (item.image && item.image.trim()) {
+                    imgEl.src = item.image;
+                    imgContainer.classList.remove('hidden');
+                } else {
+                    imgContainer.classList.add('hidden');
                 }
+
+                previewModal.classList.remove('hidden');
+                previewModal.classList.add('flex');
             }
+
+            document.getElementById('closePreviewModal')?.addEventListener('click', () => {
+                previewModal.classList.add('hidden');
+            });
+
+            initCMS();
         });
-
-        showFormBtn.addEventListener('click', resetForm);
-        clearFormBtn.addEventListener('click', resetForm);
-        cancelEditBtn.addEventListener('click', resetForm);
-        doneFormBtn.addEventListener('click', resetForm);
-
-        initNews();
     </script>
-
 </body>
 </html>
