@@ -116,13 +116,17 @@ function createHeaders() {
 }
 
 async function handleRequest(request, env) {
-  const url = new URL(request.url);
-  const rawPathname = url.pathname;
-  const pathname = rawPathname.startsWith('/api') ? rawPathname.slice(4) || '/' : rawPathname;
+  try {
+    const url = new URL(request.url);
+    const rawPathname = url.pathname;
+    let pathname = rawPathname.startsWith('/api') ? rawPathname.slice(4) || '/' : rawPathname;
+    if (pathname.length > 1 && pathname.endsWith('/')) {
+      pathname = pathname.slice(0, -1);
+    }
 
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: CORS_HEADERS });
-  }
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { status: 204, headers: CORS_HEADERS });
+    }
 
   // Reset endpoint untuk maintenance
   if (pathname === '/reset-articles' && request.method === 'POST') {
@@ -314,6 +318,9 @@ async function handleRequest(request, env) {
   }
 
   return jsonResponse({ error: 'Not found' }, 404);
+  } catch (err) {
+    return jsonResponse({ error: err.message || 'Internal Server Error' }, 500);
+  }
 }
 
 export default {
