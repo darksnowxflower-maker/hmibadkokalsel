@@ -57,30 +57,7 @@ function createArticleId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-const DEFAULT_NEWS = [
-  {
-    "id": "b-1722000001",
-    "title": "HMI Badko Kalsel Dorong Penguatan Literasi Digital dan Kepemimpinan Kader di Era Transformasi",
-    "category": "Informasi",
-    "date": "2026-07-27",
-    "status": "Terbit",
-    "summary": "Badan Koordinasi HMI Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader untuk menjawab tantangan zaman.",
-    "content": "Banjarmasin — Badan Koordinasi Himpunan Mahasiswa Islam (HMI Badko) Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader.\n\nLangkah ini diambil sebagai bentuk respon aktif terhadap pesatnya perkembangan teknologi informasi yang menuntut kader HMI untuk tidak hanya adaptif, melainkan menjadi pilar perubahan di tengah masyarakat.\n\nKetua Umum HMI Badko Kalsel menegaskan bahwa literasi sains, etika digital, serta wawasan kebangsaan harus beriringan. Dengan memanfaatkan platform digital resmi organisasi, seluruh informasi dan karya kader dapat diakses dengan cepat, aman, dan transparan oleh masyarakat umum.",
-    "image": "",
-    "publishedAt": "2026-07-27T08:00:00.000Z"
-  },
-  {
-    "id": "b-1722000002",
-    "title": "Agenda Rapat Kerja Daerah HMI Badko Kalimantan Selatan Periode 2026-2028",
-    "category": "Agenda",
-    "date": "2026-07-26",
-    "status": "Terbit",
-    "summary": "Rapat Kerja Daerah (Rakerda) HMI Badko Kalsel siap dilaksanakan dengan fokus pada konsolidasi organisasi dan pengabdian masyarakat.",
-    "content": "Banjarbaru — Pengurus HMI Badko Kalimantan Selatan mengumumkan agenda Rapat Kerja Daerah (Rakerda) yang akan dihadiri oleh seluruh utusan Cabang se-Kalimantan Selatan.\n\nFocus utama dalam Rakerda ini meliputi perumusan arah gerak organisasi, penguatan sinergi antar cabang, pembentukan lembaga kekaryaan, serta akselerasi program kerja kerakyatan dan lingkungan.\n\nSeluruh kader dan alumni diimbau untuk turut mensukseskan jalannya Rakerda demi kejayaan keislaman dan keindonesiaan.",
-    "image": "",
-    "publishedAt": "2026-07-26T10:30:00.000Z"
-  }
-];
+const DEFAULT_NEWS = [];
 
 async function getArticles(storage) {
   const articles = await readKV(storage.ARTICLES_KV, 'articles', null);
@@ -137,6 +114,16 @@ async function handleRequest(request, env) {
     try {
       await writeKV(env.ARTICLES_KV, 'articles', DEFAULT_ARTICLES);
       return jsonResponse({ success: true, message: 'Articles reset to default', count: DEFAULT_ARTICLES.length });
+    } catch (err) {
+      return jsonResponse({ error: err.message }, 500);
+    }
+  }
+
+  if (pathname === '/reset-news' && (request.method === 'POST' || request.method === 'GET')) {
+    try {
+      const kv = env.NEWS_KV || env.ARTICLES_KV;
+      await writeKV(kv, 'news', []);
+      return jsonResponse({ success: true, message: 'News reset to empty array', count: 0 });
     } catch (err) {
       return jsonResponse({ error: err.message }, 500);
     }

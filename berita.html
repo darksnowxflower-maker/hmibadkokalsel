@@ -376,40 +376,21 @@
         // Server Endpoint Config
         const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
 
-        // Helper filter dummy
+        // Helper filter dummy & sample news
         function isDummyNews(item) {
             if (!item) return true;
-            const dummyIds = [1, 2, 3, '1', '2', '3'];
+            const dummyIds = [1, 2, 3, '1', '2', '3', 'b-1722000001', 'b-1722000002'];
             if (dummyIds.includes(item.id)) return true;
             const title = String(item.title || '').toLowerCase();
-            return title.includes('persiapan rapat kerja') || title.includes('latihan kader ii') || title.includes('peluncuran website');
+            return title.includes('persiapan rapat kerja') || 
+                   title.includes('latihan kader ii') || 
+                   title.includes('peluncuran website') ||
+                   title.includes('literasi digital dan kepemimpinan kader') ||
+                   title.includes('rapat kerja daerah hmi badko');
         }
 
-        // Default News Fallback
-        const defaultNews = [
-            {
-                "id": "b-1722000001",
-                "title": "HMI Badko Kalsel Dorong Penguatan Literasi Digital dan Kepemimpinan Kader di Era Transformasi",
-                "category": "Informasi",
-                "date": "2026-07-27",
-                "status": "Terbit",
-                "summary": "Badan Koordinasi HMI Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader untuk menjawab tantangan zaman.",
-                "content": "Banjarmasin — Badan Koordinasi Himpunan Mahasiswa Islam (HMI Badko) Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader.\n\nLangkah ini diambil sebagai bentuk respon aktif terhadap pesatnya perkembangan teknologi informasi yang menuntut kader HMI untuk tidak hanya adaptif, melainkan menjadi pilar perubahan di tengah masyarakat.\n\nKetua Umum HMI Badko Kalsel menegaskan bahwa literasi sains, etika digital, serta wawasan kebangsaan harus beriringan. Dengan memanfaatkan platform digital resmi organisasi, seluruh informasi dan karya kader dapat diakses dengan cepat, aman, dan transparan oleh masyarakat umum.",
-                "image": "",
-                "publishedAt": "2026-07-27T08:00:00.000Z"
-            },
-            {
-                "id": "b-1722000002",
-                "title": "Agenda Rapat Kerja Daerah HMI Badko Kalimantan Selatan Periode 2026-2028",
-                "category": "Agenda",
-                "date": "2026-07-26",
-                "status": "Terbit",
-                "summary": "Rapat Kerja Daerah (Rakerda) HMI Badko Kalsel siap dilaksanakan dengan fokus pada konsolidasi organisasi dan pengabdian masyarakat.",
-                "content": "Banjarbaru — Pengurus HMI Badko Kalimantan Selatan mengumumkan agenda Rapat Kerja Daerah (Rakerda) yang akan dihadiri oleh seluruh utusan Cabang se-Kalimantan Selatan.\n\nFocus utama dalam Rakerda ini meliputi perumusan arah gerak organisasi, penguatan sinergi antar cabang, pembentukan lembaga kekaryaan, serta akselerasi program kerja kerakyatan dan lingkungan.\n\nSeluruh kader dan alumni diimbau untuk turut mensukseskan jalannya Rakerda demi kejayaan keislaman dan keindonesiaan.",
-                "image": "",
-                "publishedAt": "2026-07-26T10:30:00.000Z"
-            }
-        ];
+        // Default News (Empty - 100% connected to admin manage-berita.html)
+        const defaultNews = [];
 
         let publishedNews = [];
         let activeCategory = 'Semua';
@@ -477,7 +458,10 @@
         }
 
         function renderTicker() {
-            if (!publishedNews.length) return;
+            if (!publishedNews.length) {
+                newsTickerContent.innerHTML = '<span>Selamat Datang di Portal Berita Resmi HMI Badko Kalimantan Selatan • Kanal Publikasi Informasi Terkini Organisasi</span>';
+                return;
+            }
             const itemsHtml = publishedNews.map(n => `<span class="mx-6 cursor-pointer hover:text-emerald-400 transition read-btn" data-id="${n.id}">🔥 <strong class="text-white">${n.category || 'Berita'}:</strong> ${n.title}</span>`).join('');
             newsTickerContent.innerHTML = itemsHtml + itemsHtml; // duplicate for smooth continuous loop
             
@@ -488,7 +472,21 @@
         }
 
         function renderSpotlightHero() {
-            if (!publishedNews.length) return;
+            if (!publishedNews.length) {
+                heroHeadlineCard.innerHTML = `
+                    <div class="p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[300px] space-y-3">
+                        <div class="w-16 h-16 rounded-2xl bg-green-50 dark:bg-emerald-950 text-hmiGreen dark:text-emerald-400 flex items-center justify-center text-3xl shadow-sm mb-2"><i class="fas fa-newspaper"></i></div>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black bg-emerald-100 dark:bg-emerald-950 text-hmiGreen dark:text-emerald-300 uppercase tracking-wider">Pemberitahuan Redaksi</span>
+                        <h3 class="text-xl md:text-2xl font-black text-gray-900 dark:text-white">Belum Ada Berita Terbit</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">Berita resmi terbaru dari HMI Badko Kalimantan Selatan akan otomatis tampil di sini begitu diterbitkan dari Portal Redaksi.</p>
+                        <a href="manage-berita.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-hmiGreen text-white font-bold text-xs shadow hover:bg-hmiDark transition mt-2">
+                            <i class="fas fa-plus"></i> Kelola & Tulis Berita
+                        </a>
+                    </div>
+                `;
+                heroTrendingList.innerHTML = '<p class="text-xs text-gray-400 py-6 text-center">Menunggu publikasi berita...</p>';
+                return;
+            }
 
             const mainHead = publishedNews[0];
             const hasImg = mainHead.image && mainHead.image.trim().length > 0;
