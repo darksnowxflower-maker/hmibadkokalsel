@@ -57,6 +57,31 @@ function createArticleId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+const DEFAULT_NEWS = [
+  {
+    "id": "b-1722000001",
+    "title": "HMI Badko Kalsel Dorong Penguatan Literasi Digital dan Kepemimpinan Kader di Era Transformasi",
+    "category": "Informasi",
+    "date": "2026-07-27",
+    "status": "Terbit",
+    "summary": "Badan Koordinasi HMI Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader untuk menjawab tantangan zaman.",
+    "content": "Banjarmasin — Badan Koordinasi Himpunan Mahasiswa Islam (HMI Badko) Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader.\n\nLangkah ini diambil sebagai bentuk respon aktif terhadap pesatnya perkembangan teknologi informasi yang menuntut kader HMI untuk tidak hanya adaptif, melainkan menjadi pilar perubahan di tengah masyarakat.\n\nKetua Umum HMI Badko Kalsel menegaskan bahwa literasi sains, etika digital, serta wawasan kebangsaan harus beriringan. Dengan memanfaatkan platform digital resmi organisasi, seluruh informasi dan karya kader dapat diakses dengan cepat, aman, dan transparan oleh masyarakat umum.",
+    "image": "",
+    "publishedAt": "2026-07-27T08:00:00.000Z"
+  },
+  {
+    "id": "b-1722000002",
+    "title": "Agenda Rapat Kerja Daerah HMI Badko Kalimantan Selatan Periode 2026-2028",
+    "category": "Agenda",
+    "date": "2026-07-26",
+    "status": "Terbit",
+    "summary": "Rapat Kerja Daerah (Rakerda) HMI Badko Kalsel siap dilaksanakan dengan fokus pada konsolidasi organisasi dan pengabdian masyarakat.",
+    "content": "Banjarbaru — Pengurus HMI Badko Kalimantan Selatan mengumumkan agenda Rapat Kerja Daerah (Rakerda) yang akan dihadiri oleh seluruh utusan Cabang se-Kalimantan Selatan.\n\nFocus utama dalam Rakerda ini meliputi perumusan arah gerak organisasi, penguatan sinergi antar cabang, pembentukan lembaga kekaryaan, serta akselerasi program kerja kerakyatan dan lingkungan.\n\nSeluruh kader dan alumni diimbau untuk turut mensukseskan jalannya Rakerda demi kejayaan keislaman dan keindonesiaan.",
+    "image": "",
+    "publishedAt": "2026-07-26T10:30:00.000Z"
+  }
+];
+
 async function getArticles(storage) {
   const articles = await readKV(storage.ARTICLES_KV, 'articles', null);
   if (articles === null || !Array.isArray(articles)) {
@@ -65,6 +90,17 @@ async function getArticles(storage) {
     return DEFAULT_ARTICLES;
   }
   return articles;
+}
+
+async function getNews(storage) {
+  // Gunakan storage.NEWS_KV jika diset, atau fallback ke storage.ARTICLES_KV key 'news'
+  const kv = storage.NEWS_KV || storage.ARTICLES_KV;
+  const news = await readKV(kv, 'news', null);
+  if (news === null || !Array.isArray(news)) {
+    await writeKV(kv, 'news', DEFAULT_NEWS);
+    return DEFAULT_NEWS;
+  }
+  return news;
 }
 
 async function getPending(storage) {
@@ -210,6 +246,69 @@ async function handleRequest(request, env) {
     const filtered = articles.filter((item) => item.id !== id);
     if (filtered.length !== articles.length) {
       await writeKV(env.ARTICLES_KV, 'articles', filtered);
+    }
+    return jsonResponse({ success: true });
+  }
+
+  // === NEWS ENDPOINTS ===
+  if (pathname === '/news' && request.method === 'GET') {
+    const newsList = await getNews(env);
+    return jsonResponse(newsList);
+  }
+
+  if ((pathname === '/news/item' || pathname === '/news') && request.method === 'GET' && url.searchParams.has('id')) {
+    const id = url.searchParams.get('id');
+    const newsList = await getNews(env);
+    const newsItem = newsList.find(n => String(n.id) === String(id));
+    if (!newsItem) {
+      return jsonResponse({ error: 'News not found' }, 404);
+    }
+    return jsonResponse(newsItem);
+  }
+
+  if (pathname === '/news' && request.method === 'POST') {
+    let payload;
+    try {
+      payload = await request.json();
+    } catch {
+      return jsonResponse({ error: 'Invalid JSON payload' }, 400);
+    }
+    if (!payload || !payload.title) {
+      return jsonResponse({ error: 'Invalid news payload' }, 400);
+    }
+    const newsList = await getNews(env);
+    const newsItem = {
+      id: payload.id || `b-${Date.now()}`,
+      title: payload.title || '',
+      category: payload.category || 'Informasi',
+      date: payload.date || new Date().toISOString().split('T')[0],
+      status: payload.status || 'Terbit',
+      summary: payload.summary || '',
+      content: payload.content || '',
+      image: payload.image || '',
+      publishedAt: payload.publishedAt || new Date().toISOString()
+    };
+    const index = newsList.findIndex(n => String(n.id) === String(newsItem.id));
+    if (index >= 0) {
+      newsList[index] = newsItem;
+    } else {
+      newsList.unshift(newsItem);
+    }
+    const kv = env.NEWS_KV || env.ARTICLES_KV;
+    await writeKV(kv, 'news', newsList);
+    return jsonResponse({ success: true, news: newsItem });
+  }
+
+  if (pathname === '/news' && request.method === 'DELETE') {
+    const id = url.searchParams.get('id');
+    if (!id) {
+      return jsonResponse({ error: 'News id is required' }, 400);
+    }
+    const newsList = await getNews(env);
+    const filtered = newsList.filter(n => String(n.id) !== String(id));
+    if (filtered.length !== newsList.length) {
+      const kv = env.NEWS_KV || env.ARTICLES_KV;
+      await writeKV(kv, 'news', filtered);
     }
     return jsonResponse({ success: true });
   }

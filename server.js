@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const dataPath = path.join(__dirname, 'data', 'articles.json');
 const pendingPath = path.join(__dirname, 'data', 'pending.json');
+const newsPath = path.join(__dirname, 'data', 'news.json');
 const rootDir = __dirname;
 const port = process.env.PORT || 3000;
 
@@ -60,6 +61,19 @@ function readPending() {
 
 function savePending(pending) {
   fs.writeFileSync(pendingPath, JSON.stringify(pending, null, 2), 'utf8');
+}
+
+function readNews() {
+  try {
+    const raw = fs.readFileSync(newsPath, 'utf8');
+    return JSON.parse(raw);
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveNews(newsList) {
+  fs.writeFileSync(newsPath, JSON.stringify(newsList, null, 2), 'utf8');
 }
 
 const server = http.createServer((req, res) => {
@@ -162,6 +176,65 @@ const server = http.createServer((req, res) => {
       return sendJSON(res, { error: 'Article not found' }, 404);
     }
     saveArticles(filtered);
+    return sendJSON(res, { success: true });
+  }
+
+  // News Endpoints
+  if (pathname === '/news' && req.method === 'GET') {
+    return sendJSON(res, readNews());
+  }
+
+  if ((pathname === '/news/item' || pathname === '/news') && req.method === 'GET' && url.searchParams.has('id')) {
+    const id = url.searchParams.get('id');
+    const newsItem = readNews().find(n => String(n.id) === String(id));
+    if (!newsItem) {
+      return sendJSON(res, { error: 'News not found' }, 404);
+    }
+    return sendJSON(res, newsItem);
+  }
+
+  if (pathname === '/news' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const item = JSON.parse(body);
+        if (!item || !item.title) {
+          return sendJSON(res, { error: 'Invalid news payload' }, 400);
+        }
+        if (!item.id) {
+          item.id = 'b-' + Date.now();
+        }
+        if (!item.publishedAt) {
+          item.publishedAt = new Date().toISOString();
+        }
+        const newsList = readNews();
+        const index = newsList.findIndex(n => String(n.id) === String(item.id));
+        if (index === -1) {
+          newsList.unshift(item);
+        } else {
+          newsList[index] = item;
+        }
+        saveNews(newsList);
+        return sendJSON(res, { success: true, news: item });
+      } catch (err) {
+        return sendJSON(res, { error: 'Invalid JSON payload' }, 400);
+      }
+    });
+    return;
+  }
+
+  if (pathname === '/news' && req.method === 'DELETE') {
+    const id = url.searchParams.get('id');
+    if (!id) {
+      return sendJSON(res, { error: 'News id is required' }, 400);
+    }
+    const newsList = readNews();
+    const filtered = newsList.filter(n => String(n.id) !== String(id));
+    if (filtered.length === newsList.length) {
+      return sendJSON(res, { error: 'News not found' }, 404);
+    }
+    saveNews(filtered);
     return sendJSON(res, { success: true });
   }
 

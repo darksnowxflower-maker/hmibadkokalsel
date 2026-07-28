@@ -248,6 +248,8 @@
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.add('hidden'));
         });
 
+        const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
+
         // Helper to detect and filter out legacy dummy news items
         function isDummyNews(item) {
             if (!item) return true;
@@ -266,21 +268,32 @@
             return false;
         }
 
-        // Default News Data (Empty - in process of data update)
-        const defaultNews = [];
-
-        let rawNews = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
-        if (Array.isArray(rawNews)) {
-            rawNews = rawNews.filter(item => !isDummyNews(item));
-            if (rawNews.length === 0) {
-                localStorage.removeItem('hmiNewsData');
-            } else {
-                localStorage.setItem('hmiNewsData', JSON.stringify(rawNews));
+        const defaultNews = [
+            {
+                "id": "b-1722000001",
+                "title": "HMI Badko Kalsel Dorong Penguatan Literasi Digital dan Kepemimpinan Kader di Era Transformasi",
+                "category": "Informasi",
+                "date": "2026-07-27",
+                "status": "Terbit",
+                "summary": "Badan Koordinasi HMI Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader untuk menjawab tantangan zaman.",
+                "content": "Banjarmasin — Badan Koordinasi Himpunan Mahasiswa Islam (HMI Badko) Kalimantan Selatan secara resmi merilis program strategis penguatan literasi digital dan kepemimpinan kader.\n\nLangkah ini diambil sebagai bentuk respon aktif terhadap pesatnya perkembangan teknologi informasi yang menuntut kader HMI untuk tidak hanya adaptif, melainkan menjadi pilar perubahan di tengah masyarakat.\n\nKetua Umum HMI Badko Kalsel menegaskan bahwa literasi sains, etika digital, serta wawasan kebangsaan harus beriringan. Dengan memanfaatkan platform digital resmi organisasi, seluruh informasi dan karya kader dapat diakses dengan cepat, aman, dan transparan oleh masyarakat umum.",
+                "image": "",
+                "publishedAt": "2026-07-27T08:00:00.000Z"
+            },
+            {
+                "id": "b-1722000002",
+                "title": "Agenda Rapat Kerja Daerah HMI Badko Kalimantan Selatan Periode 2026-2028",
+                "category": "Agenda",
+                "date": "2026-07-26",
+                "status": "Terbit",
+                "summary": "Rapat Kerja Daerah (Rakerda) HMI Badko Kalsel siap dilaksanakan dengan fokus pada konsolidasi organisasi dan pengabdian masyarakat.",
+                "content": "Banjarbaru — Pengurus HMI Badko Kalimantan Selatan mengumumkan agenda Rapat Kerja Daerah (Rakerda) yang akan dihadiri oleh seluruh utusan Cabang se-Kalimantan Selatan.\n\nFocus utama dalam Rakerda ini meliputi perumusan arah gerak organisasi, penguatan sinergi antar cabang, pembentukan lembaga kekaryaan, serta akselerasi program kerja kerakyatan dan lingkungan.\n\nSeluruh kader dan alumni diimbau untuk turut mensukseskan jalannya Rakerda demi kejayaan keislaman dan keindonesiaan.",
+                "image": "",
+                "publishedAt": "2026-07-26T10:30:00.000Z"
             }
-        }
-        let allNews = (rawNews && Array.isArray(rawNews)) ? rawNews : defaultNews;
+        ];
 
-        const publishedNews = allNews.filter(item => item && item.status !== 'Draft');
+        let publishedNews = [];
         let activeCategory = 'Semua';
         let searchQuery = '';
 
@@ -289,6 +302,50 @@
         const newsGrid = document.getElementById('newsGrid');
         const searchInput = document.getElementById('searchInput');
 
+        async function loadNewsData() {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                const res = await fetch(`${serverApiBase}/news?t=${Date.now()}`, {
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        const clean = data.filter(item => item && !isDummyNews(item) && item.status !== 'Draft');
+                        localStorage.setItem('hmiNewsData', JSON.stringify(clean));
+                        return clean;
+                    }
+                }
+            } catch (err) {
+                console.warn('News backend API warning:', err);
+            }
+
+            // Fallback: Check local server / news endpoint if running locally
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                try {
+                    const res = await fetch(`/news?t=${Date.now()}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            return data.filter(item => item && !isDummyNews(item) && item.status !== 'Draft');
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            // Fallback: LocalStorage
+            let rawNews = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
+            if (Array.isArray(rawNews)) {
+                rawNews = rawNews.filter(item => item && !isDummyNews(item) && item.status !== 'Draft');
+                if (rawNews.length > 0) return rawNews;
+            }
+
+            return defaultNews;
+        }
+
         function updateStats() {
             if (statTotal) statTotal.textContent = publishedNews.length;
             if (statLastUpdate) {
@@ -296,7 +353,7 @@
                     const latestDate = publishedNews[0].date || '-';
                     statLastUpdate.textContent = latestDate;
                 } else {
-                    statLastUpdate.textContent = 'Dalam Pembaruan';
+                    statLastUpdate.textContent = '-';
                 }
             }
         }
@@ -321,56 +378,23 @@
                                 <div class="w-20 h-20 rounded-2xl bg-hmiGreen text-white flex items-center justify-center text-3xl shadow-lg shadow-hmiGreen/20">
                                     <i class="fas fa-newspaper"></i>
                                 </div>
-                                <span class="absolute -bottom-1 -right-1 flex h-6 w-6">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-6 w-6 bg-amber-500 text-white text-[10px] items-center justify-center font-bold">
-                                        <i class="fas fa-sync-alt animate-spin"></i>
-                                    </span>
-                                </span>
                             </div>
 
-                            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 mb-5 shadow-sm">
-                                <span class="w-2 h-2 rounded-full bg-amber-600 animate-pulse"></span>
-                                Pemberitahuan Resmi
+                            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 text-hmiGreen border border-emerald-300 mb-5 shadow-sm">
+                                Informasi
                             </span>
 
                             <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight tracking-tight mb-4">
-                                Halaman Berita sedang dalam proses pembaruan data.
+                                Tidak ada berita yang ditemukan.
                             </h2>
 
                             <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-8 max-w-xl">
-                                Saat ini tim redaksi dan Humas HMI Badko Kalimantan Selatan sedang melakukan verifikasi, penataan ulang, serta pembaruan data publikasi berita resmi organisasi. Konten berita terbaru akan segera disajikan.
+                                Belum ada publikasi berita yang sesuai dengan kata kunci atau kategori yang Anda pilih saat ini.
                             </p>
 
-                            <div class="grid sm:grid-cols-3 gap-4 w-full mb-8">
-                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-left shadow-sm">
-                                    <div class="text-hmiGreen text-sm font-bold flex items-center gap-2 mb-1">
-                                        <i class="fas fa-tools"></i> Status Redaksi
-                                    </div>
-                                    <p class="text-xs text-gray-700 font-semibold">Restrukturisasi Data</p>
-                                </div>
-
-                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-left shadow-sm">
-                                    <div class="text-hmiGreen text-sm font-bold flex items-center gap-2 mb-1">
-                                        <i class="fas fa-clock"></i> Estimasi Update
-                                    </div>
-                                    <p class="text-xs text-gray-700 font-semibold">Segera Hadir</p>
-                                </div>
-
-                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-left shadow-sm">
-                                    <div class="text-hmiGreen text-sm font-bold flex items-center gap-2 mb-1">
-                                        <i class="fas fa-shield-halved"></i> Kanal Resmi
-                                    </div>
-                                    <p class="text-xs text-gray-700 font-semibold">HMI Badko Kalsel</p>
-                                </div>
-                            </div>
-
                             <div class="flex flex-wrap items-center justify-center gap-3">
-                                <a href="index.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-hmiGreen hover:bg-hmiDark text-white font-bold text-sm shadow-md transition-all hover:scale-[1.02]">
-                                    <i class="fas fa-home"></i> Kembali ke Beranda
-                                </a>
-                                <a href="artikel.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gray-100 border border-gray-300 text-gray-800 hover:text-hmiGreen hover:bg-gray-200 font-bold text-sm shadow-sm transition-all hover:scale-[1.02]">
-                                    <i class="fas fa-newspaper"></i> Baca Artikel Kader
+                                <a href="berita.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-hmiGreen hover:bg-hmiDark text-white font-bold text-sm shadow-md transition-all hover:scale-[1.02]">
+                                    <i class="fas fa-sync-alt"></i> Tampilkan Semua Berita
                                 </a>
                             </div>
                         </div>
@@ -381,12 +405,12 @@
 
             filtered.forEach(item => {
                 const card = document.createElement('article');
-                card.className = 'bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between';
+                card.className = 'bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition duration-300 overflow-hidden flex flex-col justify-between group';
                 
                 const hasImg = item.image && item.image.trim().length > 0;
                 const imgMarkup = hasImg 
-                    ? `<img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">`
-                    : `<div class="w-full h-44 bg-gradient-to-br from-emerald-800 to-hmiGreen flex items-center justify-center text-white/30 text-4xl"><i class="fas fa-newspaper"></i></div>`;
+                    ? `<div class="w-full h-48 overflow-hidden"><img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></div>`
+                    : `<div class="w-full h-44 bg-gradient-to-br from-emerald-800 to-hmiGreen flex items-center justify-center text-white/30 text-4xl group-hover:scale-105 transition duration-300"><i class="fas fa-newspaper"></i></div>`;
 
                 card.innerHTML = `
                     <div>
@@ -396,7 +420,7 @@
                                 <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-green-50 text-hmiGreen uppercase tracking-wider">${item.category || 'Berita'}</span>
                                 <span class="text-xs text-gray-400"><i class="far fa-calendar mr-1"></i>${item.date || '-'}</span>
                             </div>
-                            <h2 class="text-lg font-extrabold text-gray-900 line-clamp-2 hover:text-hmiGreen transition cursor-pointer read-btn" data-id="${item.id}">${item.title}</h2>
+                            <h2 class="text-lg font-extrabold text-gray-900 line-clamp-2 group-hover:text-hmiGreen transition cursor-pointer read-btn" data-id="${item.id}">${item.title}</h2>
                             <p class="mt-2 text-sm text-gray-600 line-clamp-3 leading-relaxed">${item.summary || item.content || ''}</p>
                         </div>
                     </div>
@@ -438,7 +462,7 @@
             
             if (modalContent) {
                 const paragraphs = (item.content || item.summary || '').split(/\n{2,}/);
-                modalContent.innerHTML = paragraphs.map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+                modalContent.innerHTML = paragraphs.map(p => `<p class="leading-relaxed mb-4">${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
             }
 
             if (item.image && item.image.trim()) {
@@ -450,12 +474,14 @@
 
             newsModal.classList.remove('hidden');
             newsModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeNewsModalFunc() {
             if (!newsModal) return;
             newsModal.classList.add('hidden');
             newsModal.classList.remove('flex');
+            document.body.style.overflow = '';
         }
 
         document.getElementById('closeNewsModal')?.addEventListener('click', closeNewsModalFunc);
@@ -485,8 +511,26 @@
             });
         }
 
-        updateStats();
-        renderGrid();
+        async function initPage() {
+            newsGrid.innerHTML = `
+                <div class="col-span-full py-16 text-center text-gray-500 flex flex-col items-center justify-center gap-3">
+                    <i class="fas fa-circle-notch fa-spin text-3xl text-hmiGreen"></i>
+                    <p class="text-sm font-semibold">Memuat berita resmi terkini...</p>
+                </div>
+            `;
+            publishedNews = await loadNewsData();
+            updateStats();
+            renderGrid();
+
+            // Auto open modal if URL has ?id=...
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetId = urlParams.get('id');
+            if (targetId) {
+                openNewsModal(targetId);
+            }
+        }
+
+        initPage();
     });
   </script>
 </body>

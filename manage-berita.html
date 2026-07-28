@@ -123,6 +123,9 @@
         const clearFormBtn = document.getElementById('clearFormBtn');
         const doneFormBtn = document.getElementById('doneFormBtn');
 
+        const serverApiBase = 'https://hmi-artikel-backend.darksnowxflower.workers.dev';
+        const localServerBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '' : '';
+
         function isDummyNews(item) {
             if (!item) return true;
             const dummyIds = [1, 2, 3, '1', '2', '3'];
@@ -140,42 +143,77 @@
             return false;
         }
 
-        const defaultNews = [];
-
-        let rawNewsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
-        if (Array.isArray(rawNewsData)) {
-            rawNewsData = rawNewsData.filter(item => !isDummyNews(item));
-            if (rawNewsData.length === 0) {
-                localStorage.removeItem('hmiNewsData');
-            } else {
-                localStorage.setItem('hmiNewsData', JSON.stringify(rawNewsData));
-            }
-        }
-        let newsData = (rawNewsData && Array.isArray(rawNewsData)) ? rawNewsData : defaultNews;
+        let newsData = [];
         let editingId = null;
+
+        async function fetchServerNews() {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+                const res = await fetch(`${serverApiBase}/news?t=${Date.now()}`, {
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        const clean = data.filter(item => !isDummyNews(item));
+                        localStorage.setItem('hmiNewsData', JSON.stringify(clean));
+                        return clean;
+                    }
+                }
+            } catch (e) {
+                console.warn('Backend fetch fallback:', e);
+            }
+
+            // Fallback LocalStorage
+            let rawNewsData = JSON.parse(localStorage.getItem('hmiNewsData') || 'null');
+            if (Array.isArray(rawNewsData)) {
+                rawNewsData = rawNewsData.filter(item => !isDummyNews(item));
+                return rawNewsData;
+            }
+            return [];
+        }
+
+        async function initNews() {
+            newsList.innerHTML = '<div class="text-sm text-gray-500 py-4 flex items-center gap-2"><i class="fas fa-spinner fa-spin text-hmiGreen"></i> Memuat data berita...</div>';
+            newsData = await fetchServerNews();
+            renderNews();
+        }
 
         function renderNews() {
             newsList.innerHTML = '';
             if (!newsData.length) {
-                newsList.innerHTML = '<div class="text-sm text-gray-500">Belum ada berita.</div>';
+                newsList.innerHTML = '<div class="text-sm text-gray-500 py-6 text-center border border-dashed border-gray-200 rounded-2xl">Belum ada berita terbit. Silakan tambah berita baru.</div>';
                 return;
             }
 
             newsData.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'rounded-2xl border border-gray-200 p-4 bg-gray-50';
+                card.className = 'rounded-2xl border border-gray-200 p-5 bg-gray-50/70 hover:bg-white transition-all shadow-sm';
                 card.innerHTML = `
                     <div class="flex items-start justify-between gap-3">
-                        <div>
-                            <div class="font-semibold text-gray-800">${item.title}</div>
-                            <div class="text-sm text-gray-500">${item.category} • ${item.date}</div>
-                            <div class="text-sm text-gray-600 mt-2">${item.summary || ''}</div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="rounded-full bg-emerald-100 text-hmiGreen px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">${item.category || 'Berita'}</span>
+                                <span class="text-xs text-gray-400"><i class="far fa-calendar mr-1"></i>${item.date || '-'}</span>
+                            </div>
+                            <h3 class="font-extrabold text-gray-900 text-base leading-snug">${item.title}</h3>
+                            <p class="text-xs text-gray-600 mt-2 line-clamp-2">${item.summary || item.content || ''}</p>
                         </div>
-                        <span class="rounded-full ${item.status === 'Terbit' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} px-3 py-1 text-xs font-semibold">${item.status}</span>
+                        <span class="rounded-full ${item.status === 'Terbit' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'} px-3 py-1 text-xs font-semibold shrink-0">${item.status || 'Terbit'}</span>
                     </div>
-                    <div class="flex gap-2 mt-4">
-                        <button data-action="edit" data-id="${item.id}" class="text-sm text-hmiGreen font-semibold">Edit</button>
-                        <button data-action="delete" data-id="${item.id}" class="text-sm text-red-600 font-semibold">Hapus</button>
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                        <span class="text-[11px] text-gray-400">ID: ${item.id}</span>
+                        <div class="flex gap-3">
+                            <button type="button" data-action="edit" data-id="${item.id}" class="text-xs text-hmiGreen hover:text-hmiDark font-extrabold flex items-center gap-1">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button type="button" data-action="delete" data-id="${item.id}" class="text-xs text-red-600 hover:text-red-800 font-extrabold flex items-center gap-1">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
                     </div>
                 `;
                 newsList.appendChild(card);
@@ -195,59 +233,113 @@
             document.getElementById('title').value = item.title;
             document.getElementById('category').value = item.category;
             document.getElementById('date').value = item.date;
-            document.getElementById('status').value = item.status;
+            document.getElementById('status').value = item.status || 'Terbit';
             document.getElementById('summary').value = item.summary || '';
             document.getElementById('content').value = item.content || '';
             document.getElementById('image').value = item.image || '';
             formTitle.textContent = 'Edit Berita';
             cancelEditBtn.classList.remove('hidden');
             editingId = item.id;
+            window.scrollTo({ top: newsForm.offsetTop - 100, behavior: 'smooth' });
         }
 
-        newsForm.addEventListener('submit', function (e) {
+        newsForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const formData = {
-                id: editingId || Date.now(),
+            const submitBtn = newsForm.querySelector('button[type="submit"]');
+            const origText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+
+            const newsItem = {
+                id: editingId || `b-${Date.now()}`,
                 title: document.getElementById('title').value.trim(),
-                category: document.getElementById('category').value.trim(),
-                date: document.getElementById('date').value,
-                status: document.getElementById('status').value,
+                category: document.getElementById('category').value.trim() || 'Informasi',
+                date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
+                status: document.getElementById('status').value || 'Terbit',
                 summary: document.getElementById('summary').value.trim(),
                 content: document.getElementById('content').value.trim(),
-                image: document.getElementById('image').value.trim()
+                image: document.getElementById('image').value.trim(),
+                publishedAt: new Date().toISOString()
             };
 
-            if (!formData.title || !formData.category || !formData.date || !formData.content) {
+            if (!newsItem.title || !newsItem.category || !newsItem.date || !newsItem.content) {
                 alert('Judul, kategori, tanggal, dan isi berita wajib diisi.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = origText;
                 return;
             }
 
-            if (editingId) {
-                newsData = newsData.map(item => item.id === editingId ? formData : item);
+            let savedToServer = false;
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                const res = await fetch(`${serverApiBase}/news`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newsItem),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (res.ok) savedToServer = true;
+            } catch (err) {
+                console.warn('Server push warning:', err);
+            }
+
+            // Sync ke local server jika jalan di localhost
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                try {
+                    await fetch('/news', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newsItem)
+                    });
+                } catch (e) {}
+            }
+
+            // Update Local Data
+            const index = newsData.findIndex(item => String(item.id) === String(newsItem.id));
+            if (index >= 0) {
+                newsData[index] = newsItem;
             } else {
-                newsData.unshift(formData);
+                newsData.unshift(newsItem);
             }
 
             localStorage.setItem('hmiNewsData', JSON.stringify(newsData));
             renderNews();
             resetForm();
-            alert('Berita berhasil disimpan.');
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origText;
+
+            alert(savedToServer ? 'Berita berhasil disimpan dan diterbitkan secara LIVE ke Server Server-Side! 🎉' : 'Berita berhasil disimpan ke memori lokal.');
         });
 
-        newsList.addEventListener('click', function (e) {
+        newsList.addEventListener('click', async function (e) {
             const button = e.target.closest('button');
             if (!button) return;
             const action = button.getAttribute('data-action');
-            const id = Number(button.getAttribute('data-id'));
+            const id = button.getAttribute('data-id');
+
             if (action === 'edit') {
-                const item = newsData.find(entry => entry.id === id);
+                const item = newsData.find(entry => String(entry.id) === String(id));
                 if (item) fillForm(item);
             } else if (action === 'delete') {
-                if (confirm('Apakah Anda yakin ingin menghapus berita ini?')) {
-                    newsData = newsData.filter(entry => entry.id !== id);
+                if (confirm('Apakah Anda yakin ingin menghapus berita ini secara permanen dari server?')) {
+                    // Send delete request to backend server
+                    try {
+                        await fetch(`${serverApiBase}/news?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+                    } catch (err) {
+                        console.warn('Delete server error:', err);
+                    }
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        try { await fetch(`/news?id=${encodeURIComponent(id)}`, { method: 'DELETE' }); } catch (e) {}
+                    }
+
+                    newsData = newsData.filter(entry => String(entry.id) !== String(id));
                     localStorage.setItem('hmiNewsData', JSON.stringify(newsData));
                     renderNews();
-                    if (editingId === id) resetForm();
+                    if (editingId && String(editingId) === String(id)) resetForm();
                 }
             }
         });
@@ -257,7 +349,7 @@
         cancelEditBtn.addEventListener('click', resetForm);
         doneFormBtn.addEventListener('click', resetForm);
 
-        renderNews();
+        initNews();
     </script>
 
 </body>
