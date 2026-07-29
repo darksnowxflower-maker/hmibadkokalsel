@@ -59,7 +59,9 @@ export async function onRequest(context) {
     status: 200,
     headers: {
       'Content-Type': 'text/html; charset=UTF-8',
-      'Cache-Control': 'no-cache, must-revalidate'
+      'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      'CDN-Cache-Control': 'no-store',
+      'Cloudflare-CDN-Cache-Control': 'no-store'
     }
   });
 }
