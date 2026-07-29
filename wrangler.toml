@@ -1,6 +1,14 @@
 name = "hmi-artikel-backend"
 main = "worker.js"
 compatibility_date = "2025-12-01"
+workers_dev = true
+assets = { directory = "./", binding = "ASSETS" }
+
+routes = [
+  { pattern = "hmibadkokalsel.web.id/detail-artikel*", zone_name = "hmibadkokalsel.web.id" },
+  { pattern = "hmibadkokalsel.web.id/berita*", zone_name = "hmibadkokalsel.web.id" },
+  { pattern = "hmibadkokalsel.web.id/api/*", zone_name = "hmibadkokalsel.web.id" }
+]
 
 [[kv_namespaces]]
 binding = "ARTICLES_KV"
