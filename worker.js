@@ -147,7 +147,8 @@ async function handleRequest(request, env) {
     if ((pathname === '/api/article-image' || pathname === '/article-image') && request.method === 'GET') {
       const id = url.searchParams.get('id');
       const articles = await getArticles(env);
-      const article = articles.find(a => String(a.id) === String(id));
+      const pending = await getPending(env);
+      const article = [...articles, ...pending].find(a => String(a.id) === String(id));
       const newsList = await getNews(env);
       const newsItem = newsList.find(n => String(n.id) === String(id));
 
@@ -190,7 +191,8 @@ async function handleRequest(request, env) {
       if (assetRes.ok) {
         let rawHtml = await assetRes.text();
         const articles = await getArticles(env);
-        const article = articles.find(a => String(a.id) === String(targetId));
+        const pending = await getPending(env);
+        const article = [...articles, ...pending].find(a => String(a.id) === String(targetId));
         const newsList = await getNews(env);
         const newsItem = newsList.find(n => String(n.id) === String(targetId));
 

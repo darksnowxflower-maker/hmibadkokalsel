@@ -131,7 +131,8 @@ const server = http.createServer((req, res) => {
   if ((pathname === '/api/article-image' || pathname === '/article-image') && req.method === 'GET') {
     const id = url.searchParams.get('id');
     const articles = readArticles();
-    const article = articles.find(a => String(a.id) === String(id));
+    const pending = readPending();
+    const article = [...articles, ...pending].find(a => String(a.id) === String(id));
     const newsList = readNews();
     const newsItem = newsList.find(n => String(n.id) === String(id));
 
@@ -324,7 +325,9 @@ const server = http.createServer((req, res) => {
     const actualFile = (pathname.startsWith('/detail-artikel')) ? path.join(rootDir, 'detail-artikel.html') : path.join(rootDir, 'berita.html');
     if (fs.existsSync(actualFile)) {
       let rawHtml = fs.readFileSync(actualFile, 'utf8');
-      const article = readArticles().find(a => String(a.id) === String(targetId));
+      const articles = readArticles();
+      const pending = readPending();
+      const article = [...articles, ...pending].find(a => String(a.id) === String(targetId));
       const newsItem = readNews().find(n => String(n.id) === String(targetId));
       const protocol = req.headers['x-forwarded-proto'] || 'http';
       const host = req.headers.host;
