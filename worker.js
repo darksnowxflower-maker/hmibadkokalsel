@@ -92,6 +92,44 @@ function createHeaders() {
   };
 }
 
+function escapeAttr(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function injectArticleMetaTags(html, meta) {
+  const cleanTitle = escapeAttr(meta.title || 'HMI Badko Kalimantan Selatan');
+  const cleanDesc = escapeAttr(meta.description || 'HMI Badko Kalimantan Selatan');
+  const cleanImage = escapeAttr(meta.image || '');
+  const cleanUrl = escapeAttr(meta.url || '');
+  const cleanSiteName = escapeAttr(meta.siteName || 'HMI Badko Kalimantan Selatan');
+
+  const tags = `
+  <title>${cleanTitle}</title>
+  <meta name="description" content="${cleanDesc}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="${cleanSiteName}">
+  <meta property="og:title" content="${cleanTitle}">
+  <meta property="og:description" content="${cleanDesc}">
+  <meta property="og:image" content="${cleanImage}">
+  <meta property="og:url" content="${cleanUrl}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${cleanTitle}">
+  <meta name="twitter:description" content="${cleanDesc}">
+  <meta name="twitter:image" content="${cleanImage}">
+  `;
+
+  let result = html
+    .replace(/<title>.*?<\/title>/gi, '')
+    .replace(/<meta\s+name=["']description["'].*?>/gi, '')
+    .replace(/<meta\s+property=["']og:.*?["'].*?>/gi, '')
+    .replace(/<meta\s+name=["']twitter:.*?["'].*?>/gi, '');
+
+  if (result.includes('<head>')) {
+    return result.replace('<head>', `<head>${tags}`);
+  }
+  return tags + result;
+}
+
 async function handleRequest(request, env) {
   try {
     const url = new URL(request.url);
@@ -103,6 +141,84 @@ async function handleRequest(request, env) {
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
+    }
+
+    // Endpoint Image Proxy untuk Open Graph Preview
+    if ((pathname === '/api/article-image' || pathname === '/article-image') && request.method === 'GET') {
+      const id = url.searchParams.get('id');
+      const articles = await getArticles(env);
+      const article = articles.find(a => String(a.id) === String(id));
+      const newsList = await getNews(env);
+      const newsItem = newsList.find(n => String(n.id) === String(id));
+
+      const item = article || newsItem;
+      const imgSrc = item ? (item.headerImageDataUrl || item.headerImage || item.gambar || item.image || '') : '';
+
+      if (imgSrc && imgSrc.startsWith('data:image/')) {
+        const matches = imgSrc.match(/^data:(image\/[a-zA-Z0-9\+\-\.]+);base64,(.+)$/);
+        if (matches) {
+          const mimeType = matches[1];
+          const base64Data = matches[2];
+          const binaryStr = atob(base64Data);
+          const bytes = new Uint8Array(binaryStr.length);
+          for (let i = 0; i < binaryStr.length; i++) {
+            bytes[i] = binaryStr.charCodeAt(i);
+          }
+          return new Response(bytes, {
+            status: 200,
+            headers: {
+              'Content-Type': mimeType,
+              'Content-Length': bytes.length.toString(),
+              'Cache-Control': 'public, max-age=86400',
+              'Access-Control-Allow-Origin': '*'
+            }
+          });
+        }
+      } else if (imgSrc && (imgSrc.startsWith('http://') || imgSrc.startsWith('https://'))) {
+        return Response.redirect(imgSrc, 302);
+      }
+
+      return Response.redirect(`${url.origin}/LOGO%20HMI%20HD%20PNG%20(1).png`, 302);
+    }
+
+    // Dynamic Open Graph HTML injection untuk detail artikel / berita
+    const isDetailPath = rawPathname === '/detail-artikel' || rawPathname === '/detail-artikel.html' || rawPathname === '/berita' || rawPathname === '/berita.html';
+    const targetId = url.searchParams.get('id');
+
+    if (isDetailPath && targetId && env.ASSETS) {
+      const assetRes = await env.ASSETS.fetch(request);
+      if (assetRes.ok) {
+        let rawHtml = await assetRes.text();
+        const articles = await getArticles(env);
+        const article = articles.find(a => String(a.id) === String(targetId));
+        const newsList = await getNews(env);
+        const newsItem = newsList.find(n => String(n.id) === String(targetId));
+
+        const baseUrl = url.origin;
+        if (article) {
+          const title = `${article.judul} - HMI Badko Kalsel`;
+          const description = `Oleh: ${article.nama || 'Kader HMI'}${article.asal ? ' (' + article.asal + ')' : ''}. ${article.ringkasan || ''}`.trim();
+          const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(article.id)}`;
+          const pageUrl = `${baseUrl}/detail-artikel?id=${encodeURIComponent(article.id)}`;
+
+          rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
+        } else if (newsItem) {
+          const title = `${newsItem.title || newsItem.judul} - HMI Badko Kalsel`;
+          const description = (newsItem.summary || newsItem.content || 'Portal Berita Resmi HMI Badko Kalsel').trim();
+          const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(newsItem.id)}`;
+          const pageUrl = `${baseUrl}/berita.html?id=${encodeURIComponent(newsItem.id)}`;
+
+          rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
+        }
+
+        return new Response(rawHtml, {
+          status: 200,
+          headers: {
+            'Content-Type': 'text/html; charset=UTF-8',
+            'Cache-Control': 'no-cache'
+          }
+        });
+      }
     }
 
   // Reset endpoint untuk maintenance
@@ -300,6 +416,10 @@ async function handleRequest(request, env) {
       await writeKV(kv, 'news', filtered);
     }
     return jsonResponse({ success: true });
+  }
+
+  if (env.ASSETS) {
+    return env.ASSETS.fetch(request);
   }
 
   return jsonResponse({ error: 'Not found' }, 404);

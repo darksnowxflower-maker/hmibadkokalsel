@@ -732,7 +732,8 @@
         document.getElementById('btnShareWA')?.addEventListener('click', () => {
             const shareUrl = `${window.location.origin}${window.location.pathname}?id=${currentActiveNewsId}`;
             const item = publishedNews.find(n => String(n.id) === String(currentActiveNewsId));
-            const text = encodeURIComponent(`*${item?.title || 'Berita HMI'}*\n\nBaca berita selengkapnya di HMI Badko Kalsel:\n${shareUrl}`);
+            const categoryStr = item?.category ? ` [${item.category}]` : '';
+            const text = encodeURIComponent(`*${item?.title || 'Berita HMI'}${categoryStr}*\n\nBaca berita selengkapnya di HMI Badko Kalsel:\n${shareUrl}`);
             window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         });
 

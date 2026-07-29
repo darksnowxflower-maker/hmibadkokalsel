@@ -3,12 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Detail artikel HMI Badko Kalimantan Selatan.">
-      <!-- Favicon Resmi HMI -->
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" href="favicon.png" />
-    <title>Detail Artikel | HMI Badko Kalsel</title>
+  <meta name="description" id="metaDescription" content="Detail artikel HMI Badko Kalimantan Selatan.">
+  <!-- Open Graph / Social Media Preview Meta Tags -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="HMI Badko Kalimantan Selatan">
+  <meta property="og:title" id="ogTitle" content="Detail Artikel | HMI Badko Kalsel">
+  <meta property="og:description" id="ogDescription" content="Detail artikel HMI Badko Kalimantan Selatan.">
+  <meta property="og:image" id="ogImage" content="https://hmibadkokalsel.web.id/LOGO%20HMI%20HD%20PNG%20(1).png">
+  <meta property="og:url" id="ogUrl" content="https://hmibadkokalsel.web.id/detail-artikel">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="twTitle" content="Detail Artikel | HMI Badko Kalsel">
+  <meta name="twitter:description" id="twDescription" content="Detail artikel HMI Badko Kalimantan Selatan.">
+  <meta name="twitter:image" id="twImage" content="https://hmibadkokalsel.web.id/LOGO%20HMI%20HD%20PNG%20(1).png">
+
+  <!-- Favicon Resmi HMI -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <title id="pageTitle">Detail Artikel | HMI Badko Kalsel</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>tailwind.config={theme:{extend:{colors:{hmiGreen:'#006B3F',hmiDark:'#004d2c'}}}}</script>
@@ -272,14 +284,20 @@
     function shareArticlePlatform(platform){
       const currentUrl = window.location.href;
       const title = currentArticleData ? currentArticleData.judul : document.title;
-      const text = `Baca artikel "${title}" di HMI Badko Kalsel:`;
+      const author = currentArticleData ? `${currentArticleData.nama || 'Kader HMI'}${currentArticleData.asal ? ' (' + currentArticleData.asal + ')' : ''}` : '';
+      
+      const textWa = author 
+        ? `*${title}*\nOleh: ${author}\n\nBaca artikel selengkapnya di HMI Badko Kalsel:\n${currentUrl}`
+        : `*${title}*\n\nBaca artikel selengkapnya di HMI Badko Kalsel:\n${currentUrl}`;
+
+      const textGeneric = `Baca artikel "${title}" di HMI Badko Kalsel:`;
 
       if(platform === 'wa'){
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + '\n' + currentUrl)}`, '_blank');
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textWa)}`, '_blank');
       } else if(platform === 'fb'){
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, '_blank');
       } else if(platform === 'tw'){
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(currentUrl)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`*${title}*`)}&url=${encodeURIComponent(currentUrl)}`, '_blank');
       } else if(platform === 'copy'){
         if(navigator.clipboard && navigator.clipboard.writeText){
           navigator.clipboard.writeText(currentUrl).then(()=>{
@@ -293,12 +311,12 @@
       } else if(platform === 'native' && navigator.share){
         navigator.share({
           title: title,
-          text: text,
+          text: textGeneric,
           url: currentUrl
         }).catch(()=>{});
       } else {
         if(navigator.share){
-          navigator.share({ title, text, url: currentUrl }).catch(()=>{});
+          navigator.share({ title, text: textGeneric, url: currentUrl }).catch(()=>{});
         } else {
           shareArticlePlatform('copy');
         }
@@ -334,11 +352,32 @@
     function renderArticle(article){
       currentArticleData = article;
 
-      if(article && article.judul){
-        document.title = `${article.judul} | HMI Badko Kalsel`;
-      } else {
-        document.title = "Detail Artikel | HMI Badko Kalsel";
+      const pageTitleStr = article && article.judul ? `${article.judul} - HMI Badko Kalsel` : "Detail Artikel | HMI Badko Kalsel";
+      document.title = pageTitleStr;
+
+      const metaDescStr = article ? `Oleh: ${article.nama || 'Kader HMI'}${article.asal ? ' (' + article.asal + ')' : ''}. ${article.ringkasan || ''}`.trim() : "Detail artikel HMI Badko Kalimantan Selatan.";
+      const currentUrl = window.location.href;
+
+      // Update Meta Tags Client-Side
+      const updateMeta = (id, val) => { const el = document.getElementById(id); if(el) el.setAttribute('content', val); };
+      updateMeta('metaDescription', metaDescStr);
+      updateMeta('ogTitle', pageTitleStr);
+      updateMeta('ogDescription', metaDescStr);
+      updateMeta('ogUrl', currentUrl);
+      updateMeta('twTitle', pageTitleStr);
+      updateMeta('twDescription', metaDescStr);
+
+      const imgSrc = article.headerImageDataUrl || article.headerImage || article.gambar || article.gambarUrl || '';
+      let ogImageUrl = `${window.location.origin}/LOGO%20HMI%20HD%20PNG%20(1).png`;
+      if(imgSrc){
+        if(imgSrc.startsWith('http://') || imgSrc.startsWith('https://')){
+          ogImageUrl = imgSrc;
+        } else if(article.id) {
+          ogImageUrl = `${window.location.origin}/api/article-image?id=${encodeURIComponent(article.id)}`;
+        }
       }
+      updateMeta('ogImage', ogImageUrl);
+      updateMeta('twImage', ogImageUrl);
 
       const articleMeta=document.getElementById('articleMeta');
       const articleTitle=document.getElementById('articleTitle');
@@ -352,7 +391,6 @@
       articleByline.textContent=`oleh ${article.nama || 'Kader HMI'} • ${article.asal || 'HMI Badko Kalsel'} • ${new Date(article.publishedAt || article.submittedAt || Date.now()).toLocaleDateString('id-ID')}`;
       articleExcerpt.textContent=article.ringkasan || 'Ringkasan artikel belum tersedia.';
 
-      const imgSrc = article.headerImageDataUrl || article.headerImage || article.gambar || article.gambarUrl || '';
       if(imgSrc && (imgSrc.startsWith('data:image/') || imgSrc.startsWith('http://') || imgSrc.startsWith('https://') || imgSrc.startsWith('blob:'))){
         articleImageContainer.innerHTML=`<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(article.judul || 'Gambar header artikel')}" class="w-full max-h-[500px] object-cover rounded-[1.75rem] shadow-sm" />`;
         articleImageContainer.classList.remove('hidden');
