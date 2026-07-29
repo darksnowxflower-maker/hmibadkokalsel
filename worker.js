@@ -186,33 +186,40 @@ async function handleRequest(request, env) {
     const isDetailPath = rawPathname === '/detail-artikel' || rawPathname === '/detail-artikel.html' || rawPathname === '/berita' || rawPathname === '/berita.html';
     const targetId = url.searchParams.get('id');
 
-    if (isDetailPath && targetId && env.ASSETS) {
-      const assetRes = await env.ASSETS.fetch(request);
-      if (assetRes.ok) {
-        let rawHtml = await assetRes.text();
-        const articles = await getArticles(env);
-        const pending = await getPending(env);
-        const article = [...articles, ...pending].find(a => String(a.id) === String(targetId));
-        const newsList = await getNews(env);
-        const newsItem = newsList.find(n => String(n.id) === String(targetId));
+    if (isDetailPath && targetId) {
+      let rawHtml = '';
+      if (env.ASSETS) {
+        try {
+          const assetRes = await env.ASSETS.fetch(request);
+          if (assetRes && assetRes.ok) {
+            rawHtml = await assetRes.text();
+          }
+        } catch (e) {}
+      }
+      const articles = await getArticles(env);
+      const pending = await getPending(env);
+      const article = [...articles, ...pending].find(a => String(a.id) === String(targetId));
+      const newsList = await getNews(env);
+      const newsItem = newsList.find(n => String(n.id) === String(targetId));
 
-        const baseUrl = url.origin;
-        if (article) {
-          const title = `${article.judul} - HMI Badko Kalsel`;
-          const description = `Oleh: ${article.nama || 'Kader HMI'}${article.asal ? ' (' + article.asal + ')' : ''}. ${article.ringkasan || ''}`.trim();
-          const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(article.id)}`;
-          const pageUrl = `${baseUrl}/detail-artikel?id=${encodeURIComponent(article.id)}`;
+      const baseUrl = url.origin;
+      if (article) {
+        const title = `${article.judul} - HMI Badko Kalsel`;
+        const description = `Oleh: ${article.nama || 'Kader HMI'}${article.asal ? ' (' + article.asal + ')' : ''}. ${article.ringkasan || ''}`.trim();
+        const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(article.id)}`;
+        const pageUrl = `${baseUrl}/detail-artikel?id=${encodeURIComponent(article.id)}`;
 
-          rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
-        } else if (newsItem) {
-          const title = `${newsItem.title || newsItem.judul} - HMI Badko Kalsel`;
-          const description = (newsItem.summary || newsItem.content || 'Portal Berita Resmi HMI Badko Kalsel').trim();
-          const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(newsItem.id)}`;
-          const pageUrl = `${baseUrl}/berita.html?id=${encodeURIComponent(newsItem.id)}`;
+        rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
+      } else if (newsItem) {
+        const title = `${newsItem.title || newsItem.judul} - HMI Badko Kalsel`;
+        const description = (newsItem.summary || newsItem.content || 'Portal Berita Resmi HMI Badko Kalsel').trim();
+        const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(newsItem.id)}`;
+        const pageUrl = `${baseUrl}/berita.html?id=${encodeURIComponent(newsItem.id)}`;
 
-          rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
-        }
+        rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
+      }
 
+      if (rawHtml) {
         return new Response(rawHtml, {
           status: 200,
           headers: {

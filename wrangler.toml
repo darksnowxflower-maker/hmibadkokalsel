@@ -2,7 +2,7 @@ name = "hmi-artikel-backend"
 main = "worker.js"
 compatibility_date = "2025-12-01"
 workers_dev = true
-assets = { directory = "./", binding = "ASSETS" }
+assets = { directory = "./", binding = "ASSETS", run_worker_first = true }
 
 routes = [
   { pattern = "hmibadkokalsel.web.id/detail-artikel*", zone_name = "hmibadkokalsel.web.id" },
