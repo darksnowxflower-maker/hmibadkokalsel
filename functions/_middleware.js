@@ -14,6 +14,9 @@ export async function onRequest(context) {
   if (!response.ok) return response;
 
   let rawHtml = await response.text();
+  if (!rawHtml || typeof rawHtml !== 'string' || !rawHtml.includes('<html')) {
+    return response;
+  }
 
   try {
     let article = null;

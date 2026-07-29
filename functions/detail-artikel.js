@@ -3,13 +3,17 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   const targetId = url.searchParams.get('id');
 
-  // Fetch the static HTML file from Cloudflare Pages assets
-  const assetRes = await env.ASSETS.fetch(request);
+  // Fetch static asset cleanly without query params to avoid asset pipeline loops
+  const cleanUrl = `${url.origin}/detail-artikel.html`;
+  const assetRes = await env.ASSETS.fetch(new Request(cleanUrl));
   if (!assetRes.ok || !targetId) {
     return assetRes;
   }
 
   let rawHtml = await assetRes.text();
+  if (!rawHtml || !rawHtml.includes('<html')) {
+    return assetRes;
+  }
 
   try {
     // Fetch article data from internal API

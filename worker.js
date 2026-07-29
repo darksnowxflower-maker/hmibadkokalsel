@@ -169,6 +169,9 @@ function escapeAttr(str) {
 }
 
 function injectArticleMetaTags(html, meta) {
+  if (!html || typeof html !== 'string' || !html.includes('<html')) {
+    return html;
+  }
   const cleanTitle = escapeAttr(meta.title || 'HMI Badko Kalimantan Selatan');
   const cleanDesc = escapeAttr(meta.description || 'HMI Badko Kalimantan Selatan');
   const cleanImage = escapeAttr(meta.image || '');
@@ -262,36 +265,38 @@ async function handleRequest(request, env) {
       let rawHtml = '';
       if (env.ASSETS) {
         try {
-          const assetRes = await env.ASSETS.fetch(request);
+          const cleanPath = rawPathname.startsWith('/detail-artikel') ? '/detail-artikel.html' : '/berita.html';
+          const assetRes = await env.ASSETS.fetch(new Request(`${url.origin}${cleanPath}`));
           if (assetRes && assetRes.ok) {
             rawHtml = await assetRes.text();
           }
         } catch (e) {}
       }
-      const articles = await getArticles(env);
-      const pending = await getPending(env);
-      const article = [...articles, ...pending].find(a => String(a.id) === String(targetId));
-      const newsList = await getNews(env);
-      const newsItem = newsList.find(n => String(n.id) === String(targetId));
 
-      const baseUrl = url.origin;
-      if (article) {
-        const title = `${article.judul} - HMI Badko Kalsel`;
-        const description = `Oleh: ${article.nama || 'Kader HMI'}${article.asal ? ' (' + article.asal + ')' : ''}. ${article.ringkasan || ''}`.trim();
-        const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(article.id)}`;
-        const pageUrl = `${baseUrl}/detail-artikel?id=${encodeURIComponent(article.id)}`;
+      if (rawHtml && rawHtml.includes('<html')) {
+        const articles = await getArticles(env);
+        const pending = await getPending(env);
+        const article = [...articles, ...pending].find(a => String(a.id) === String(targetId));
+        const newsList = await getNews(env);
+        const newsItem = newsList.find(n => String(n.id) === String(targetId));
 
-        rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
-      } else if (newsItem) {
-        const title = `${newsItem.title || newsItem.judul} - HMI Badko Kalsel`;
-        const description = (newsItem.summary || newsItem.content || 'Portal Berita Resmi HMI Badko Kalsel').trim();
-        const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(newsItem.id)}`;
-        const pageUrl = `${baseUrl}/berita.html?id=${encodeURIComponent(newsItem.id)}`;
+        const baseUrl = url.origin;
+        if (article) {
+          const title = `${article.judul} - HMI Badko Kalsel`;
+          const description = `Oleh: ${article.nama || 'Kader HMI'}${article.asal ? ' (' + article.asal + ')' : ''}. ${article.ringkasan || ''}`.trim();
+          const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(article.id)}`;
+          const pageUrl = `${baseUrl}/detail-artikel?id=${encodeURIComponent(article.id)}`;
 
-        rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
-      }
+          rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
+        } else if (newsItem) {
+          const title = `${newsItem.title || newsItem.judul} - HMI Badko Kalsel`;
+          const description = (newsItem.summary || newsItem.content || 'Portal Berita Resmi HMI Badko Kalsel').trim();
+          const imageUrl = `${baseUrl}/api/article-image?id=${encodeURIComponent(newsItem.id)}`;
+          const pageUrl = `${baseUrl}/berita.html?id=${encodeURIComponent(newsItem.id)}`;
 
-      if (rawHtml) {
+          rawHtml = injectArticleMetaTags(rawHtml, { title, description, image: imageUrl, url: pageUrl });
+        }
+
         return new Response(rawHtml, {
           status: 200,
           headers: {
