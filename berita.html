@@ -473,14 +473,20 @@
 
         function renderSpotlightHero() {
             if (!publishedNews.length) {
+                const isAuth = !!localStorage.getItem('hmiDashboardAuth');
+                const targetLink = isAuth ? 'manage-berita.html' : 'login.html';
+                const btnLabel = isAuth 
+                    ? '<i class="fas fa-plus"></i> Kelola & Tulis Berita' 
+                    : '<i class="fas fa-lock"></i> Login Redaksi untuk Tulis Berita';
+
                 heroHeadlineCard.innerHTML = `
                     <div class="p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[300px] space-y-3">
                         <div class="w-16 h-16 rounded-2xl bg-green-50 dark:bg-emerald-950 text-hmiGreen dark:text-emerald-400 flex items-center justify-center text-3xl shadow-sm mb-2"><i class="fas fa-newspaper"></i></div>
                         <span class="px-3 py-1 rounded-full text-[10px] font-black bg-emerald-100 dark:bg-emerald-950 text-hmiGreen dark:text-emerald-300 uppercase tracking-wider">Pemberitahuan Redaksi</span>
                         <h3 class="text-xl md:text-2xl font-black text-gray-900 dark:text-white">Belum Ada Berita Terbit</h3>
                         <p class="text-xs text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">Berita resmi terbaru dari HMI Badko Kalimantan Selatan akan otomatis tampil di sini begitu diterbitkan dari Portal Redaksi.</p>
-                        <a href="manage-berita.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-hmiGreen text-white font-bold text-xs shadow hover:bg-hmiDark transition mt-2">
-                            <i class="fas fa-plus"></i> Kelola & Tulis Berita
+                        <a href="${targetLink}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-hmiGreen text-white font-bold text-xs shadow hover:bg-hmiDark transition mt-2">
+                            ${btnLabel}
                         </a>
                     </div>
                 `;

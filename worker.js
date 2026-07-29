@@ -131,17 +131,15 @@ async function handleRequest(request, env) {
 
   if (pathname === '/articles' && request.method === 'GET') {
     const articles = await getArticles(env);
-    // Strip field berat dari list: headerImageDataUrl (base64) dan isi (konten panjang)
-    // Data lengkap hanya di /article?id=... (halaman detail)
-    const lightArticles = articles.map(({ headerImageDataUrl, isi, ...rest }) => rest);
+    // Hanya strip field isi (konten panjang) dari daftar ringkasan, simpan headerImageDataUrl agar foto kartu artikel dapat muncul
+    const lightArticles = articles.map(({ isi, ...rest }) => rest);
     return jsonResponse(lightArticles);
   }
 
   if (pathname === '/pending' && request.method === 'GET') {
     const pending = await getPending(env);
-    // Strip headerImageDataUrl dari list pending juga
-    const lightPending = pending.map(({ headerImageDataUrl, ...rest }) => rest);
-    return jsonResponse(lightPending);
+    // Kembalikan pending lengkap termasuk headerImageDataUrl agar foto terbaca di admin moderasi saat disetujui (approve)
+    return jsonResponse(pending);
   }
 
   if (pathname === '/article' && request.method === 'GET') {

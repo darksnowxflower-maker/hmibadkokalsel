@@ -352,8 +352,9 @@
       articleByline.textContent=`oleh ${article.nama || 'Kader HMI'} • ${article.asal || 'HMI Badko Kalsel'} • ${new Date(article.publishedAt || article.submittedAt || Date.now()).toLocaleDateString('id-ID')}`;
       articleExcerpt.textContent=article.ringkasan || 'Ringkasan artikel belum tersedia.';
 
-      if(article.headerImageDataUrl){
-        articleImageContainer.innerHTML=`<img src="${escapeHtml(article.headerImageDataUrl)}" alt="Gambar header artikel" class="w-full object-cover" />`;
+      const imgSrc = article.headerImageDataUrl || article.headerImage || article.gambar || article.gambarUrl || '';
+      if(imgSrc && (imgSrc.startsWith('data:image/') || imgSrc.startsWith('http://') || imgSrc.startsWith('https://') || imgSrc.startsWith('blob:'))){
+        articleImageContainer.innerHTML=`<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(article.judul || 'Gambar header artikel')}" class="w-full max-h-[500px] object-cover rounded-[1.75rem] shadow-sm" />`;
         articleImageContainer.classList.remove('hidden');
       } else {
         articleImageContainer.classList.add('hidden');
