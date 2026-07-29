@@ -48,29 +48,72 @@
       </div>
     </div>
 
-    <!-- Modal Edit / Unggah Gambar Header -->
-    <div id="editImageModal" class="fixed inset-0 z-[70] hidden items-center justify-center overflow-y-auto bg-black/60 px-4 py-8">
-      <div class="w-full max-w-lg rounded-[2rem] bg-white p-6 shadow-2xl">
-        <div class="flex items-start justify-between gap-4 mb-4">
+    <!-- Modal Edit Artikel Lengkap (Teks + Foto) -->
+    <div id="editArticleModal" class="fixed inset-0 z-[70] hidden items-center justify-center overflow-y-auto bg-black/60 px-4 py-8">
+      <div class="w-full max-w-3xl rounded-[2rem] bg-white p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-4 mb-6 border-b pb-4 border-gray-100">
           <div>
-            <p class="text-xs uppercase tracking-[0.2em] text-hmiGreen font-bold">Edit Foto Header Artikel</p>
-            <h3 id="editImageModalTitle" class="mt-1 text-lg font-extrabold text-gray-900 line-clamp-2"></h3>
+            <p class="text-xs uppercase tracking-[0.2em] text-hmiGreen font-bold">Penyuntingan Moderasi</p>
+            <h3 class="mt-1 text-2xl font-extrabold text-gray-900">Edit Artikel</h3>
           </div>
-          <button id="closeEditImageModal" type="button" class="rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200" aria-label="Tutup"><i class="fas fa-times"></i></button>
+          <button id="closeEditArticleModal" type="button" class="rounded-full bg-gray-100 p-2.5 text-gray-600 hover:bg-gray-200" aria-label="Tutup"><i class="fas fa-times"></i></button>
         </div>
-        <form id="editImageForm" class="space-y-4">
-          <input type="hidden" id="editImageArticleId">
+        <form id="editArticleForm" class="space-y-5">
+          <input type="hidden" id="editArticleId">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Nama Penulis</label>
+              <input type="text" id="editNama" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-hmiGreen focus:ring-1 focus:ring-hmiGreen outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Asal HMI / Utusan</label>
+              <input type="text" id="editAsal" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-hmiGreen focus:ring-1 focus:ring-hmiGreen outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Judul Artikel</label>
+              <input type="text" id="editJudul" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-hmiGreen focus:ring-1 focus:ring-hmiGreen outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kategori</label>
+              <select id="editKategori" class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-hmiGreen focus:ring-1 focus:ring-hmiGreen outline-none bg-white">
+                <option value="Opini">Opini</option>
+                <option value="Esai">Esai</option>
+                <option value="Refleksi">Refleksi</option>
+                <option value="Lingkungan">Lingkungan</option>
+                <option value="Keislaman">Keislaman</option>
+                <option value="Kebangsaan">Kebangsaan</option>
+                <option value="Gagasan">Gagasan</option>
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label class="block text-sm font-bold mb-2">Pilih File Foto Baru</label>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Ringkasan Artikel</label>
+            <textarea id="editRingkasan" rows="2" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-hmiGreen focus:ring-1 focus:ring-hmiGreen outline-none"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Isi Tulisan Lengkap</label>
+            <textarea id="editIsi" rows="8" required class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-hmiGreen focus:ring-1 focus:ring-hmiGreen outline-none font-sans leading-relaxed"></textarea>
+          </div>
+
+          <div class="border-t border-gray-100 pt-4">
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Foto Header Artikel (Opsional)</label>
             <input type="file" id="editImageFileInput" accept="image/*" class="w-full rounded-xl border border-gray-300 p-2 text-sm">
-            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, WEBP (Otomatis dikompresi agar efisien)</p>
+            <p class="text-xs text-gray-500 mt-1">Pilih gambar baru jika ingin mengganti/menambahkan foto header. Gambar akan dikompresi otomatis.</p>
           </div>
-          <div id="editImagePreviewContainer" class="hidden mt-3 rounded-xl overflow-hidden max-h-56 border border-gray-200 bg-gray-50 p-1">
-            <img id="editImagePreview" src="" alt="Pratinjau Foto" class="w-full h-48 object-cover rounded-lg">
+
+          <div id="editImagePreviewContainer" class="hidden rounded-xl overflow-hidden max-h-56 border border-gray-200 bg-gray-50 p-1">
+            <img id="editImagePreview" src="" alt="Pratinjau Foto Header" class="w-full h-48 object-cover rounded-lg">
           </div>
-          <div class="flex justify-end gap-2 pt-2 border-t border-gray-100 mt-4">
-            <button type="button" id="cancelEditImage" class="px-4 py-2 rounded-full border text-gray-600 font-semibold hover:bg-gray-50 text-sm">Batal</button>
-            <button type="submit" id="saveEditImageBtn" class="px-5 py-2 rounded-full bg-hmiGreen text-white font-bold hover:bg-hmiDark transition text-sm"><i class="fas fa-save mr-1"></i>Simpan Gambar</button>
+
+          <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+            <button type="button" id="cancelEditArticle" class="px-5 py-2.5 rounded-full border text-gray-600 font-semibold hover:bg-gray-50 text-sm">Batal</button>
+            <button type="submit" id="saveEditArticleBtn" class="px-6 py-2.5 rounded-full bg-hmiGreen text-white font-bold hover:bg-hmiDark transition text-sm shadow-sm"><i class="fas fa-save mr-1.5"></i>Simpan Perubahan</button>
           </div>
         </form>
       </div>
@@ -387,7 +430,7 @@
             <p class="text-sm text-gray-500">oleh ${escapeHtml(a.nama)} • ${new Date(a.publishedAt||a.submittedAt||Date.now()).toLocaleString()}</p>
           </div>
           <div class="flex flex-wrap gap-2">
-            <button data-article-id="${escapeHtml(a.id)}" class="editImageBtn rounded-full border border-blue-600 text-blue-600 px-4 py-2 hover:bg-blue-50 transition text-sm font-semibold"><i class="fas fa-image mr-1"></i>Edit Gambar</button>
+            <button data-article-id="${escapeHtml(a.id)}" class="editArticleBtn rounded-full border border-blue-600 text-blue-600 px-4 py-2 hover:bg-blue-50 transition text-sm font-semibold"><i class="fas fa-edit mr-1"></i>Edit Artikel</button>
             <button data-article-id="${escapeHtml(a.id)}" class="viewBtn rounded-full border border-hmiGreen text-hmiGreen px-4 py-2 text-sm font-semibold">Lihat</button>
             <button data-article-id="${escapeHtml(a.id)}" class="deleteBtn rounded-full bg-red-50 text-red-600 px-4 py-2 text-sm font-semibold">Hapus</button>
           </div>
@@ -398,23 +441,34 @@
     }
 
     function attachPublishedActions(){
-      document.querySelectorAll('.editImageBtn').forEach((btn)=>{
+      document.querySelectorAll('.editArticleBtn').forEach((btn)=>{
         btn.onclick=async ()=>{
           const articleId=btn.dataset.articleId;
-          let article=currentPublished.find(a=>a.id===articleId);
-          if(!article){
-            try {
-              const res = await fetch(`${articleUrl}?id=${encodeURIComponent(articleId)}`);
-              if(res.ok) article = await res.json();
-            } catch(e){}
-          }
-          if(!article) return;
+          let article = currentPublished.find(a => a.id === articleId);
+          
+          // Muat detail lengkap artikel via API jika ada agar konten 'isi' terisi utuh
+          try {
+            const res = await fetch(`${articleUrl}?id=${encodeURIComponent(articleId)}`);
+            if(res.ok) {
+              const fullArticle = await res.json();
+              if(fullArticle && !fullArticle.error) {
+                article = fullArticle;
+              }
+            }
+          } catch(e){}
+
+          if(!article) return alert('Data artikel tidak dapat dimuat.');
 
           window.targetEditArticle = article;
           window.tempEditImageDataUrl = article.headerImageDataUrl || article.gambar || '';
 
-          document.getElementById('editImageArticleId').value = article.id;
-          document.getElementById('editImageModalTitle').textContent = article.judul;
+          document.getElementById('editArticleId').value = article.id || '';
+          document.getElementById('editNama').value = article.nama || '';
+          document.getElementById('editAsal').value = article.asal || '';
+          document.getElementById('editJudul').value = article.judul || '';
+          document.getElementById('editKategori').value = article.kategori || 'Opini';
+          document.getElementById('editRingkasan').value = article.ringkasan || '';
+          document.getElementById('editIsi').value = article.isi || article.ringkasan || '';
           document.getElementById('editImageFileInput').value = '';
 
           const previewContainer = document.getElementById('editImagePreviewContainer');
@@ -428,7 +482,7 @@
             previewImg.src = '';
           }
 
-          const modal = document.getElementById('editImageModal');
+          const modal = document.getElementById('editArticleModal');
           modal.classList.remove('hidden');
           modal.classList.add('flex');
         };
@@ -500,8 +554,8 @@
       }
     });
 
-    function closeEditImageModal(){
-      const modal = document.getElementById('editImageModal');
+    function closeEditArticleModal(){
+      const modal = document.getElementById('editArticleModal');
       if(!modal) return;
       modal.classList.add('hidden');
       modal.classList.remove('flex');
@@ -509,29 +563,35 @@
       window.targetEditArticle = null;
     }
 
-    document.getElementById('closeEditImageModal')?.addEventListener('click', closeEditImageModal);
-    document.getElementById('cancelEditImage')?.addEventListener('click', closeEditImageModal);
-    document.getElementById('editImageModal')?.addEventListener('click', (e)=>{
-      if(e.target === document.getElementById('editImageModal')) closeEditImageModal();
+    document.getElementById('closeEditArticleModal')?.addEventListener('click', closeEditArticleModal);
+    document.getElementById('cancelEditArticle')?.addEventListener('click', closeEditArticleModal);
+    document.getElementById('editArticleModal')?.addEventListener('click', (e)=>{
+      if(e.target === document.getElementById('editArticleModal')) closeEditArticleModal();
     });
 
-    document.getElementById('editImageForm')?.addEventListener('submit', async (e)=>{
+    document.getElementById('editArticleForm')?.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const article = window.targetEditArticle;
       if(!article) return alert('Artikel tidak ditemukan.');
 
-      if(!window.tempEditImageDataUrl){
-        return alert('Silakan pilih file foto terlebih dahulu.');
-      }
-
-      const saveBtn = document.getElementById('saveEditImageBtn');
+      const saveBtn = document.getElementById('saveEditArticleBtn');
       saveBtn.disabled = true;
-      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Menyimpan...';
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1.5"></i>Menyimpan...';
+
+      const finalImageDataUrl = window.tempEditImageDataUrl || article.headerImageDataUrl || article.gambar || '';
 
       const updatedArticle = {
         ...article,
-        headerImageDataUrl: window.tempEditImageDataUrl,
-        headerImage: document.getElementById('editImageFileInput')?.files[0]?.name || article.headerImage || 'header.jpg'
+        nama: document.getElementById('editNama').value.trim(),
+        asal: document.getElementById('editAsal').value.trim(),
+        judul: document.getElementById('editJudul').value.trim(),
+        kategori: document.getElementById('editKategori').value,
+        ringkasan: document.getElementById('editRingkasan').value.trim(),
+        isi: document.getElementById('editIsi').value.trim(),
+        headerImageDataUrl: finalImageDataUrl,
+        headerImage: document.getElementById('editImageFileInput')?.files[0]?.name || article.headerImage || '',
+        status: 'published',
+        publishedAt: article.publishedAt || article.submittedAt || new Date().toISOString()
       };
 
       try {
@@ -551,23 +611,23 @@
         filtered.unshift(updatedArticle);
         localStorage.setItem(pubKey, JSON.stringify(filtered));
 
-        alert('Gambar header artikel berhasil diperbarui!');
-        closeEditImageModal();
+        alert('Artikel berhasil diperbarui!');
+        closeEditArticleModal();
         await renderPublishedList();
       } catch(err) {
-        console.error('Update image error:', err);
+        console.error('Update article error:', err);
         // Fallback local update
         const stored = JSON.parse(localStorage.getItem(pubKey)||'[]');
         const filtered = stored.filter(a => a.id !== updatedArticle.id);
         filtered.unshift(updatedArticle);
         localStorage.setItem(pubKey, JSON.stringify(filtered));
 
-        alert('Gambar header disimpan di memori lokal.');
-        closeEditImageModal();
+        alert('Perubahan artikel tersimpan di memori lokal.');
+        closeEditArticleModal();
         await renderPublishedList();
       } finally {
         saveBtn.disabled = false;
-        saveBtn.innerHTML = '<i class="fas fa-save mr-1"></i>Simpan Gambar';
+        saveBtn.innerHTML = '<i class="fas fa-save mr-1.5"></i>Simpan Perubahan';
       }
     });
 
