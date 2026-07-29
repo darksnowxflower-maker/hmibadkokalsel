@@ -113,7 +113,6 @@
           <p id="articleExcerpt" class="mt-8 max-w-3xl text-lg leading-relaxed text-emerald-100/90"></p>
           <div class="mt-8 flex flex-wrap items-center gap-3">
             <a href="artikel.html" class="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-bold text-hmiDark shadow hover:bg-gray-100"><i class="fas fa-arrow-left mr-2"></i>Kembali ke Artikel</a>
-            <button id="heroShareBtn" type="button" class="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-3 text-sm font-bold text-white shadow hover:bg-white/20 transition"><i class="fas fa-share-nodes"></i><span>Bagikan Artikel</span></button>
           </div>
         </div>
       </div>
@@ -323,7 +322,6 @@
       }
     }
 
-    document.getElementById('heroShareBtn')?.addEventListener('click', () => shareArticlePlatform('native'));
     document.getElementById('shareWaBtn')?.addEventListener('click', () => shareArticlePlatform('wa'));
     document.getElementById('shareFbBtn')?.addEventListener('click', () => shareArticlePlatform('fb'));
     document.getElementById('shareTwBtn')?.addEventListener('click', () => shareArticlePlatform('tw'));
