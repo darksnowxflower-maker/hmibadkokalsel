@@ -1,15 +1,16 @@
 {
   "version": 1,
   "include": [
-    "/detail-artikel*",
-    "/berita*",
-    "/api/*",
-    "/article-image*"
+    "/*"
   ],
   "exclude": [
     "/theme.css*",
     "/theme-toggle.js*",
     "/favicon.*",
-    "/LOGO*"
+    "/*.png",
+    "/*.jpg",
+    "/*.jpeg",
+    "/*.ico",
+    "/*.svg"
   ]
 }
